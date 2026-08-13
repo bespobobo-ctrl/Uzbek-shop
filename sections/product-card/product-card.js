@@ -1,5 +1,5 @@
 /* ==========================================================================
-   TEXNOMART / UZBEKSHOP - Product Card Component Renderer
+   TEXNOMART / UZBEKSHOP - Product Card Component Renderer (Optimized)
    ========================================================================== */
 
 function renderSingleProductCardHTML(product) {
@@ -25,7 +25,7 @@ function renderSingleProductCardHTML(product) {
             ⚖️
           </button>
         </div>
-        <img src="${product.image}" alt="${product.name}" class="product-card-img">
+        <img src="${product.image}" alt="${product.name}" class="product-card-img" loading="lazy">
       </div>
 
       <div class="product-card-content">
