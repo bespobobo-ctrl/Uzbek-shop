@@ -24,17 +24,18 @@ function toggleAuthModal(open) {
   if (modal) {
     if (open) {
       modal.classList.add('active');
-      modal.style.display = 'flex';
-      modal.style.opacity = '1';
-      modal.style.visibility = 'visible';
-      modal.style.pointerEvents = 'auto';
+      modal.style.setProperty('display', 'flex', 'important');
+      modal.style.setProperty('opacity', '1', 'important');
+      modal.style.setProperty('visibility', 'visible', 'important');
+      modal.style.setProperty('pointer-events', 'auto', 'important');
+      modal.style.setProperty('z-index', '9999999', 'important');
       renderAdminCabinetView();
     } else {
       modal.classList.remove('active');
-      modal.style.display = 'none';
-      modal.style.opacity = '0';
-      modal.style.visibility = 'hidden';
-      modal.style.pointerEvents = 'none';
+      modal.style.setProperty('display', 'none', 'important');
+      modal.style.setProperty('opacity', '0', 'important');
+      modal.style.setProperty('visibility', 'hidden', 'important');
+      modal.style.setProperty('pointer-events', 'none', 'important');
     }
   }
 }
@@ -47,10 +48,11 @@ window.openAuthModal = function() {
     const modal = document.getElementById('authModalOverlay');
     if (modal) {
       modal.classList.add('active');
-      modal.style.display = 'flex';
-      modal.style.opacity = '1';
-      modal.style.visibility = 'visible';
-      modal.style.pointerEvents = 'auto';
+      modal.style.setProperty('display', 'flex', 'important');
+      modal.style.setProperty('opacity', '1', 'important');
+      modal.style.setProperty('visibility', 'visible', 'important');
+      modal.style.setProperty('pointer-events', 'auto', 'important');
+      modal.style.setProperty('z-index', '9999999', 'important');
     }
   }
 };
@@ -59,24 +61,37 @@ window.closeAuthModal = function() {
   toggleAuthModal(false);
 };
 
+window.switchAuthToLoginView = function() {
+  isAdminLoggedIn = false;
+  localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify(false));
+  updateHeaderProfileButton();
+  renderAdminCabinetView();
+};
+
 function renderAdminCabinetView() {
   const loginView = document.getElementById('authLoginFormView');
   const adminDashboardView = document.getElementById('authAdminDashboardView');
 
   if (isAdminLoggedIn) {
-    if (loginView) loginView.style.display = 'none';
+    if (loginView) loginView.style.setProperty('display', 'none', 'important');
     if (adminDashboardView) {
       adminDashboardView.classList.add('active');
-      adminDashboardView.style.display = 'block';
+      adminDashboardView.style.setProperty('display', 'block', 'important');
+      adminDashboardView.style.setProperty('visibility', 'visible', 'important');
+      adminDashboardView.style.setProperty('opacity', '1', 'important');
       renderAccountingTab();
       renderOrdersTab();
       renderProductsPriceTab();
     }
   } else {
-    if (loginView) loginView.style.display = 'block';
+    if (loginView) {
+      loginView.style.setProperty('display', 'block', 'important');
+      loginView.style.setProperty('visibility', 'visible', 'important');
+      loginView.style.setProperty('opacity', '1', 'important');
+    }
     if (adminDashboardView) {
       adminDashboardView.classList.remove('active');
-      adminDashboardView.style.display = 'none';
+      adminDashboardView.style.setProperty('display', 'none', 'important');
     }
   }
 }
@@ -405,8 +420,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const addProdForm = document.getElementById('addNewProductForm');
   const fileInput = document.getElementById('newProdFileInput');
 
-  if (openBtn) openBtn.addEventListener('click', () => window.openAuthModal());
-  if (closeBtn) closeBtn.addEventListener('click', () => window.closeAuthModal());
+  if (openBtn) openBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.openAuthModal();
+  });
+  if (closeBtn) closeBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.closeAuthModal();
+  });
   if (modalOverlay) {
     modalOverlay.addEventListener('click', (e) => {
       if (e.target === modalOverlay) window.closeAuthModal();
