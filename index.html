@@ -582,12 +582,27 @@
         </div>
 
         <!-- Tab Pills Navigation -->
-        <div class="admin-tabs-nav">
-          <button class="admin-tab-btn active" data-tab="accountingTabContent">📊 Moliya & Telegram Bot</button>
-          <button class="admin-tab-btn" data-tab="ordersTabContent">📦 Buyurtmalar</button>
-          <button class="admin-tab-btn" data-tab="omborTabContent">🏪 Ombor & Narxlar</button>
-          <button class="admin-tab-btn" data-tab="chegirmaTabContent">🔥 Chegirmalar</button>
-          <button class="admin-tab-btn" data-tab="addProductTabContent">➕ Yangi Tovar</button>
+        <div class="admin-tabs-nav" id="adminTabsNav">
+          <button class="admin-tab-btn active" data-tab="accountingTabContent"
+            onclick="switchAdminTab(this,'accountingTabContent')">
+            📊 Moliya &amp; Telegram Bot
+          </button>
+          <button class="admin-tab-btn" data-tab="ordersTabContent"
+            onclick="switchAdminTab(this,'ordersTabContent')">
+            📦 Buyurtmalar
+          </button>
+          <button class="admin-tab-btn" data-tab="omborTabContent"
+            onclick="switchAdminTab(this,'omborTabContent')">
+            🏪 Ombor &amp; Narxlar
+          </button>
+          <button class="admin-tab-btn" data-tab="chegirmaTabContent"
+            onclick="switchAdminTab(this,'chegirmaTabContent')">
+            🔥 Chegirmalar
+          </button>
+          <button class="admin-tab-btn" data-tab="addProductTabContent"
+            onclick="switchAdminTab(this,'addProductTabContent')">
+            ➕ Yangi Tovar
+          </button>
         </div>
 
         <!-- Tab 1: Accounting -->
@@ -785,8 +800,35 @@
 
   <!-- UNIFIED AUTH INIT SCRIPT -->
   <script>
-    // Define global functions immediately (before DOMContentLoaded)
-    // so onclick attributes can call them at any time
+    // ====================================================
+    // GLOBAL TAB SWITCHING — called directly from onclick
+    // ====================================================
+    window.switchAdminTab = function(clickedBtn, tabId) {
+      // Deactivate all tab buttons
+      var allBtns = document.querySelectorAll('.admin-tab-btn');
+      allBtns.forEach(function(b) { b.classList.remove('active'); });
+      // Activate clicked button
+      if (clickedBtn) clickedBtn.classList.add('active');
+      // Hide all tab contents
+      var allContents = document.querySelectorAll('.admin-tab-content');
+      allContents.forEach(function(c) { c.style.display = 'none'; });
+      // Show the selected tab
+      var target = document.getElementById(tabId);
+      if (target) {
+        target.style.display = 'block';
+        // If tab is empty, re-render it
+        if (!target.innerHTML.trim()) {
+          var renderMap = {
+            accountingTabContent: window.renderAdminDashboardTabs,
+            ordersTabContent:     window.renderAdminDashboardTabs,
+            omborTabContent:      window.renderAdminDashboardTabs,
+            chegirmaTabContent:   window.renderAdminDashboardTabs,
+          };
+          if (renderMap[tabId] && window.renderAdminDashboardTabs) window.renderAdminDashboardTabs();
+        }
+      }
+      console.log('switchAdminTab: switched to', tabId);
+    };
 
     window.openAuthModal = function() {
       var m = document.getElementById('authModalOverlay');
