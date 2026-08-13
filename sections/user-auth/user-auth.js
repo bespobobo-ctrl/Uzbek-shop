@@ -17,9 +17,15 @@ function toggleAuthModal(open) {
   if (modal) {
     if (open) {
       modal.classList.add('active');
+      modal.style.display = 'flex';
+      modal.style.opacity = '1';
+      modal.style.visibility = 'visible';
       renderAdminCabinetView();
     } else {
       modal.classList.remove('active');
+      modal.style.display = 'none';
+      modal.style.opacity = '0';
+      modal.style.visibility = 'hidden';
     }
   }
 }
