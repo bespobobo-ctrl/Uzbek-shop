@@ -563,3 +563,42 @@
     align-items: flex-start;
   }
 }
+
+/* ==========================================================================
+   CHEGIRMALAR TAB - Flash Deal Manager Cards
+   ========================================================================== */
+.chegirma-cards-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.chegirma-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #ffffff;
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  transition: var(--transition);
+}
+
+.chegirma-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+  transform: translateY(-1px);
+}
+
+.chegirma-card.chegirma-active {
+  border-color: #fde68a;
+  background: #fffbeb;
+}
+
+@media (max-width: 768px) {
+  .chegirma-card {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+}
+

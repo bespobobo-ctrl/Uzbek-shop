@@ -584,9 +584,10 @@
         <!-- Tab Pills Navigation -->
         <div class="admin-tabs-nav">
           <button class="admin-tab-btn active" data-tab="accountingTabContent">📊 Moliya & Telegram Bot</button>
-          <button class="admin-tab-btn" data-tab="ordersTabContent">📦 Buyurtmalar Boshqaruvi</button>
-          <button class="admin-tab-btn" data-tab="productsPriceTabContent">🏷️ Narxlar & Super Chegirma</button>
-          <button class="admin-tab-btn" data-tab="addProductTabContent">➕ Yangi Tovar & Rasm Yuklash</button>
+          <button class="admin-tab-btn" data-tab="ordersTabContent">📦 Buyurtmalar</button>
+          <button class="admin-tab-btn" data-tab="omborTabContent">🏪 Ombor & Narxlar</button>
+          <button class="admin-tab-btn" data-tab="chegirmaTabContent">🔥 Chegirmalar</button>
+          <button class="admin-tab-btn" data-tab="addProductTabContent">➕ Yangi Tovar</button>
         </div>
 
         <!-- Tab 1: Accounting -->
@@ -595,8 +596,11 @@
         <!-- Tab 2: Orders -->
         <div id="ordersTabContent" class="admin-tab-content" style="display:none;"></div>
 
-        <!-- Tab 3: Products Price & Metrics -->
-        <div id="productsPriceTabContent" class="admin-tab-content" style="display:none;"></div>
+        <!-- Tab 3: Ombor (Warehouse & Price Editor) -->
+        <div id="omborTabContent" class="admin-tab-content" style="display:none;"></div>
+
+        <!-- Tab 4: Chegirmalar (Flash Deals Manager) -->
+        <div id="chegirmaTabContent" class="admin-tab-content" style="display:none;"></div>
 
         <!-- Tab 4: Add Product Form Studio with Image Upload -->
         <div id="addProductTabContent" class="admin-tab-content" style="display:none;">
@@ -628,6 +632,14 @@
                 <div class="input-with-icon">
                   <span class="input-icon">💳</span>
                   <input type="number" id="newProdPrice" placeholder="Masalan: 8500000" required>
+                </div>
+              </div>
+
+              <div class="auth-form-group">
+                <label>Ombordagi Boshlang'ich Soni (dona):</label>
+                <div class="input-with-icon">
+                  <span class="input-icon">📦</span>
+                  <input type="number" id="newProdStock" placeholder="Masalan: 10" value="10" min="0">
                 </div>
               </div>
               
