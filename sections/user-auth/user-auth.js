@@ -1,15 +1,15 @@
 /* ==========================================================================
-   TEXNOMART / UZBEKSHOP - Admin Personal Cabinet, Image Upload & Persistent Flash Deal Management
+   TEXNOMART / UZBEKSHOP - Admin Personal Cabinet & Telegram Bot Integration
    ========================================================================== */
 
 const ADMIN_SESSION_KEY = 'texnomart_admin_logged';
+const TELEGRAM_CHAT_ID_KEY = 'texnomart_telegram_chat_id';
 let isAdminLoggedIn = JSON.parse(localStorage.getItem(ADMIN_SESSION_KEY)) || false;
 let uploadedImageBase64 = "";
 
 let storeOrdersList = JSON.parse(localStorage.getItem('texnomart_orders')) || [
   { id: 1001, customer: "Sardor Rahimov", phone: "+998 90 123 45 67", address: "Toshkent sh., Yunusobod 12", product: "iPhone 15 Pro 128GB", amount: 14200000, date: "2026-08-12", status: "Bajarildi", statusType: "success" },
-  { id: 1002, customer: "Jahongir Aliyev", phone: "+998 93 987 65 43", address: "Samarqand sh., Registon ko'ch.", product: "MacBook Air M2", amount: 12800000, date: "2026-08-13", status: "Yetkazilmoqda", statusType: "warning" },
-  { id: 1003, customer: "Malika Ikromova", phone: "+998 91 555 44 33", address: "Farg'ona sh., Mustaqillik ko'ch.", product: "Artel 55 4K Smart TV", amount: 4800000, date: "2026-08-13", status: "Yetkazilmoqda", statusType: "warning" }
+  { id: 1002, customer: "Jahongir Aliyev", phone: "+998 93 987 65 43", address: "Samarqand sh., Registon ko'ch.", product: "MacBook Air M2", amount: 12800000, date: "2026-08-13", status: "Yetkazilmoqda", statusType: "warning" }
 ];
 
 function toggleAuthModal(open) {
@@ -52,7 +52,7 @@ function handleLoginSubmit(event) {
     localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify(true));
     updateHeaderProfileButton();
     renderAdminCabinetView();
-    showToast("Xush kelibsiz! Boshqaruv va Buxgalteriya paneli faollashtirildi.", "success");
+    showToast("Xush kelibsiz! Boshqaruv va Telegram Bot paneli faollashtirildi.", "success");
   } else {
     showToast("Noto'g'ri login yoki parol! (Parol: 123)", "danger");
   }
@@ -79,51 +79,68 @@ function updateHeaderProfileButton() {
   }
 }
 
-/* ================= 1. BUXGALTERIYA & HISOBOTLAR ================= */
+/* ================= 1. BUXGALTERIYA & TELEGRAM BOT SOZLAMASI ================= */
 function renderAccountingTab() {
   const container = document.getElementById('accountingTabContent');
   if (!container) return;
 
-  const totalRevenue = 148500000;
-  const itemsSold = 34;
-  const netProfit = 22400000;
+  const currentChatId = localStorage.getItem(TELEGRAM_CHAT_ID_KEY) || "";
 
   container.innerHTML = `
     <div class="kpi-cards-grid">
       <div class="kpi-card">
         <div class="kpi-card-icon">💰</div>
         <div class="kpi-card-title">Bir oylik jami savdo</div>
-        <div class="kpi-card-value">${formatUZS(totalRevenue)}</div>
-        <div class="kpi-card-trend"><span>↑</span> o'tgan oyga nisbatan +18.4%</div>
+        <div class="kpi-card-value">${formatUZS(148500000)}</div>
+        <div class="kpi-card-trend"><span>↑</span> +18.4% o'sish</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-card-icon">📦</div>
-        <div class="kpi-card-title">Sotilgan tovarlar soni</div>
-        <div class="kpi-card-value">${itemsSold} ta</div>
-        <div class="kpi-card-trend"><span>↑</span> 14 ta muddatli to'lovda</div>
+        <div class="kpi-card-icon">📲</div>
+        <div class="kpi-card-title">Telegram Bot Statusi</div>
+        <div class="kpi-card-value" style="font-size:1.1rem; color:#16a34a;">🟢 Faol (8932753943)</div>
+        <div class="kpi-card-trend"><span>⚡</span> Instant Buyurtma Xabari</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-card-icon">📈</div>
         <div class="kpi-card-title">Oylik sof foyda</div>
-        <div class="kpi-card-value">${formatUZS(netProfit)}</div>
-        <div class="kpi-card-trend"><span>↑</span> Foyda marjasi 15.1%</div>
+        <div class="kpi-card-value">${formatUZS(22400000)}</div>
+        <div class="kpi-card-trend"><span>↑</span> Foyda 15.1%</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-card-icon">🔥</div>
-        <div class="kpi-card-title">Eng ko'p sotilgan kategoriya</div>
-        <div class="kpi-card-value">Smartfonlar</div>
-        <div class="kpi-card-trend"><span>★</span> Jami savdoning 45% ulushi</div>
+    </div>
+
+    <!-- Telegram Bot Chat ID Configuration Card -->
+    <div style="background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:18px; padding:1.5rem; margin-top:1.5rem;">
+      <h4 style="font-weight:800; color:#166534; font-size:1.1rem; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem;">
+        📲 Telegram Botga Buyurtma Yuborish Sozlamasi
+      </h4>
+      <p style="font-size:0.85rem; color:#15803d; margin-bottom:1rem;">
+        Buyurtma tushganda Telegramingizga zudlik bilan xabar kelishi uchun <b>Chat ID</b> raqamingizni kiriting:
+      </p>
+      <div style="display:flex; gap:0.75rem;">
+        <input type="text" id="tgAdminChatIdInput" value="${currentChatId}" placeholder="Masalan: 123456789" style="flex:1; padding:0.75rem 1rem; border:1px solid #86efac; border-radius:10px; font-weight:700;">
+        <button onclick="saveTelegramChatId()" style="background:#16a34a; color:#ffffff; font-weight:800; padding:0.75rem 1.5rem; border-radius:10px; cursor:pointer;">💾 Chat ID Saqlash</button>
       </div>
     </div>
   `;
 }
+
+window.saveTelegramChatId = function() {
+  const input = document.getElementById('tgAdminChatIdInput');
+  if (input) {
+    const val = input.value.trim();
+    localStorage.setItem(TELEGRAM_CHAT_ID_KEY, val);
+    showToast(`Telegram Chat ID (${val || 'o\'chirildi'}) muvaffaqiyatli saqlandi!`, 'success');
+  }
+};
 
 /* ================= 2. TUSHGAN BUYURTMALAR ================= */
 function renderOrdersTab() {
   const container = document.getElementById('ordersTabContent');
   if (!container) return;
 
-  if (storeOrdersList.length === 0) {
+  const orders = JSON.parse(localStorage.getItem('texnomart_orders')) || storeOrdersList;
+
+  if (orders.length === 0) {
     container.innerHTML = `<p style="padding:2rem; text-align:center; color:var(--text-muted);">Hozircha buyurtmalar yo'q.</p>`;
     return;
   }
@@ -143,7 +160,7 @@ function renderOrdersTab() {
           </tr>
         </thead>
         <tbody>
-          ${storeOrdersList.map(o => `
+          ${orders.map(o => `
             <tr>
               <td><b>#${o.id}</b></td>
               <td><b>${o.customer}</b></td>
@@ -215,9 +232,6 @@ function renderProductsPriceTab() {
   `;
 }
 
-/**
- * Toggle Flash Deal status for any product with permanent LocalStorage persistence
- */
 window.toggleFlashDealStatus = function(productId) {
   const item = window.allProductsList.find(p => p.id === productId);
   if (item) {
@@ -234,9 +248,6 @@ window.toggleFlashDealStatus = function(productId) {
   }
 };
 
-/**
- * Save Updated Price
- */
 window.saveUpdatedPrice = function(productId) {
   const input = document.getElementById(`priceInput_${productId}`);
   if (!input) return;
@@ -259,9 +270,6 @@ window.saveUpdatedPrice = function(productId) {
   }
 };
 
-/**
- * Delete Product by ID
- */
 window.deleteProductById = function(productId) {
   const index = window.allProductsList.findIndex(p => p.id === productId);
   if (index >= 0) {
@@ -277,7 +285,6 @@ window.deleteProductById = function(productId) {
   }
 };
 
-/* ================= 4. MAHSULOT KARTASIGA RASM YUKLASH (FILE UPLOAD) ================= */
 function handleFileInputChange(event) {
   const file = event.target.files[0];
   const previewImg = document.getElementById('newProdImgPreview');
