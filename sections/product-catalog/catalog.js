@@ -3,17 +3,29 @@
    ========================================================================== */
 
 const PRODUCTS_STORAGE_KEY = 'texnomart_all_products';
-window.allProductsList = JSON.parse(localStorage.getItem(PRODUCTS_STORAGE_KEY)) || [];
+// Always start with localStorage cache, but initCatalogData will refresh from JSON
+window.allProductsList = [];
+try {
+  var _cached = JSON.parse(localStorage.getItem(PRODUCTS_STORAGE_KEY));
+  // Only use cache if it has stock field (new format)
+  if (_cached && _cached.length > 0 && typeof _cached[0].stock !== 'undefined') {
+    window.allProductsList = _cached;
+  }
+} catch(e) {}
 
 let currentCategoryFilter = 'all';
 let currentSearchQuery = '';
 let currentSortOrder = 'default';
 
 const fallbackProductsData = [
-  { id: 101, name: "Smartfon Apple iPhone 15 Pro 128GB Natural Titanium", category: "smartfonlar", categoryName: "Smartfonlar", brand: "Apple", price: 14200000, oldPrice: 15800000, monthlyPrice: 1450000, rating: 4.9, reviews: 128, badge: "SUPER NARX", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "A17 Pro chip, Titanium korpus, 48 MP Action kamera va Dynamic Island." },
-  { id: 102, name: "Smartfon Samsung Galaxy S24 Ultra 12/512GB Titanium Black", category: "smartfonlar", categoryName: "Smartfonlar", brand: "Samsung", price: 15900000, oldPrice: 17200000, monthlyPrice: 1620000, rating: 4.9, reviews: 94, badge: "0-0-12", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "Galaxy AI imkoniyatlari, 200MP kamera va Snapdragon 8 Gen 3." },
-  { id: 103, name: "Noutbuk Apple MacBook Air 13 M2 8/256GB Midnight", category: "kompyuterlar", categoryName: "Kompyuterlar", brand: "Apple", price: 12800000, oldPrice: 14100000, monthlyPrice: 1290000, rating: 4.8, reviews: 65, badge: "HIT SOTUV", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "M2 protsessor, Liquid Retina ekrani va ingichka dizayn." },
-  { id: 104, name: "Noutbuk ASUS TUF Gaming F15 i5-12500H RTX 3050 16GB", category: "kompyuterlar", categoryName: "Kompyuterlar", brand: "ASUS", price: 9800000, oldPrice: 10900000, monthlyPrice: 990000, rating: 4.7, reviews: 42, badge: "AKSIYA", badgeColor: "red", image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "Kuchli o'yin noutbuki, 144Hz IPS ekran va harbiylarcha baquvvat korpus." }
+  { id: 101, name: "Smartfon Apple iPhone 15 Pro 128GB Natural Titanium", category: "smartfonlar", categoryName: "Smartfonlar", brand: "Apple", price: 14200000, oldPrice: 15800000, monthlyPrice: 1450000, stock: 12, rating: 4.9, reviews: 128, badge: "SUPER NARX", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "A17 Pro chip, Titanium korpus, 48 MP Action kamera va Dynamic Island." },
+  { id: 102, name: "Smartfon Samsung Galaxy S24 Ultra 12/512GB Titanium Black", category: "smartfonlar", categoryName: "Smartfonlar", brand: "Samsung", price: 15900000, oldPrice: 17200000, monthlyPrice: 1620000, stock: 8, rating: 4.9, reviews: 94, badge: "0-0-12", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "Galaxy AI imkoniyatlari, 200MP kamera va Snapdragon 8 Gen 3." },
+  { id: 103, name: "Noutbuk Apple MacBook Air 13 M2 8/256GB Midnight", category: "kompyuterlar", categoryName: "Kompyuterlar", brand: "Apple", price: 12800000, oldPrice: 14100000, monthlyPrice: 1290000, stock: 5, rating: 4.8, reviews: 65, badge: "HIT SOTUV", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "M2 protsessor, Liquid Retina ekrani va ingichka dizayn." },
+  { id: 104, name: "Noutbuk ASUS TUF Gaming F15 i5-12500H RTX 3050 16GB", category: "kompyuterlar", categoryName: "Kompyuterlar", brand: "ASUS", price: 9800000, oldPrice: 10900000, monthlyPrice: 990000, stock: 14, rating: 4.7, reviews: 42, badge: "AKSIYA", badgeColor: "red", image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=600&q=80", isFlashDeal: false, description: "Kuchli o'yin noutbuki, 144Hz IPS ekran va harbiylarcha baquvvat korpus." },
+  { id: 105, name: "Televizor Artel 55AU90G 4K UHD Smart Android TV", category: "tv-audio", categoryName: "TV va Audio", brand: "Artel", price: 4800000, oldPrice: 5300000, monthlyPrice: 490000, stock: 20, rating: 4.6, reviews: 88, badge: "0% TO'LOV", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1593784991095-a205069470b6?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "55 dyuymli 4K UHD tasvirlash va Android TV." },
+  { id: 106, name: "Muzlatgich LG GR-B569BLCZ No Frost Inverter", category: "maishiy-texnika", categoryName: "Maishiy texnika", brand: "LG", price: 8600000, oldPrice: 9400000, monthlyPrice: 870000, stock: 7, rating: 4.9, reviews: 31, badge: "TOP KAFOLAT", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?auto=format&fit=crop&w=600&q=80", isFlashDeal: false, description: "Smart Inverter kompressor, Total No Frost va A++ sinf." },
+  { id: 107, name: "Kir yuvish mashinasi Bosch WAN24200ME 8 kg Inverter", category: "maishiy-texnika", categoryName: "Maishiy texnika", brand: "Bosch", price: 6200000, oldPrice: 6900000, monthlyPrice: 630000, stock: 3, rating: 4.9, reviews: 56, badge: "GERMAN QUALITY", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "EcoSilence Drive vositasi va gigiyenik bug'da yuvish." },
+  { id: 108, name: "Konditsioner Haier Tundra Inverter 12 HSU-12H", category: "iqlim", categoryName: "Iqlim texnikasi", brand: "Haier", price: 4300000, oldPrice: 4800000, monthlyPrice: 440000, stock: 18, rating: 4.7, reviews: 29, badge: "BEPUL O'RNATISH", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1631545806604-e34988f57fa5?auto=format&fit=crop&w=600&q=80", isFlashDeal: false, description: "Inverter dvigatel va jim ishlash rejimi." }
 ];
 
 async function initCatalogData() {
@@ -29,10 +41,15 @@ async function initCatalogData() {
       } catch (e) {
         window.allProductsList = fallbackProductsData;
       }
+      // Ensure every product has a stock field
+      window.allProductsList.forEach(p => { if (!p.stock && p.stock !== 0) p.stock = 10; });
       localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(window.allProductsList));
     }
     renderCatalogGrid();
     if (window.renderFlashDealsSection) window.renderFlashDealsSection();
+    // Notify admin panel that products are now ready — re-render Ombor tab if it's open
+    if (window.renderAdminDashboardTabs) window.renderAdminDashboardTabs();
+    console.log('Catalog: ' + window.allProductsList.length + ' mahsulot yuklandi ✅');
   } catch (err) {
     console.error('Catalog init error:', err);
   }
