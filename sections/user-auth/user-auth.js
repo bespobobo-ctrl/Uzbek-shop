@@ -21,41 +21,28 @@ let storeOrdersList = JSON.parse(localStorage.getItem('texnomart_orders')) || [
 
 function toggleAuthModal(open) {
   const modal = document.getElementById('authModalOverlay');
-  if (modal) {
-    if (open) {
-      if (modal.classList.contains('active') && modal.style.display === 'flex') return;
-      modal.classList.add('active');
-      modal.style.setProperty('display', 'flex', 'important');
-      modal.style.setProperty('opacity', '1', 'important');
-      modal.style.setProperty('visibility', 'visible', 'important');
-      modal.style.setProperty('pointer-events', 'auto', 'important');
-      modal.style.setProperty('z-index', '9999999', 'important');
-      renderAdminCabinetView();
-    } else {
-      modal.classList.remove('active');
-      modal.style.setProperty('display', 'none', 'important');
-      modal.style.setProperty('opacity', '0', 'important');
-      modal.style.setProperty('visibility', 'hidden', 'important');
-      modal.style.setProperty('pointer-events', 'none', 'important');
-    }
+  if (!modal) {
+    console.error('AUTH MODAL ERROR: #authModalOverlay not found in DOM!');
+    return;
+  }
+  if (open) {
+    modal.style.display = 'flex';
+    modal.classList.add('active');
+    modal.style.zIndex = '9999999';
+    modal.style.pointerEvents = 'auto';
+    renderAdminCabinetView();
+    console.log('Auth modal OPENED ✅');
+  } else {
+    modal.style.display = 'none';
+    modal.classList.remove('active');
+    modal.style.pointerEvents = 'none';
+    console.log('Auth modal CLOSED');
   }
 }
 
 window.openAuthModal = function() {
-  try {
-    toggleAuthModal(true);
-  } catch (err) {
-    console.error("openAuthModal error:", err);
-    const modal = document.getElementById('authModalOverlay');
-    if (modal) {
-      modal.classList.add('active');
-      modal.style.setProperty('display', 'flex', 'important');
-      modal.style.setProperty('opacity', '1', 'important');
-      modal.style.setProperty('visibility', 'visible', 'important');
-      modal.style.setProperty('pointer-events', 'auto', 'important');
-      modal.style.setProperty('z-index', '9999999', 'important');
-    }
-  }
+  console.log('openAuthModal() called');
+  toggleAuthModal(true);
 };
 
 window.closeAuthModal = function() {

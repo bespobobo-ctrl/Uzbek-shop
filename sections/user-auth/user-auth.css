@@ -2,27 +2,24 @@
    TEXNOMART / UZBEKSHOP - Professional Premium UI/UX Personal Cabinet & Mobile Adaptation
    ========================================================================== */
 
-/* Auth Modal Backdrop */
+/* Auth Modal Backdrop - Default HIDDEN via display:none */
 .auth-modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(8px);
   z-index: 9999999 !important;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
-  opacity: 0;
-  visibility: hidden;
   pointer-events: none;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .auth-modal-overlay.active {
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
   display: flex !important;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto !important;
   z-index: 9999999 !important;
 }
 
