@@ -23,6 +23,7 @@ function toggleAuthModal(open) {
   const modal = document.getElementById('authModalOverlay');
   if (modal) {
     if (open) {
+      if (modal.classList.contains('active') && modal.style.display === 'flex') return;
       modal.classList.add('active');
       modal.style.setProperty('display', 'flex', 'important');
       modal.style.setProperty('opacity', '1', 'important');
