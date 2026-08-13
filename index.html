@@ -612,7 +612,163 @@
         <div id="ordersTabContent" class="admin-tab-content" style="display:none;"></div>
 
         <!-- Tab 3: Ombor (Warehouse & Price Editor) -->
-        <div id="omborTabContent" class="admin-tab-content" style="display:none;"></div>
+        <div id="omborTabContent" class="admin-tab-content" style="display:none;">
+          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.75rem; margin-bottom:1.25rem;">
+            <div>
+              <h3 style="font-weight:800; font-size:1.15rem;">🏪 Ombor — Barcha Mahsulotlar (8 ta)</h3>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.2rem;">
+                Jami ombor: <b>87 dona</b> &nbsp;|&nbsp;
+                <span style="color:#ef4444; font-weight:700;">⚠️ Kam qolgan: 2 ta</span>
+              </p>
+            </div>
+            <button onclick="if(window.renderOmborTab) window.renderOmborTab();" style="background:#f1f5f9; color:var(--tm-dark); font-weight:700; padding:0.5rem 1rem; border-radius:8px; font-size:0.85rem; cursor:pointer;">🔄 Yangilash</button>
+          </div>
+          <div class="table-responsive-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th style="min-width:240px;">📦 Mahsulot</th>
+                  <th>Kategoriya</th>
+                  <th>Ombor soni</th>
+                  <th>Joriy Narx</th>
+                  <th>Chegirma %</th>
+                  <th>Kun Taklifi</th>
+                  <th style="min-width:220px;">Amallar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr id="omborRow_101">
+                  <td>
+                    <div style="display:flex;align-items:center;gap:0.6rem;">
+                      <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=600&q=80" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;">
+                      <div>
+                        <div style="font-weight:700;font-size:0.82rem;line-height:1.3;max-width:180px;">Smartfon Apple iPhone 15 Pro 128GB Natural Titanium</div>
+                        <div style="font-size:0.72rem;color:#64748b;">Apple</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span style="background:#f1f5f9;padding:0.25rem 0.6rem;border-radius:20px;font-size:0.75rem;font-weight:700;">📱 Smartfonlar</span></td>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:0.4rem;">
+                      <input type="number" id="stockInput_101" value="12" min="0" style="width:65px;padding:0.35rem 0.4rem;border:1.5px solid #e2e8f0;border-radius:8px;font-weight:800;text-align:center;font-size:0.9rem;color:#16a34a;">
+                      <button onclick="saveStock(101)" style="background:#dbeafe;color:#1d4ed8;font-weight:700;padding:0.35rem 0.55rem;border-radius:8px;font-size:0.75rem;cursor:pointer;">💾</button>
+                    </div>
+                    <div style="font-size:0.7rem;color:#16a34a;font-weight:700;margin-top:2px;">🟢 Yetarli</div>
+                  </td>
+                  <td>
+                    <input type="number" id="priceInput_101" value="14200000" style="width:130px;padding:0.35rem 0.5rem;border:1.5px solid #e2e8f0;border-radius:8px;font-weight:800;font-size:0.85rem;">
+                    <div style="font-size:0.7rem;color:#64748b;margin-top:2px;">14 200 000 so'm</div>
+                  </td>
+                  <td><span style="background:#fee2e2;color:#dc2626;padding:0.25rem 0.65rem;border-radius:20px;font-weight:800;font-size:0.8rem;">-10%</span><div style="font-size:0.7rem;color:#64748b;margin-top:2px;text-decoration:line-through;">15 800 000 so'm</div></td>
+                  <td><span style="background:#fef3c7;color:#b45309;padding:0.3rem 0.7rem;border-radius:20px;font-size:0.78rem;font-weight:800;">🔥 Faol</span></td>
+                  <td>
+                    <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                      <button onclick="saveOmborPrice(101)" style="background:#FBC100;color:#000;font-weight:800;padding:0.4rem 0.7rem;border-radius:8px;font-size:0.8rem;cursor:pointer;width:100%;">💾 Narxni Saqlash</button>
+                      <button onclick="toggleFlashFromOmbor(101)" style="background:#fee2e2;color:#dc2626;font-weight:800;padding:0.4rem 0.7rem;border-radius:8px;font-size:0.8rem;cursor:pointer;width:100%;">❌ Chegirmadan chiqar</button>
+                      <button onclick="deleteProductById(101)" style="background:#fee2e2;color:#dc2626;font-weight:800;padding:0.4rem 0.7rem;border-radius:8px;font-size:0.8rem;cursor:pointer;width:100%;">🗑️ O'chirish</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr id="omborRow_102">
+                  <td>
+                    <div style="display:flex;align-items:center;gap:0.6rem;">
+                      <img src="https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=600&q=80" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;">
+                      <div>
+                        <div style="font-weight:700;font-size:0.82rem;line-height:1.3;max-width:180px;">Smartfon Samsung Galaxy S24 Ultra 12/512GB Titanium Black</div>
+                        <div style="font-size:0.72rem;color:#64748b;">Samsung</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span style="background:#f1f5f9;padding:0.25rem 0.6rem;border-radius:20px;font-size:0.75rem;font-weight:700;">📱 Smartfonlar</span></td>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:0.4rem;">
+                      <input type="number" id="stockInput_102" value="8" min="0" style="width:65px;padding:0.35rem 0.4rem;border:1.5px solid #e2e8f0;border-radius:8px;font-weight:800;text-align:center;font-size:0.9rem;color:#16a34a;">
+                      <button onclick="saveStock(102)" style="background:#dbeafe;color:#1d4ed8;font-weight:700;padding:0.35rem 0.55rem;border-radius:8px;font-size:0.75rem;cursor:pointer;">💾</button>
+                    </div>
+                    <div style="font-size:0.7rem;color:#16a34a;font-weight:700;margin-top:2px;">🟢 Yetarli</div>
+                  </td>
+                  <td>
+                    <input type="number" id="priceInput_102" value="15900000" style="width:130px;padding:0.35rem 0.5rem;border:1.5px solid #e2e8f0;border-radius:8px;font-weight:800;font-size:0.85rem;">
+                    <div style="font-size:0.7rem;color:#64748b;margin-top:2px;">15 900 000 so'm</div>
+                  </td>
+                  <td><span style="background:#fee2e2;color:#dc2626;padding:0.25rem 0.65rem;border-radius:20px;font-size:0.8rem;">-8%</span><div style="font-size:0.7rem;color:#64748b;margin-top:2px;text-decoration:line-through;">17 200 000 so'm</div></td>
+                  <td><span style="background:#fef3c7;color:#b45309;padding:0.3rem 0.7rem;border-radius:20px;font-size:0.78rem;font-weight:800;">🔥 Faol</span></td>
+                  <td>
+                    <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                      <button onclick="saveOmborPrice(102)" style="background:#FBC100;color:#000;font-weight:800;padding:0.4rem 0.7rem;border-radius:8px;font-size:0.8rem;cursor:pointer;width:100%;">💾 Narxni Saqlash</button>
+                      <button onclick="toggleFlashFromOmbor(102)" style="background:#fee2e2;color:#dc2626;font-weight:800;padding:0.4rem 0.7rem;border-radius:8px;font-size:0.8rem;cursor:pointer;width:100%;">❌ Chegirmadan chiqar</button>
+                      <button onclick="deleteProductById(102)" style="background:#fee2e2;color:#dc2626;font-weight:800;padding:0.4rem 0.7rem;border-radius:8px;font-size:0.8rem;cursor:pointer;width:100%;">🗑️ O'chirish</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr id="omborRow_103">
+                  <td>
+                    <div style="display:flex;align-items:center;gap:0.6rem;">
+                      <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;">
+                      <div>
+                        <div style="font-weight:700;font-size:0.82rem;line-height:1.3;max-width:180px;">Noutbuk Apple MacBook Air 13 M2 8/256GB Midnight</div>
+                        <div style="font-size:0.72rem;color:#64748b;">Apple</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span style="background:#f1f5f9;padding:0.25rem 0.6rem;border-radius:20px;font-size:0.75rem;font-weight:700;">💻 Kompyuterlar</span></td>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:0.4rem;">
+                      <input type="number" id="stockInput_103" value="5" min="0" style="width:65px;padding:0.35rem 0.4rem;border:1.5px solid #e2e8f0;border-radius:8px;font-weight:800;text-align:center;font-size:0.9rem;color:#d97706;">
+                      <button onclick="saveStock(103)" style="background:#dbeafe;color:#1d4ed8;font-weight:700;padding:0.35rem 0.55rem;border-radius:8px;font-size:0.75rem;cursor:pointer;">💾</button>
+                    </div>
+                    <div style="font-size:0.7rem;color:#d97706;font-weight:700;margin-top:2px;">🟡 Kam qoldi</div>
+                  </td>
+                  <td>
+                    <input type="number" id="priceInput_103" value="12800000" style="width:130px;padding:0.35rem 0.5rem;border:1.5px solid #e2e8f0;border-radius:8px;font-weight:800;font-size:0.85rem;">
+                    <div style="font-size:0.7rem;color:#64748b;margin-top:2px;">12 800 000 so'm</div>
+                  </td>
+                  <td><span style="background:#fee2e2;color:#dc2626;padding:0.25rem 0.65rem;border-radius:20px;font-weight:800;font-size:0.8rem;">-9%</span><div style="font-size:0.7rem;color:#64748b;margin-top:2px;text-decoration:line-through;">14 100 000 so'm</div></td>
+                  <td><span style="background:#fef3c7;color:#b45309;padding:0.3rem 0.7rem;border-radius:20px;font-size:0.78rem;font-weight:800;">🔥 Faol</span></td>
+                  <td>
+                    <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                      <button onclick="saveOmborPrice(103)" style="background:#FBC100;color:#000;font-weight:800;padding:0.4rem 0.7rem;border-radius:8px;font-size:0.8rem;cursor:pointer;width:100%;">💾 Narxni Saqlash</button>
+                      <button onclick="toggleFlashFromOmbor(103)" style="background:#fee2e2;color:#dc2626;font-weight:800;padding:0.4rem 0.7rem;border-radius:8px;font-size:0.8rem;cursor:pointer;width:100%;">❌ Chegirmadan chiqar</button>
+                      <button onclick="deleteProductById(103)" style="background:#fee2e2;color:#dc2626;font-weight:800;padding:0.4rem 0.7rem;border-radius:8px;font-size:0.8rem;cursor:pointer;width:100%;">🗑️ O'chirish</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr id="omborRow_104">
+                  <td>
+                    <div style="display:flex;align-items:center;gap:0.6rem;">
+                      <img src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=600&q=80" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;">
+                      <div>
+                        <div style="font-weight:700;font-size:0.82rem;line-height:1.3;max-width:180px;">Noutbuk ASUS TUF Gaming F15 i5-12500H RTX 3050 16GB</div>
+                        <div style="font-size:0.72rem;color:#64748b;">ASUS</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span style="background:#f1f5f9;padding:0.25rem 0.6rem;border-radius:20px;font-size:0.75rem;font-weight:700;">💻 Kompyuterlar</span></td>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:0.4rem;">
+                      <input type="number" id="stockInput_104" value="14" min="0" style="width:65px;padding:0.35rem 0.4rem;border:1.5px solid #e2e8f0;border-radius:8px;font-weight:800;text-align:center;font-size:0.9rem;color:#16a34a;">
+                      <button onclick="saveStock(104)" style="background:#dbeafe;color:#1d4ed8;font-weight:700;padding:0.35rem 0.55rem;border-radius:8px;font-size:0.75rem;cursor:pointer;">💾</button>
+                    </div>
+                    <div style="font-size:0.7rem;color:#16a34a;font-weight:700;margin-top:2px;">🟢 Yetarli</div>
+                  </td>
+                  <td>
+                    <input type="number" id="priceInput_104" value="9800000" style="width:130px;padding:0.35rem 0.5rem;border:1.5px solid #e2e8f0;border-radius:8px;font-weight:800;font-size:0.85rem;">
+                    <div style="font-size:0.7rem;color:#64748b;margin-top:2px;">9 800 000 so'm</div>
+                  </td>
+                  <td><span style="background:#fee2e2;color:#dc2626;padding:0.25rem 0.65rem;border-radius:20px;font-weight:800;font-size:0.8rem;">-10%</span><div style="font-size:0.7rem;color:#64748b;margin-top:2px;text-decoration:line-through;">10 900 000 so'm</div></td>
+                  <td><span style="background:#f1f5f9;color:#64748b;padding:0.3rem 0.7rem;border-radius:20px;font-size:0.78rem;font-weight:700;">Yo'q</span></td>
+                  <td>
+                    <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                      <button onclick="saveOmborPrice(104)" style="background:#FBC100;color:#000;font-weight:800;padding:0.4rem 0.7rem;border-radius:8px;font-size:0.8rem;cursor:pointer;width:100%;">💾 Narxni Saqlash</button>
+                      <button onclick="toggleFlashFromOmbor(104)" style="background:#dcfce7;color:#166534;font-weight:800;padding:0.4rem 0.7rem;border-radius:8px;font-size:0.8rem;cursor:pointer;width:100%;">🔥 Kun Taklifiga qo'sh</button>
+                      <button onclick="deleteProductById(104)" style="background:#fee2e2;color:#dc2626;font-weight:800;padding:0.4rem 0.7rem;border-radius:8px;font-size:0.8rem;cursor:pointer;width:100%;">🗑️ O'chirish</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
         <!-- Tab 4: Chegirmalar (Flash Deals Manager) -->
         <div id="chegirmaTabContent" class="admin-tab-content" style="display:none;"></div>
