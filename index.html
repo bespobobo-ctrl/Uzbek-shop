@@ -2,7 +2,7 @@
 <html lang="uz">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>UzbekShop TexnoMart - Maishiy Texnika va Elektronika Onlayn Do'koni</title>
   
   <!-- Telegram WebApp (Mini App) SDK -->
@@ -671,6 +671,30 @@
 
       </div>
     </div>
+  </div>
+
+  <!-- TELEGRAM MINI APP BOTTOM MOBILE NAVIGATION BAR -->
+  <div class="tg-mobile-nav-bar">
+    <button class="tg-nav-item active" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+      <span class="tg-nav-icon">🏠</span>
+      <span>Asosiy</span>
+    </button>
+    <button class="tg-nav-item" onclick="document.getElementById('openMegaMenuBtn').click()">
+      <span class="tg-nav-icon">📂</span>
+      <span>Katalog</span>
+    </button>
+    <button class="tg-nav-item" onclick="document.getElementById('openCartBtn').click()">
+      <span class="tg-nav-icon">🛒</span>
+      <span>Savatcha</span>
+    </button>
+    <button class="tg-nav-item" onclick="document.getElementById('openWishlistBtn').click()">
+      <span class="tg-nav-icon">❤️</span>
+      <span>Sevimlilar</span>
+    </button>
+    <button class="tg-nav-item" onclick="document.getElementById('openUserAuthBtn').click()">
+      <span class="tg-nav-icon">👤</span>
+      <span>Kabinet</span>
+    </button>
   </div>
 
   <!-- 13. FOOTER SECTION -->

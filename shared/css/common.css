@@ -1,5 +1,5 @@
 /* ==========================================================================
-   TEXNOMART / UZBEKSHOP - Shared Common Styles & Design System
+   TEXNOMART / UZBEKSHOP - Shared Common Styles & Telegram Mini App Mobile Layout
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -102,7 +102,7 @@ button {
   color: #ffffff;
 }
 
-/* Installment Monthly Badge (Texnomart signature feature) */
+/* Installment Monthly Badge */
 .installment-badge {
   background-color: #fffbeb;
   color: #b45309;
@@ -128,8 +128,8 @@ button {
 /* Toast Container */
 .toast-container {
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
+  bottom: 5rem;
+  right: 1.25rem;
   z-index: 9999;
   display: flex;
   flex-direction: column;
@@ -154,4 +154,113 @@ button {
 @keyframes slideInRight {
   from { transform: translateX(100%); opacity: 0; }
   to { transform: translateX(0); opacity: 1; }
+}
+
+/* ==========================================================================
+   TELEGRAM MINI APP BOTTOM MOBILE NAVIGATION BAR (MOBILE NATIVE FEEL)
+   ========================================================================== */
+.tg-mobile-nav-bar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 65px;
+  background: #ffffff;
+  border-top: 1.5px solid var(--border);
+  z-index: 99999;
+  box-shadow: 0 -4px 15px rgba(0,0,0,0.06);
+  justify-content: space-around;
+  align-items: center;
+}
+
+.tg-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.tg-nav-item.active, .tg-nav-item:hover {
+  color: var(--tm-dark);
+}
+
+.tg-nav-icon {
+  font-size: 1.25rem;
+}
+
+/* ==========================================================================
+   TELEGRAM MINI APP MOBILE RESPONSIVE ADAPTATION (MOBILE FIRST UI)
+   ========================================================================== */
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 75px; /* Space for bottom mobile nav bar */
+  }
+
+  .tg-mobile-nav-bar {
+    display: flex; /* Show Telegram native bottom nav bar on mobile */
+  }
+
+  .container {
+    padding: 0 0.85rem;
+  }
+
+  /* Header & Navigation Adaptations */
+  .top-bar-left span.top-link {
+    display: none; /* Hide secondary links on mobile header */
+  }
+
+  .header-inner {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+  }
+
+  .header-search-wrap {
+    order: 3;
+    width: 100%;
+  }
+
+  .header-nav-actions {
+    margin-left: auto;
+  }
+
+  /* Products Grid switches to 2-column mobile layout */
+  .products-grid-container {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.75rem !important;
+  }
+
+  /* Product Card Mobile Adjustments */
+  .product-card {
+    padding: 0.65rem;
+  }
+
+  .product-card-title {
+    font-size: 0.85rem;
+    line-height: 1.25;
+    height: 2.5rem;
+  }
+
+  .current-price {
+    font-size: 0.95rem;
+  }
+
+  .monthly-installment-pill {
+    font-size: 0.68rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  .hero-banner-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .side-banners {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
 }

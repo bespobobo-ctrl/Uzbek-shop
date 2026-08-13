@@ -1,5 +1,5 @@
 /* ==========================================================================
-   TEXNOMART / UZBEKSHOP - Telegram Bot API & Telegram Mini App Integration
+   TEXNOMART / UZBEKSHOP - Telegram Mini App Mobile Native Layout Engine
    ========================================================================== */
 
 const TELEGRAM_BOT_TOKEN = "8932753943:AAEgaPfDupiUUZRxm4fSkssuN4TPtti1cmo";
@@ -7,13 +7,21 @@ const TELEGRAM_CHAT_ID_KEY = "texnomart_telegram_chat_id";
 
 // Initialize Telegram WebApp (Mini App)
 function initTelegramMiniApp() {
+  const isTgEnv = Boolean(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData);
+  const isMobileScreen = window.innerWidth <= 768;
+
+  // Add mobile Telegram WebApp class to body
+  if (isTgEnv || isMobileScreen) {
+    document.body.classList.add('tg-webapp-mode');
+  }
+
   if (window.Telegram && window.Telegram.WebApp) {
     try {
       const tg = window.Telegram.WebApp;
       tg.ready();
       tg.expand(); // Auto-expand full screen on mobile devices
       
-      // Adapt header color to Telegram theme
+      // Adapt theme colors
       if (tg.themeParams && tg.themeParams.bg_color) {
         document.documentElement.style.setProperty('--tg-theme-bg', tg.themeParams.bg_color);
       }
