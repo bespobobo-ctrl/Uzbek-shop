@@ -32,35 +32,39 @@ let currentSortOrder = 'default';
 
 async function initCatalogData() {
   try {
-    // Try loading fresh json from server
-    try {
-      const res = await fetch('./data/products.json');
-      if (res.ok) {
-        const fetchedData = await res.json();
-        if (Array.isArray(fetchedData) && fetchedData.length > 0) {
-          // Merge with any custom stock/price values from localStorage
-          const localMap = {};
-          (window.allProductsList || []).forEach(p => { localMap[p.id] = p; });
-          
-          window.allProductsList = fetchedData.map(p => {
-            if (localMap[p.id]) {
-              return { ...p, ...localMap[p.id] };
-            }
-            return p;
-          });
-          localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(window.allProductsList));
-        }
+    // 1. Try Supabase Cloud Database first
+    if (typeof window.fetchSupabaseProducts === 'function') {
+      const supaData = await window.fetchSupabaseProducts();
+      if (Array.isArray(supaData) && supaData.length > 0) {
+        window.allProductsList = supaData;
+        localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(window.allProductsList));
+        console.log('Catalog: Loaded ' + supaData.length + ' products live from Supabase ☁️');
       }
-    } catch (e) {
-      console.warn('Network fetch for products.json skipped, using local data');
     }
 
-    // Ensure stock on all items
+    // 2. Fallback to products.json if Supabase table is not populated yet
+    if (!window.allProductsList || window.allProductsList.length === 0) {
+      try {
+        const res = await fetch('./data/products.json');
+        if (res.ok) {
+          const fetchedData = await res.json();
+          if (Array.isArray(fetchedData) && fetchedData.length > 0) {
+            window.allProductsList = fetchedData;
+            localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(window.allProductsList));
+          }
+        }
+      } catch (e) {
+        console.warn('Network fetch for products.json skipped, using local fallback');
+      }
+    }
+
+    // Ensure stock field on all items
     window.allProductsList.forEach(p => { if (typeof p.stock !== 'number') p.stock = 10; });
 
     renderCatalogGrid();
     if (window.renderFlashDealsSection) window.renderFlashDealsSection();
     if (window.renderAdminDashboardTabs) window.renderAdminDashboardTabs();
+    console.log('Catalog ready: ' + window.allProductsList.length + ' mahsulot ✅');
   } catch (err) {
     console.error('Catalog init error:', err);
   }
@@ -68,6 +72,12 @@ async function initCatalogData() {
 
 window.saveProductsToStorage = function() {
   localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(window.allProductsList));
+  // Sync to Supabase in background if enabled
+  if (typeof window.upsertSupabaseProduct === 'function') {
+    (window.allProductsList || []).forEach(p => {
+      window.upsertSupabaseProduct(p);
+    });
+  }
 };
 
 function getFilteredProductsList() {

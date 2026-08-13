@@ -434,6 +434,7 @@ window.deleteProductById = function(productId) {
   if (confirm('"' + item.name + '" ni o\'chirib tashlashni xohlaysizmi?')) {
     window.allProductsList.splice(idx, 1);
     if (window.saveProductsToStorage) window.saveProductsToStorage();
+    if (typeof window.deleteSupabaseProduct === 'function') window.deleteSupabaseProduct(productId);
     if (window.filterProductsBySearch) window.filterProductsBySearch('');
     if (window.renderFlashDealsSection) window.renderFlashDealsSection();
     if(window.showToast) showToast('"' + item.name + '" o\'chirildi!', 'info');
