@@ -1,0 +1,157 @@
+/* ==========================================================================
+   TEXNOMART / UZBEKSHOP - Shared Common Styles & Design System
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Brand Texnomart Color Tokens */
+  --tm-yellow: #FBC100;
+  --tm-yellow-hover: #e5b000;
+  --tm-yellow-light: #fffbeb;
+  
+  --tm-dark: #1e293b;
+  --tm-dark-hover: #0f172a;
+  
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-alt: #f1f5f9;
+
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+
+  --border: #e2e8f0;
+  --border-focus: #FBC100;
+
+  --success: #10b981;
+  --danger: #ef4444;
+  --accent: #f59e0b;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
+
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  transition: var(--transition);
+}
+
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* Common Badge Styles */
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.badge-pill.yellow {
+  background-color: var(--tm-yellow);
+  color: #000000;
+}
+
+.badge-pill.dark {
+  background-color: var(--tm-dark);
+  color: #ffffff;
+}
+
+.badge-pill.danger {
+  background-color: var(--danger);
+  color: #ffffff;
+}
+
+/* Installment Monthly Badge (Texnomart signature feature) */
+.installment-badge {
+  background-color: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fde68a;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.installment-badge span {
+  background-color: #f59e0b;
+  color: #ffffff;
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+}
+
+/* Toast Container */
+.toast-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.toast-item {
+  background: #ffffff;
+  color: var(--text-main);
+  padding: 0.9rem 1.25rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  border-left: 5px solid var(--tm-yellow);
+  font-weight: 600;
+  font-size: 0.925rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}

@@ -1,0 +1,134 @@
+/* Header Component Styles */
+header.main-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: var(--tm-dark);
+  border-bottom: 3px solid var(--tm-yellow);
+  box-shadow: var(--shadow-md);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 80px;
+  gap: 1.5rem;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.brand-logo .yellow-text {
+  color: var(--tm-yellow);
+}
+
+.brand-logo-icon {
+  background-color: var(--tm-yellow);
+  color: #000000;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+/* Yellow Catalog Drawer Button */
+.mega-catalog-btn {
+  background-color: var(--tm-yellow);
+  color: #000000;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.mega-catalog-btn:hover {
+  background-color: var(--tm-yellow-hover);
+}
+
+/* Header Search Box */
+.header-search-wrap {
+  flex: 1;
+  max-width: 520px;
+  position: relative;
+}
+
+.header-search-wrap input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.75rem;
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  background-color: #ffffff;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.header-search-wrap input:focus {
+  border-color: var(--tm-yellow);
+  box-shadow: 0 0 0 4px rgba(251, 193, 0, 0.25);
+}
+
+.header-search-wrap svg {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  width: 18px;
+  height: 18px;
+}
+
+/* Header User Actions */
+.header-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.action-icon-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #cbd5e1;
+  font-size: 0.75rem;
+  font-weight: 600;
+  position: relative;
+  gap: 2px;
+}
+
+.action-icon-btn:hover {
+  color: var(--tm-yellow);
+}
+
+.action-icon-btn .icon {
+  font-size: 1.3rem;
+}
+
+.action-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background-color: var(--tm-yellow);
+  color: #000000;
+  font-size: 0.7rem;
+  font-weight: 800;
+  min-width: 18px;
+  height: 18px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -1,0 +1,59 @@
+/* Catalog Component Styles */
+.catalog-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1.25rem;
+}
+
+.category-pills {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  overflow-x: auto;
+}
+
+.cat-pill-btn {
+  padding: 0.65rem 1.35rem;
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  background-color: var(--bg-alt);
+  white-space: nowrap;
+}
+
+.cat-pill-btn:hover {
+  background-color: #cbd5e1;
+  color: var(--text-main);
+}
+
+.cat-pill-btn.active {
+  background-color: var(--tm-dark);
+  color: var(--tm-yellow);
+}
+
+.sort-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sort-select {
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.products-grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.75rem;
+}

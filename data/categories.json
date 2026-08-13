@@ -1,0 +1,9 @@
+[
+  { "id": "smartfonlar", "name": "Smartfonlar va gadjetlar", "icon": "📱", "count": 1420 },
+  { "id": "kompyuterlar", "name": "Kompyuter texnikasi", "icon": "💻", "count": 890 },
+  { "id": "tv-audio", "name": "Televizorlar va audiotexnikalar", "icon": "📺", "count": 640 },
+  { "id": "maishiy-texnika", "name": "Maishiy texnika", "icon": "🧺", "count": 1150 },
+  { "id": "oshxona", "name": "Oshxona uchun texnika", "icon": "🍳", "count": 930 },
+  { "id": "iqlim", "name": "Iqlim texnikasi", "icon": "❄️", "count": 310 },
+  { "id": "gozallik", "name": "Go'zallik va salomatlik", "icon": "💈", "count": 520 }
+]

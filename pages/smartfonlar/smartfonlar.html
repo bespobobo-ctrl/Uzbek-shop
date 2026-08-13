@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smartfonlar va Gadjetlar | UzbekShop TexnoMart</title>
+  <link rel="stylesheet" href="../../shared/css/common.css">
+  <link rel="stylesheet" href="../../sections/top-bar/top-bar.css">
+  <link rel="stylesheet" href="../../sections/header/header.css">
+  <link rel="stylesheet" href="../../sections/product-catalog/catalog.css">
+  <link rel="stylesheet" href="../../sections/product-card/product-card.css">
+  <link rel="stylesheet" href="../../sections/footer/footer.css">
+</head>
+<body>
+
+  <div class="top-bar">
+    <div class="container top-bar-container">
+      <div class="top-bar-left">
+        <span>📍 Shahar: Toshkent</span>
+        <span> do'konlarimiz</span>
+      </div>
+      <div class="top-bar-right">
+        <span>📞 +998 91 207 00 08</span>
+      </div>
+    </div>
+  </div>
+
+  <header class="main-header">
+    <div class="container header-inner">
+      <a href="../../index.html" class="brand-logo">
+        <div class="brand-logo-icon">📱</div>
+        <span>Uzbek<span class="yellow-text">Shop</span></span>
+      </a>
+      <h2 style="color:#ffffff;">Smartfonlar Bo'limi</h2>
+    </div>
+  </header>
+
+  <main class="container" style="margin-top: 3rem;">
+    <h1>📱 Smartfonlar va Gadjetlar Katalogi</h1>
+    <p style="color:var(--text-muted); margin-bottom: 2rem;">Apple iPhone, Samsung Galaxy, Xiaomi va boshqa brendlar hamyonbop muddatli to'lov evaziga.</p>
+
+    <div class="products-grid-container" id="smartphonesGrid">
+      <!-- Smartphones Category Products -->
+    </div>
+  </main>
+
+  <script src="../../shared/js/toast.js"></script>
+  <script src="../../shared/js/storage.js"></script>
+  <script src="../../sections/product-card/product-card.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const res = await fetch('../../data/products.json');
+      const data = await res.json();
+      const smartphones = data.filter(p => p.category === 'smartfonlar');
+      const container = document.getElementById('smartphonesGrid');
+      container.innerHTML = smartphones.map(p => renderSingleProductCardHTML(p)).join('');
+    });
+  </script>
+</body>
+</html>

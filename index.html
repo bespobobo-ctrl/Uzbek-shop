@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UzbekShop TexnoMart - Maishiy Texnika va Elektronika Onlayn Do'koni</title>
+  <meta name="description" content="UzbekShop TexnoMart onlayn do'koni. Telefonlar, noutbuklar, televizorlar va maishiy texnika mahsulotlarini 12-24 oyga qulay muddatli to'lov asosida sotib oling.">
+
+  <!-- Shared Global Styles -->
+  <link rel="stylesheet" href="./shared/css/common.css">
+
+  <!-- Section Component Styles (Each section in its own folder) -->
+  <link rel="stylesheet" href="./sections/top-bar/top-bar.css">
+  <link rel="stylesheet" href="./sections/header/header.css">
+  <link rel="stylesheet" href="./sections/mega-menu/mega-menu.css">
+  <link rel="stylesheet" href="./sections/hero-banner/hero-banner.css">
+  <link rel="stylesheet" href="./sections/flash-deals/flash-deals.css">
+  <link rel="stylesheet" href="./sections/product-catalog/catalog.css">
+  <link rel="stylesheet" href="./sections/product-card/product-card.css">
+  <link rel="stylesheet" href="./sections/product-detail/product-detail.css">
+  <link rel="stylesheet" href="./sections/cart-drawer/cart-drawer.css">
+  <link rel="stylesheet" href="./sections/wishlist/wishlist.css">
+  <link rel="stylesheet" href="./sections/compare/compare.css">
+  <link rel="stylesheet" href="./sections/checkout-modal/checkout-modal.css">
+  <link rel="stylesheet" href="./sections/user-auth/user-auth.css">
+  <link rel="stylesheet" href="./sections/footer/footer.css">
+</head>
+<body>
+
+  <!-- 1. TOP BAR SECTION -->
+  <div class="top-bar">
+    <div class="container top-bar-container">
+      <div class="top-bar-left">
+        <div class="city-selector" id="citySelectorBtn">
+          📍 <span id="selectedCityName">Toshkent</span> ▾
+        </div>
+        <span class="top-link" id="topLinkStores" data-i18n="top_stores">Bizning do'konlarimiz</span>
+        <span class="top-link" id="topLinkB2B" data-i18n="top_b2b">Yuridik shaxslar uchun</span>
+        <span class="top-link" id="topLinkPayments" data-i18n="top_payments">To'lov usullari</span>
+      </div>
+      <div class="top-bar-right">
+        <a href="tel:+998912070008" class="call-center-link">
+          📞 <span data-i18n="top_callcenter">Aloqa markazi</span>: +998 91 207 00 08
+        </a>
+        <button class="lang-btn">O'Z / РУ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. HEADER SECTION -->
+  <header class="main-header">
+    <div class="container header-inner">
+      <a href="#" class="brand-logo">
+        <div class="brand-logo-icon">⚡</div>
+        <span>Uzbek<span class="yellow-text">Shop</span></span>
+      </a>
+
+      <!-- Mega Catalog Toggle Button -->
+      <button class="mega-catalog-btn" id="openMegaMenuBtn">
+        <span>☰</span> <span data-i18n="catalog_btn">Catalog</span>
+      </button>
+
+      <!-- Global Search Box -->
+      <div class="header-search-wrap">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        <input type="text" id="globalSearchInput" data-i18n="search_placeholder" placeholder="Mahsulotlarni qidirish (iPhone, Smart TV, LG muzlatgich)...">
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="header-nav-actions">
+        <button class="action-icon-btn" id="openWishlistBtn">
+          <span class="icon">❤️</span>
+          <span data-i18n="nav_wishlist">Sevimlilar</span>
+          <span class="action-badge" id="wishlistBadgeCount">0</span>
+        </button>
+
+        <button class="action-icon-btn" id="openCompareBtn">
+          <span class="icon">⚖️</span>
+          <span data-i18n="nav_compare">Taqqoslash</span>
+          <span class="action-badge" id="compareBadgeCount">0</span>
+        </button>
+
+        <button class="action-icon-btn" id="openCartBtn">
+          <span class="icon">🛒</span>
+          <span data-i18n="nav_cart">Savatcha</span>
+          <span class="action-badge" id="cartBadgeCount">0</span>
+        </button>
+
+        <!-- User Login / Profile Button (Right after Cart) -->
+        <button class="action-icon-btn" id="openUserAuthBtn">
+          <span class="icon" id="headerUserBtnIcon">👤</span>
+          <span id="headerUserBtnText" data-i18n="nav_login">Kirish</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3. MEGA MENU DROPDOWN SECTION -->
+  <div class="mega-menu-overlay" id="megaMenuOverlay">
+    <div class="mega-menu-content">
+      <div class="container mega-menu-grid">
+        <div class="mega-category-list">
+          <a href="./pages/smartfonlar/smartfonlar.html" class="mega-cat-item active">📱 Smartfonlar va gadjetlar</a>
+          <a href="./pages/kompyuterlar/kompyuterlar.html" class="mega-cat-item">💻 Kompyuter texnikasi</a>
+          <a href="#" class="mega-cat-item">📺 Televizorlar va audio</a>
+          <a href="./pages/maishiy-texnika/maishiy-texnika.html" class="mega-cat-item">🧺 Maishiy texnika</a>
+          <a href="#" class="mega-cat-item">🍳 Oshxona uchun texnika</a>
+          <a href="#" class="mega-cat-item">❄️ Iqlim texnikasi</a>
+        </div>
+        <div class="mega-subcategories">
+          <div class="subcat-group">
+            <h4>Smartfonlar</h4>
+            <ul>
+              <li><a href="./pages/smartfonlar/smartfonlar.html">Apple iPhone</a></li>
+              <li><a href="./pages/smartfonlar/smartfonlar.html">Samsung Galaxy</a></li>
+              <li><a href="./pages/smartfonlar/smartfonlar.html">Xiaomi / Redmi</a></li>
+              <li><a href="./pages/smartfonlar/smartfonlar.html">Vivo & Realme</a></li>
+            </ul>
+          </div>
+          <div class="subcat-group">
+            <h4>Noutbuklar</h4>
+            <ul>
+              <li><a href="./pages/kompyuterlar/kompyuterlar.html">MacBook Air & Pro</a></li>
+              <li><a href="./pages/kompyuterlar/kompyuterlar.html">ASUS Gaming</a></li>
+              <li><a href="./pages/kompyuterlar/kompyuterlar.html">HP & Lenovo</a></li>
+            </ul>
+          </div>
+          <div class="subcat-group">
+            <h4>Maishiy Texnika</h4>
+            <ul>
+              <li><a href="./pages/maishiy-texnika/maishiy-texnika.html">Muzlatgichlar</a></li>
+              <li><a href="./pages/maishiy-texnika/maishiy-texnika.html">Kir yuvish mashinalari</a></li>
+              <li><a href="./pages/maishiy-texnika/maishiy-texnika.html">Konditsionerlar</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <!-- 4. HERO BANNER & 3 BENEFIT CARDS SECTION -->
+    <section class="hero-slider-section">
+      <div class="hero-banner-grid">
+        <div class="main-banner-card">
+          <span class="banner-badge" data-i18n="hero_badge">0-0-12 MUDDATLI TO'LOV</span>
+          <h2 data-i18n="hero_title">Barcha Smartfonlar va Texnikalar <span>0% Oldindan To'lov</span> Bilan!</h2>
+          <p data-i18n="hero_desc">Texnomart kafolati, bepul yetkazib berish xizmati va hamyonbop 12 oylik to'lov rejasi.</p>
+          <button class="banner-cta-btn" onclick="document.getElementById('catalogSection').scrollIntoView({behavior:'smooth'})" data-i18n="hero_cta">Xarid Xilishni Boshlash →</button>
+        </div>
+        
+        <!-- 3 Interactive Benefit Cards -->
+        <div class="side-banners">
+          <!-- Card 1: Delivery -->
+          <div class="side-banner-card" id="heroCardDelivery">
+            <div class="icon-wrap">🚀</div>
+            <div>
+              <h4 data-i18n="card_delivery_title">Bepul Yetkazib Berish</h4>
+              <p data-i18n="card_delivery_desc">O'zbekiston bo'ylab 24 soat ichida yetkazamiz</p>
+            </div>
+            <span class="arrow-hint">›</span>
+          </div>
+
+          <!-- Card 2: Warranty -->
+          <div class="side-banner-card" id="heroCardWarranty">
+            <div class="icon-wrap">🛡️</div>
+            <div>
+              <h4 data-i18n="card_warranty_title">1 Yillik Rasmiy Kafolat</h4>
+              <p data-i18n="card_warranty_desc">Barcha mahsulotlarga to'liq servis kafolati</p>
+            </div>
+            <span class="arrow-hint">›</span>
+          </div>
+
+          <!-- Card 3: 30-Day Returns -->
+          <div class="side-banner-card" id="heroCardReturns">
+            <div class="icon-wrap">🔄</div>
+            <div>
+              <h4 data-i18n="card_returns_title">30 Kun Qaytarish Kafolati</h4>
+              <p data-i18n="card_returns_desc">Mahsulot yoqmasa 30 kun ichida almashtirish</p>
+            </div>
+            <span class="arrow-hint">›</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. FLASH DEALS SECTION (KUN TAKLIFI) -->
+    <section class="flash-deals-section">
+      <div class="flash-header">
+        <div class="flash-title-wrap">
+          <h2 data-i18n="flash_title">🔥 Kun Taklifi & Super Chegirmalar</h2>
+          <div class="deal-timer">
+            <span data-i18n="flash_timer_text">Tugashiga:</span>
+            <span class="timer-box" id="flashTimerHours">14</span>:
+            <span class="timer-box" id="flashTimerMins">30</span>:
+            <span class="timer-box" id="flashTimerSecs">49</span>
+          </div>
+        </div>
+      </div>
+      <div id="flashDealProductContainer" class="flash-deal-content"></div>
+    </section>
+
+    <!-- 6. PRODUCT CATALOG SECTION -->
+    <section class="catalog-section" id="catalogSection">
+      <div class="catalog-toolbar">
+        <div class="category-pills">
+          <button class="cat-pill-btn active" data-cat="all" data-i18n="cat_all">Barcha Tovar</button>
+          <button class="cat-pill-btn" data-cat="smartfonlar" data-i18n="cat_smartphones">📱 Smartfonlar</button>
+          <button class="cat-pill-btn" data-cat="kompyuterlar" data-i18n="cat_laptops">💻 Kompyuterlar</button>
+          <button class="cat-pill-btn" data-cat="tv-audio" data-i18n="cat_tv">📺 TV va Audio</button>
+          <button class="cat-pill-btn" data-cat="maishiy-texnika" data-i18n="cat_appliances">🧺 Maishiy Texnika</button>
+          <button class="cat-pill-btn" data-cat="iqlim" data-i18n="cat_climate">❄️ Iqlim</button>
+        </div>
+        <div class="sort-container">
+          <label style="font-weight:600; font-size:0.875rem;" data-i18n="sort_label">Saralash:</label>
+          <select id="catalogSortSelect" class="sort-select">
+            <option value="default" data-i18n="sort_default">Odatiy</option>
+            <option value="price-low" data-i18n="sort_price_low">Narx: Arzondan qimmatga</option>
+            <option value="price-high" data-i18n="sort_price_high">Narx: Qimmatdan arzonga</option>
+            <option value="monthly" data-i18n="sort_monthly">Oylik to'lov bo'yicha</option>
+            <option value="rating" data-i18n="sort_rating">Reyting bo'yicha</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Main Products Grid -->
+      <div class="products-grid-container" id="mainProductsGrid">
+        <!-- Products generated dynamically by catalog.js & product-card.js -->
+      </div>
+    </section>
+  </main>
+
+  <!-- PRODUCT DETAIL / QUICK VIEW MODAL -->
+  <div class="product-detail-modal-overlay" id="productDetailModalOverlay">
+    <div class="product-detail-modal-box">
+      <button class="product-detail-close-btn" id="closeProductDetailBtn">&times;</button>
+      <div id="productDetailModalContent">
+        <!-- Rendered by product-detail.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. CART DRAWER SECTION -->
+  <div class="cart-drawer-overlay" id="cartDrawerOverlay">
+    <div class="cart-drawer-panel">
+      <div class="cart-drawer-header">
+        <h3>🛒 Xaridlar Savatchasi</h3>
+        <button class="close-drawer-btn" id="closeCartDrawerBtn">&times;</button>
+      </div>
+      <div class="cart-drawer-body" id="cartDrawerItemsList">
+        <!-- Cart items rendered by cart-drawer.js -->
+      </div>
+      <div class="cart-drawer-footer">
+        <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; font-weight:600;">
+          <span>Jami to'lov:</span>
+          <span id="cartDrawerTotal" style="color:var(--tm-dark); font-size:1.2rem; font-weight:800;">0 so'm</span>
+        </div>
+        <button class="cart-checkout-btn" id="cartDrawerCheckoutBtn">Buyurtmani Rasmiylashtirish</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. WISHLIST MODAL SECTION -->
+  <div class="wishlist-modal-overlay" id="wishlistModalOverlay">
+    <div class="wishlist-modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; border-bottom:2px solid var(--tm-yellow); padding-bottom:0.5rem;">
+        <h3 style="font-size:1.3rem; font-weight:800;">❤️ Sevimlilar Ro'yxati</h3>
+        <button id="closeWishlistBtn" style="font-size:1.5rem;">&times;</button>
+      </div>
+      <div id="wishlistItemsContainer" style="overflow-y:auto; flex:1;"></div>
+    </div>
+  </div>
+
+  <!-- 10. COMPARE MODAL SECTION -->
+  <div class="compare-modal-overlay" id="compareModalOverlay">
+    <div class="compare-modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--tm-yellow); padding-bottom:0.5rem;">
+        <h3 style="font-size:1.3rem; font-weight:800;">⚖️ Mahsulotlarni Taqqoslash</h3>
+        <button id="closeCompareBtn" style="font-size:1.5rem;">&times;</button>
+      </div>
+      <div id="compareTableContainer"></div>
+    </div>
+  </div>
+
+  <!-- 11. CHECKOUT MODAL SECTION -->
+  <div class="checkout-modal-overlay" id="checkoutModalOverlay">
+    <div class="checkout-box">
+      <h3 style="font-size:1.4rem; font-weight:800; margin-bottom:1.25rem;">Buyurtmani Rasmiylashtirish</h3>
+      <form id="tmCheckoutForm">
+        <div class="checkout-form-group">
+          <label>Ism-familiyangiz:</label>
+          <input type="text" id="checkoutName" placeholder="Masalan: Sardor Rahimov" required>
+        </div>
+        <div class="checkout-form-group">
+          <label>Telefon raqamingiz:</label>
+          <input type="tel" id="checkoutPhone" placeholder="+998 90 123 45 67" required>
+        </div>
+        <div class="checkout-form-group">
+          <label>Yetkazib berish manzili:</label>
+          <textarea id="checkoutAddress" rows="2" placeholder="Toshkent sh., Yunusobod tumani..." required></textarea>
+        </div>
+        <div class="checkout-form-group">
+          <label>To'lov usuli:</label>
+          <select id="checkoutPaymentType">
+            <option value="cash">Eshik oldida naqd yoki karta</option>
+            <option value="installment">12 oyga bo'lib to'lash (TexnoMart Credit)</option>
+            <option value="online">Click / Payme orqali instant to'lov</option>
+          </select>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:0.75rem; margin-top:1.5rem;">
+          <button type="button" id="cancelCheckoutBtn" style="padding:0.75rem 1.25rem; background:var(--bg-alt); font-weight:600; border-radius:var(--radius-sm);">Bekor Xilish</button>
+          <button type="submit" class="checkout-submit-btn" style="width:auto;">Buyurtmani Tasdiqlash</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOP BAR MODALS (City, Stores, B2B, Payments) -->
+  <!-- City Selector Modal -->
+  <div class="topbar-modal-overlay" id="cityModalOverlay">
+    <div class="topbar-modal-box">
+      <span class="topbar-modal-close">&times;</span>
+      <h3 style="font-size:1.3rem; font-weight:800; margin-bottom:0.5rem;">📍 Shaharni Tanlang</h3>
+      <p style="color:var(--text-muted); font-size:0.875rem;">Tanlangan hududga qarab yetkazib berish va do'konlar mavjudligi belgilanadi:</p>
+      <div class="cities-grid">
+        <div class="city-select-card" onclick="selectCity('Toshkent')">Toshkent</div>
+        <div class="city-select-card" onclick="selectCity('Samarqand')">Samarqand</div>
+        <div class="city-select-card" onclick="selectCity('Farg\'ona')">Farg'ona</div>
+        <div class="city-select-card" onclick="selectCity('Andijon')">Andijon</div>
+        <div class="city-select-card" onclick="selectCity('Namangan')">Namangan</div>
+        <div class="city-select-card" onclick="selectCity('Buxoro')">Buxoro</div>
+        <div class="city-select-card" onclick="selectCity('Nukus')">Nukus</div>
+        <div class="city-select-card" onclick="selectCity('Qarshi')">Qarshi</div>
+        <div class="city-select-card" onclick="selectCity('Urganch')">Urganch</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stores Map Modal -->
+  <div class="topbar-modal-overlay" id="storesModalOverlay">
+    <div class="topbar-modal-box">
+      <span class="topbar-modal-close">&times;</span>
+      <h3 style="font-size:1.3rem; font-weight:800;">🏪 Bizning Do'konlarimiz Manzillari</h3>
+      <div class="store-cards-list">
+        <div class="store-card-item">
+          <div class="store-card-info">
+            <h4>📍 TexnoMart Toshkent (Mega Planet)</h4>
+            <p>Ahmad Donish ko'chasi 2B-uy | Ish vaqti: 09:00 - 21:00</p>
+          </div>
+          <a href="tel:+998912070008" class="badge-pill yellow">📞 Qo'ng'iroq</a>
+        </div>
+        <div class="store-card-item">
+          <div class="store-card-info">
+            <h4>📍 TexnoMart Samarqand (Registon)</h4>
+            <p>Dagbitskaya ko'chasi 14-uy | Ish vaqti: 09:00 - 20:00</p>
+          </div>
+          <a href="tel:+998912070008" class="badge-pill yellow">📞 Qo'ng'iroq</a>
+        </div>
+        <div class="store-card-item">
+          <div class="store-card-info">
+            <h4>📍 TexnoMart Farg'ona (Center)</h4>
+            <p>Al-Farg'oniy ko'chasi 45-uy | Ish vaqti: 09:00 - 20:00</p>
+          </div>
+          <a href="tel:+998912070008" class="badge-pill yellow">📞 Qo'ng'iroq</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B2B Corporate Application Modal (Professional UI/UX) -->
+  <div class="topbar-modal-overlay" id="b2bModalOverlay">
+    <div class="topbar-modal-box">
+      <span class="topbar-modal-close">&times;</span>
+      
+      <!-- B2B Hero Header -->
+      <div class="b2b-header-card">
+        <h3>🏢 Corporate <span>B2B Portal</span></h3>
+        <p>Yuridik shaxslar va tashkilotlar uchun shartnoma, QQS (NDS) hisob-faktura va ulgurji narxlar.</p>
+      </div>
+
+      <!-- B2B Key Benefit Cards Grid -->
+      <div class="b2b-benefits-grid">
+        <div class="b2b-benefit-item">
+          <div class="b2b-benefit-icon">📄</div>
+          <div class="b2b-benefit-text">
+            <h5>Elektron Hujjatlar (QQS)</h5>
+            <p>Factura.uz yoki Didox orqali 0% xatolik bilan hisob-faktura rasmiylashtirish.</p>
+          </div>
+        </div>
+        <div class="b2b-benefit-item">
+          <div class="b2b-benefit-icon">📉</div>
+          <div class="b2b-benefit-text">
+            <h5>Ulgurji Chegirmalar</h5>
+            <p>Kompaniyalar uchun hajmli xaridlarda 15% gacha korporativ chegirmalar.</p>
+          </div>
+        </div>
+        <div class="b2b-benefit-item">
+          <div class="b2b-benefit-icon">👨‍💼</div>
+          <div class="b2b-benefit-text">
+            <h5>Shaxsiy B2B Menedjer</h5>
+            <p>24/7 rejimda shartnomalarni rasmiylashtiruvchi biriktirilgan mutaxassis.</p>
+          </div>
+        </div>
+        <div class="b2b-benefit-item">
+          <div class="b2b-benefit-icon">🚚</div>
+          <div class="b2b-benefit-text">
+            <h5>Ofisgacha Bepul Yetkazish</h5>
+            <p>Toshkent va viloyatlar bo'ylab korporativ kuryerlik xizmati.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- B2B Request Form -->
+      <div class="b2b-form-wrap">
+        <h4 style="font-size:1.1rem; font-weight:800; margin-bottom:1.25rem; color:var(--tm-dark);">📝 Tijorat Taklifini Olish Uchun Ariza:</h4>
+        <form id="b2bSubmitForm" class="form-grid-2col">
+          <div class="auth-form-group">
+            <label>Kompaniya / Korxona Nomi:</label>
+            <div class="input-with-icon">
+              <span class="input-icon">🏢</span>
+              <input type="text" id="b2bCompanyName" placeholder="Masalan: ООО 'Tech Solutions'" required>
+            </div>
+          </div>
+          <div class="auth-form-group">
+            <label>STIR (ИНН) Raqami:</label>
+            <div class="input-with-icon">
+              <span class="input-icon">🔢</span>
+              <input type="text" placeholder="300 123 456" required>
+            </div>
+          </div>
+          <div class="auth-form-group">
+            <label>Mas'ul Xodim Ismi va Telefoni:</label>
+            <div class="input-with-icon">
+              <span class="input-icon">📞</span>
+              <input type="tel" placeholder="+998 90 123 45 67" required>
+            </div>
+          </div>
+          <div class="auth-form-group">
+            <label>Xarid Byudjeti (Taxminiy):</label>
+            <div class="input-with-icon">
+              <span class="input-icon">💰</span>
+              <input type="text" placeholder="Masalan: 50,000,000 so'm">
+            </div>
+          </div>
+          <div class="auth-form-group form-col-full">
+            <label>Kerakli Tovar va Miqdori (Texnik topshiriq):</label>
+            <div class="input-with-icon">
+              <span class="input-icon">📝</span>
+              <textarea rows="2" placeholder="Masalan: 10 ta noutbuk va 5 ta konditsioner..."></textarea>
+            </div>
+          </div>
+          <button type="submit" class="b2b-submit-btn-styled">Korporativ Tijorat Taklifini Olish →</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Payment Methods Modal -->
+  <div class="topbar-modal-overlay" id="paymentsModalOverlay">
+    <div class="topbar-modal-box">
+      <span class="topbar-modal-close">&times;</span>
+      <h3 style="font-size:1.3rem; font-weight:800;">💳 Qulay To'lov Usullari</h3>
+      <div class="payment-methods-grid">
+        <div class="payment-method-card">
+          <h4>💳 Uzcard & Humo</h4>
+          <p>Milliy bank kartalari orqali eshik oldida yoki onlayn instant to'lov.</p>
+        </div>
+        <div class="payment-method-card">
+          <h4>📱 Click & Payme</h4>
+          <p>Mobil ilova orqali QR-kod yoki kartadan darhol o'tkazma.</p>
+        </div>
+        <div class="payment-method-card">
+          <h4>📄 12/24 Oyga Bo'lib To'lash</h4>
+          <p>0% oldindan to'lovsiz, faqat pasport va bank kartasi bilan.</p>
+        </div>
+        <div class="payment-method-card">
+          <h4>💵 Naqd Pulda</h4>
+          <p>Kuryer mahsulotni yetkazib berganida tekshirib naqd to'lash.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12. USER AUTH & SHAXSIY KABINET MODAL SECTION -->
+  <div class="auth-modal-overlay" id="authModalOverlay">
+    <div class="auth-modal-box">
+      <button class="auth-modal-close-btn" id="closeAuthModalBtn">&times;</button>
+      
+      <!-- Pre-Login Premium Form View -->
+      <div id="authLoginFormView">
+        <div class="login-card-narrow">
+          <div class="login-shield-icon">🛡️</div>
+          <div class="login-header-title">
+            <h3>Tizimga Kirish</h3>
+            <p class="login-hint">UzbekShop TexnoMart Boshqaruv va Buxgalteriya paneli</p>
+          </div>
+
+          <div class="demo-credentials-badge">
+            <span>💡 Test rejimida login va parol:</span> <b>123</b> / <b>123</b>
+          </div>
+
+          <form id="authLoginForm">
+            <div class="auth-form-group">
+              <label for="authUsernameInput">Foydalanuvchi Logini:</label>
+              <div class="input-with-icon">
+                <span class="input-icon">👤</span>
+                <input type="text" id="authUsernameInput" value="admin" placeholder="admin" required>
+              </div>
+            </div>
+
+            <div class="auth-form-group">
+              <label for="authPasswordInput">Maxfiy Parol:</label>
+              <div class="input-with-icon">
+                <span class="input-icon">🔒</span>
+                <input type="password" id="authPasswordInput" value="123" placeholder="Parolni kiriting" required>
+              </div>
+            </div>
+
+            <button type="submit" class="auth-submit-btn">Tizimga Kirish →</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Professional Admin Dashboard View -->
+      <div id="authAdminDashboardView" class="admin-dashboard-view">
+        <div class="admin-header-bar">
+          <div class="admin-user-profile-badge">
+            <div class="admin-avatar-lg">⚡</div>
+            <div class="admin-user-info">
+              <h3>Sardor Rahimov <span class="online-status-pill">🟢 Master Admin</span></h3>
+              <p>UzbekShop TexnoMart Boshqaruv Markazi</p>
+            </div>
+          </div>
+          <button class="badge-pill danger" id="adminLogoutBtn" style="padding:0.6rem 1.25rem; font-size:0.875rem;">🚪 Tizimdan Chiqish</button>
+        </div>
+
+        <!-- Tab Pills Navigation -->
+        <div class="admin-tabs-nav">
+          <button class="admin-tab-btn active" data-tab="accountingTabContent">📊 Moliya & Buxgalteriya</button>
+          <button class="admin-tab-btn" data-tab="ordersTabContent">📦 Buyurtmalar Boshqaruvi</button>
+          <button class="admin-tab-btn" data-tab="productsPriceTabContent">🏷️ Narxlar & Super Chegirma</button>
+          <button class="admin-tab-btn" data-tab="addProductTabContent">➕ Yangi Tovar & Rasm Yuklash</button>
+        </div>
+
+        <!-- Tab 1: Accounting -->
+        <div id="accountingTabContent" class="admin-tab-content" style="display:block;"></div>
+
+        <!-- Tab 2: Orders -->
+        <div id="ordersTabContent" class="admin-tab-content" style="display:none;"></div>
+
+        <!-- Tab 3: Products Price & Metrics -->
+        <div id="productsPriceTabContent" class="admin-tab-content" style="display:none;"></div>
+
+        <!-- Tab 4: Add Product Form Studio with Image Upload -->
+        <div id="addProductTabContent" class="admin-tab-content" style="display:none;">
+          <div class="add-product-card-form">
+            <h4 style="margin-bottom:1.25rem; font-weight:800; font-size:1.2rem; color:var(--tm-dark);">✨ Yangi Mahsulot va Rasm Yuklash Studio</h4>
+            <form id="addNewProductForm" class="form-grid-2col">
+              <div class="auth-form-group">
+                <label>Mahsulot Nomi:</label>
+                <div class="input-with-icon">
+                  <span class="input-icon">📱</span>
+                  <input type="text" id="newProdName" placeholder="Masalan: Samsung Galaxy S24 Plus" required>
+                </div>
+              </div>
+              <div class="auth-form-group">
+                <label>Kategoriya Bo'limi:</label>
+                <div class="input-with-icon">
+                  <span class="input-icon">📂</span>
+                  <select id="newProdCategory">
+                    <option value="smartfonlar">📱 Smartfonlar va gadjetlar</option>
+                    <option value="kompyuterlar">💻 Kompyuter texnikasi</option>
+                    <option value="tv-audio">📺 Televizorlar va audio</option>
+                    <option value="maishiy-texnika">🧺 Maishiy texnika</option>
+                    <option value="iqlim">❄️ Iqlim texnikasi</option>
+                  </select>
+                </div>
+              </div>
+              <div class="auth-form-group">
+                <label>Narxi (So'mda):</label>
+                <div class="input-with-icon">
+                  <span class="input-icon">💳</span>
+                  <input type="number" id="newProdPrice" placeholder="Masalan: 8500000" required>
+                </div>
+              </div>
+              
+              <!-- File Image Upload Container -->
+              <div class="auth-form-group">
+                <label>Mahsulot Rasmini Yuklash (Kompyuterdan):</label>
+                <div class="file-upload-box">
+                  <input type="file" id="newProdFileInput" accept="image/*" style="display:none;">
+                  <label for="newProdFileInput" style="cursor:pointer; font-weight:700; color:var(--tm-dark);">
+                    📁 Kompyuteringizdan Rasm Tanlang
+                  </label>
+                </div>
+                <div id="newProdImgPreviewWrap" style="display:none;" class="img-preview-box">
+                  <img id="newProdImgPreview" src="" alt="Preview">
+                </div>
+              </div>
+
+              <div class="auth-form-group">
+                <label>🔥 Super Chegirma (Kun taklifi):</label>
+                <div style="display:flex; align-items:center; gap:0.5rem; margin-top:0.35rem;">
+                  <input type="checkbox" id="newProdIsFlash" style="width:20px; height:20px; accent-color:#ef4444;">
+                  <label for="newProdIsFlash" style="cursor:pointer; font-weight:700; color:#ef4444;">Kun Taklifi va Super Chegirmaga qo'shish</label>
+                </div>
+              </div>
+
+              <div class="auth-form-group form-col-full">
+                <label>Yoki Rasm Internet URL Manzili (Muqobil):</label>
+                <div class="input-with-icon">
+                  <span class="input-icon">🖼️</span>
+                  <input type="url" id="newProdImage" placeholder="https://images.unsplash.com/...">
+                </div>
+              </div>
+
+              <div class="auth-form-group form-col-full">
+                <label>Mahsulot Ta'rifi:</label>
+                <div class="input-with-icon">
+                  <span class="input-icon">📝</span>
+                  <textarea id="newProdDesc" rows="2" placeholder="Mahsulot haqida qisqacha ma'lumot..."></textarea>
+                </div>
+              </div>
+              <button type="submit" class="submit-new-product-btn">Mahsulotni Do'konga Joylash ✨</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 13. FOOTER SECTION -->
+  <footer class="tm-footer">
+    <div class="container footer-grid-container">
+      <div class="footer-brand-box">
+        <h2>⚡ Uzbek<span>Shop</span> TexnoMart</h2>
+        <p>O'zbekistondagi yetakchi maishiy texnika va elektronika internet-do'koni. Yuqori sifat, rasmiy kafolat hamda hamyonbop muddatli to'lov imkoniyati.</p>
+        <div class="payment-badges-row">
+          <span class="payment-badge-pill">HUMO</span>
+          <span class="payment-badge-pill">UZCARD</span>
+          <span class="payment-badge-pill">VISA</span>
+          <span class="payment-badge-pill">PAYME</span>
+        </div>
+      </div>
+
+      <div class="footer-column-box">
+        <h4 data-i18n="footer_categories">Kategoriyalar</h4>
+        <ul>
+          <li><a href="./pages/smartfonlar/smartfonlar.html">Smartfonlar</a></li>
+          <li><a href="./pages/kompyuterlar/kompyuterlar.html">Noutbuklar</a></li>
+          <li><a href="#">Televizorlar</a></li>
+          <li><a href="./pages/maishiy-texnika/maishiy-texnika.html">Maishiy texnika</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column-box">
+        <h4 data-i18n="footer_help">Mijozlarga Yordam</h4>
+        <ul>
+          <li><a href="#">Muddatli to'lov shartlari</a></li>
+          <li><a href="#">Yetkazib berish xizmati</a></li>
+          <li><a href="#">Servis va kafolat</a></li>
+          <li><a href="#">Do'konlar xaritasi</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column-box">
+        <h4 data-i18n="footer_contact">Bog'lanish</h4>
+        <ul>
+          <li>📞 +998 91 207 00 08</li>
+          <li>✉️ info@uzbekshop.uz</li>
+          <li>📍 Toshkent sh., Amirlik ko'chasi 15</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom-bar">
+      <p data-i18n="footer_rights">&copy; 2026 UzbekShop TexnoMart. Barcha huquqlar himoyalangan.</p>
+    </div>
+  </footer>
+
+  <!-- Shared Utility Scripts -->
+  <script src="./shared/js/toast.js"></script>
+  <script src="./shared/js/storage.js"></script>
+  <script src="./shared/js/i18n.js"></script>
+
+  <!-- Component Section Scripts (Each section in its own folder) -->
+  <script src="./sections/top-bar/top-bar.js"></script>
+  <script src="./sections/header/header.js"></script>
+  <script src="./sections/mega-menu/mega-menu.js"></script>
+  <script src="./sections/hero-banner/hero-banner.js"></script>
+  <script src="./sections/flash-deals/flash-deals.js"></script>
+  <script src="./sections/product-card/product-card.js"></script>
+  <script src="./sections/product-catalog/catalog.js"></script>
+  <script src="./sections/product-detail/product-detail.js"></script>
+  <script src="./sections/cart-drawer/cart-drawer.js"></script>
+  <script src="./sections/wishlist/wishlist.js"></script>
+  <script src="./sections/compare/compare.js"></script>
+  <script src="./sections/checkout-modal/checkout-modal.js"></script>
+  <script src="./sections/user-auth/user-auth.js"></script>
+  <script src="./sections/footer/footer.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,192 @@
+/* ==========================================================================
+   TEXNOMART / UZBEKSHOP - Flash Deals (Kun Taklifi) Section Styling
+   ========================================================================== */
+
+.flash-deals-section {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border-radius: 24px;
+  padding: 2rem;
+  margin: 2.5rem 0;
+  border: 1.5px solid #fde68a;
+  box-shadow: 0 10px 30px rgba(251, 193, 0, 0.1);
+}
+
+.flash-header {
+  margin-bottom: 1.75rem;
+}
+
+.flash-title-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.flash-title-wrap h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--tm-dark);
+}
+
+.deal-timer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #ef4444;
+  color: #ffffff;
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-full);
+  font-weight: 800;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+}
+
+.timer-box {
+  background: rgba(0, 0, 0, 0.25);
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+}
+
+.flash-deals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+}
+
+.flash-deal-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  position: relative;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  display: flex;
+  flex-direction: column;
+}
+
+.flash-deal-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+  border-color: var(--tm-yellow);
+}
+
+.flash-card-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-sm);
+  z-index: 2;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+}
+
+.flash-card-actions {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  z-index: 2;
+}
+
+.card-action-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.card-action-btn:hover {
+  background: var(--tm-yellow);
+}
+
+.flash-card-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 14px;
+  margin-bottom: 1rem;
+}
+
+.flash-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.flash-installment-pill {
+  background-color: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #b45309;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-full);
+  align-self: flex-start;
+  margin-bottom: 0.6rem;
+}
+
+.flash-card-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--tm-dark);
+  margin-bottom: 0.4rem;
+  line-height: 1.35;
+}
+
+.flash-card-rating {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.flash-card-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--border);
+}
+
+.flash-current-price {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--tm-dark);
+}
+
+.flash-old-price {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.flash-cart-btn {
+  background: var(--tm-yellow);
+  color: #000000;
+  font-weight: 800;
+  font-size: 0.825rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 10px rgba(251, 193, 0, 0.3);
+  transition: var(--transition);
+}
+
+.flash-cart-btn:hover {
+  background: var(--tm-yellow-hover);
+  transform: translateY(-1px);
+}
