@@ -24,19 +24,16 @@ try {
 
 /* =================== HELPER: Get Products (always fresh) =================== */
 function getAdminProducts() {
-  // 1. Try window.allProductsList (set by catalog.js)
-  if (window.allProductsList && window.allProductsList.length > 0) {
+  if (window.allProductsList && Array.isArray(window.allProductsList) && window.allProductsList.length > 0) {
     return window.allProductsList;
   }
-  // 2. Fallback: read from localStorage directly
   try {
     var stored = JSON.parse(localStorage.getItem(PRODUCTS_STORAGE_KEY));
-    if (stored && stored.length > 0) {
+    if (Array.isArray(stored) && stored.length > 0) {
       window.allProductsList = stored;
       return window.allProductsList;
     }
   } catch(e) {}
-  // 3. Return empty (products not loaded yet)
   return [];
 }
 
@@ -59,7 +56,7 @@ function toggleAuthModal(open) {
 }
 
 window.openAuthModal = function() {
-  console.log('openAuthModal() called from user-auth.js');
+  console.log('openAuthModal() called');
   toggleAuthModal(true);
 };
 
@@ -67,15 +64,15 @@ window.closeAuthModal = function() {
   toggleAuthModal(false);
 };
 
-// Called from inline script after login to render all dashboard tabs
+// Called after login to render all dashboard tabs
 window.renderAdminDashboardTabs = function() {
-  renderAccountingTab();
-  renderOrdersTab();
-  renderOmborTab();
-  renderChegirmaTab();
+  try { renderAccountingTab(); } catch(e) { console.error('AccountingTab error:', e); }
+  try { renderOrdersTab(); } catch(e) { console.error('OrdersTab error:', e); }
+  try { renderOmborTab(); } catch(e) { console.error('OmborTab error:', e); }
+  try { renderChegirmaTab(); } catch(e) { console.error('ChegirmaTab error:', e); }
 };
 
-// Called when modal opens to show correct view (login vs dashboard)
+// Called when modal opens
 window.renderAdminView = function() {
   isAdminLoggedIn = localStorage.getItem(ADMIN_SESSION_KEY) === 'true';
   renderAdminCabinetView();
@@ -253,21 +250,21 @@ window.clearAllOrders = function() {
   }
 };
 
-/* =================== TAB 3: OMBOR =================== */
+/* =================== TAB 3: OMBOR (WAREHOUSE) =================== */
 function renderOmborTab() {
-  const container = document.getElementById('omborTabContent');
+  var container = document.getElementById('omborTabContent');
   if (!container) return;
 
-  // Always get fresh product list
-  const products = getAdminProducts();
+  var products = getAdminProducts();
+  console.log('renderOmborTab executing. Products count:', products.length);
 
   if (products.length === 0) {
     container.innerHTML = `
-      <div style="text-align:center; padding:3rem 1rem; color:var(--text-muted);">
+      <div style="text-align:center; padding:3rem 1rem; color:#64748b;">
         <div style="font-size:3rem; margin-bottom:1rem;">⏳</div>
         <h3 style="font-weight:800; margin-bottom:0.5rem;">Mahsulotlar yuklanmoqda...</h3>
         <p style="margin-bottom:1.5rem;">Web saytdagi mahsulotlar yuklangach bu yerda ko'rinadi.</p>
-        <button onclick="renderOmborTabPublic()" style="background:var(--tm-yellow); color:#000; font-weight:800; padding:0.75rem 1.5rem; border-radius:12px; cursor:pointer; font-size:1rem;">
+        <button onclick="renderOmborTabPublic()" style="background:#FBC100; color:#000; font-weight:800; padding:0.75rem 1.5rem; border-radius:12px; cursor:pointer; font-size:1rem;">
           🔄 Yangilash
         </button>
       </div>
@@ -275,19 +272,83 @@ function renderOmborTab() {
     return;
   }
 
-  const categoryEmojis = { smartfonlar:'📱', kompyuterlar:'💻', 'tv-audio':'📺', 'maishiy-texnika':'🧺', iqlim:'❄️' };
-  const lowStockItems = products.filter(p => (p.stock || 0) <= 5).length;
+  var catEmoji = { smartfonlar:'📱', kompyuterlar:'💻', 'tv-audio':'📺', 'maishiy-texnika':'🧺', iqlim:'❄️' };
+  var lowStock = products.filter(function(p){ return (p.stock||0) <= 5; }).length;
+  var totalStock = products.reduce(function(s,p){ return s+(p.stock||0); }, 0);
+
+  var rowsHtml = '';
+  for (var i = 0; i < products.length; i++) {
+    var p = products[i];
+    var stockNum = p.stock || 0;
+    var stockColor = stockNum <= 3 ? '#dc2626' : stockNum <= 7 ? '#d97706' : '#16a34a';
+    var stockLabel = stockNum <= 3 ? '🔴 Tugayapti!' : stockNum <= 7 ? '🟡 Kam qoldi' : '🟢 Yetarli';
+    var discountPct = p.oldPrice ? Math.round((1 - p.price / p.oldPrice) * 100) : 0;
+    var emoji = catEmoji[p.category] || '📦';
+    var catName = p.categoryName || p.category || '';
+    var flashBg = p.isFlashDeal ? '#fef3c7' : '#f1f5f9';
+    var flashColor = p.isFlashDeal ? '#b45309' : '#64748b';
+    var flashLabel = p.isFlashDeal ? '🔥 Faol' : 'Yoq';
+    var btnBg = p.isFlashDeal ? '#fee2e2' : '#dcfce7';
+    var btnColor = p.isFlashDeal ? '#dc2626' : '#166534';
+    var btnLabel = p.isFlashDeal ? 'Chegirmadan chiqar' : 'Kun Taklifiga qo\'sh';
+
+    rowsHtml += `
+      <tr id="omborRow_${p.id}">
+        <td>
+          <div style="display:flex;align-items:center;gap:0.6rem;">
+            <img src="${p.image}" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;" onerror="this.src='https://via.placeholder.com/44'">
+            <div>
+              <div style="font-weight:700;font-size:0.82rem;line-height:1.3;max-width:180px;">${p.name}</div>
+              <div style="font-size:0.72rem;color:#64748b;">${p.brand || ''}</div>
+            </div>
+          </div>
+        </td>
+        <td>
+          <span style="background:#f1f5f9;padding:0.25rem 0.6rem;border-radius:20px;font-size:0.75rem;font-weight:700;">
+            ${emoji} ${catName}
+          </span>
+        </td>
+        <td>
+          <div style="display:flex;align-items:center;gap:0.4rem;">
+            <input type="number" id="stockInput_${p.id}" value="${stockNum}" min="0" style="width:65px;padding:0.35rem 0.4rem;border:1.5px solid #e2e8f0;border-radius:8px;font-weight:800;text-align:center;font-size:0.9rem;color:${stockColor};">
+            <button onclick="saveStock(${p.id})" style="background:#dbeafe;color:#1d4ed8;font-weight:700;padding:0.35rem 0.55rem;border-radius:8px;font-size:0.75rem;cursor:pointer;">💾</button>
+          </div>
+          <div style="font-size:0.7rem;color:${stockColor};font-weight:700;margin-top:2px;">${stockLabel}</div>
+        </td>
+        <td>
+          <input type="number" id="priceInput_${p.id}" value="${p.price}" style="width:130px;padding:0.35rem 0.5rem;border:1.5px solid #e2e8f0;border-radius:8px;font-weight:800;font-size:0.85rem;">
+          <div style="font-size:0.7rem;color:#64748b;margin-top:2px;">${safeFormatUZS(p.price)}</div>
+        </td>
+        <td>
+          ${p.oldPrice && discountPct > 0
+            ? `<span style="background:#fee2e2;color:#dc2626;padding:0.25rem 0.65rem;border-radius:20px;font-weight:800;font-size:0.8rem;">-${discountPct}%</span>
+               <div style="font-size:0.7rem;color:#64748b;margin-top:2px;text-decoration:line-through;">${safeFormatUZS(p.oldPrice)}</div>`
+            : `<span style="color:#64748b;font-size:0.8rem;">—</span>`}
+        </td>
+        <td>
+          <span style="background:${flashBg};color:${flashColor};padding:0.3rem 0.7rem;border-radius:20px;font-size:0.78rem;font-weight:800;">${flashLabel}</span>
+        </td>
+        <td>
+          <div style="display:flex;flex-direction:column;gap:0.4rem;">
+            <button onclick="saveOmborPrice(${p.id})" style="background:#FBC100;color:#000;font-weight:800;padding:0.4rem 0.7rem;border-radius:8px;font-size:0.8rem;cursor:pointer;width:100%;">💾 Narxni Saqlash</button>
+            <button onclick="toggleFlashFromOmbor(${p.id})" style="background:${btnBg};color:${btnColor};font-weight:800;padding:0.4rem 0.7rem;border-radius:8px;font-size:0.8rem;cursor:pointer;width:100%;">${btnLabel}</button>
+            <button onclick="deleteProductById(${p.id})" style="background:#fee2e2;color:#dc2626;font-weight:800;padding:0.4rem 0.7rem;border-radius:8px;font-size:0.8rem;cursor:pointer;width:100%;">🗑️ O'chirish</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }
 
   container.innerHTML = `
-    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.75rem; margin-bottom:1.25rem;">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.25rem;">
       <div>
-        <h3 style="font-weight:800; font-size:1.15rem;">🏪 Ombor — Barcha Mahsulotlar (${products.length} ta)</h3>
-        <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.2rem;">
-          Jami ombor: <b>${products.reduce((s,p)=>s+(p.stock||0),0)} dona</b> &nbsp;|&nbsp;
-          <span style="color:#ef4444; font-weight:700;">⚠️ Kam qolgan: ${lowStockItems} ta</span>
+        <h3 style="font-weight:800;font-size:1.15rem;">🏪 Ombor — Barcha Mahsulotlar (${products.length} ta)</h3>
+        <p style="font-size:0.85rem;color:#64748b;margin-top:0.2rem;">
+          Jami ombor: <b>${totalStock} dona</b> &nbsp;|&nbsp;
+          <span style="color:#ef4444;font-weight:700;">⚠️ Kam qolgan: ${lowStock} ta</span>
         </p>
       </div>
-      <button onclick="renderOmborTabPublic()" style="background:#f1f5f9; color:var(--tm-dark); font-weight:700; padding:0.5rem 1rem; border-radius:8px; font-size:0.85rem; cursor:pointer;">🔄 Yangilash</button>
+      <button onclick="renderOmborTabPublic()" style="background:#f1f5f9;color:#1e293b;font-weight:700;padding:0.5rem 1rem;border-radius:8px;font-size:0.85rem;cursor:pointer;">🔄 Yangilash</button>
     </div>
     <div class="table-responsive-wrap">
       <table class="admin-table">
@@ -303,77 +364,13 @@ function renderOmborTab() {
           </tr>
         </thead>
         <tbody>
-          ${products.map(p => {
-            const stockNum = p.stock || 0;
-            const stockColor = stockNum <= 3 ? '#dc2626' : stockNum <= 7 ? '#d97706' : '#16a34a';
-            const stockLabel = stockNum <= 3 ? '🔴 Tugayapti!' : stockNum <= 7 ? '🟡 Kam qoldi' : '🟢 Yetarli';
-            const discountPct = p.oldPrice ? Math.round((1 - p.price / p.oldPrice) * 100) : 0;
-            return `
-            <tr id="omborRow_${p.id}">
-              <td>
-                <div style="display:flex;align-items:center;gap:0.6rem;">
-                  <img src="${p.image}" onerror="this.src='https://via.placeholder.com/44'" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;">
-                  <div>
-                    <div style="font-weight:700;font-size:0.82rem;line-height:1.3;max-width:180px;">${p.name}</div>
-                    <div style="font-size:0.72rem;color:var(--text-muted);">${p.brand || ''}</div>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <span style="background:#f1f5f9;padding:0.25rem 0.6rem;border-radius:20px;font-size:0.75rem;font-weight:700;">
-                  ${categoryEmojis[p.category] || '📦'} ${p.categoryName || p.category}
-                </span>
-              </td>
-              <td>
-                <div style="display:flex;align-items:center;gap:0.4rem;">
-                  <input type="number" id="stockInput_${p.id}" value="${stockNum}" min="0"
-                    style="width:65px;padding:0.35rem 0.4rem;border:1.5px solid var(--border);border-radius:8px;font-weight:800;text-align:center;font-size:0.9rem;color:${stockColor};">
-                  <button onclick="saveStock(${p.id})" title="Saqlash"
-                    style="background:#dbeafe;color:#1d4ed8;font-weight:700;padding:0.35rem 0.55rem;border-radius:8px;font-size:0.75rem;cursor:pointer;">💾</button>
-                </div>
-                <div style="font-size:0.7rem;color:${stockColor};font-weight:700;margin-top:2px;">${stockLabel}</div>
-              </td>
-              <td>
-                <input type="number" id="priceInput_${p.id}" value="${p.price}"
-                  style="width:130px;padding:0.35rem 0.5rem;border:1.5px solid var(--border);border-radius:8px;font-weight:800;font-size:0.85rem;">
-                <div style="font-size:0.7rem;color:var(--text-muted);margin-top:2px;">${safeFormatUZS(p.price)}</div>
-              </td>
-              <td>
-                ${p.oldPrice && discountPct > 0
-                  ? `<span style="background:#fee2e2;color:#dc2626;padding:0.25rem 0.65rem;border-radius:20px;font-weight:800;font-size:0.8rem;">-${discountPct}%</span>
-                     <div style="font-size:0.7rem;color:var(--text-muted);margin-top:2px;text-decoration:line-through;">${safeFormatUZS(p.oldPrice)}</div>`
-                  : `<span style="color:var(--text-muted);font-size:0.8rem;">—</span>`}
-              </td>
-              <td>
-                ${p.isFlashDeal
-                  ? `<span style="background:#fef3c7;color:#b45309;padding:0.3rem 0.7rem;border-radius:20px;font-size:0.78rem;font-weight:800;">🔥 Faol</span>`
-                  : `<span style="background:#f1f5f9;color:#64748b;padding:0.3rem 0.7rem;border-radius:20px;font-size:0.78rem;font-weight:700;">Yo'q</span>`}
-              </td>
-              <td>
-                <div style="display:flex;flex-direction:column;gap:0.4rem;">
-                  <button onclick="saveOmborPrice(${p.id})"
-                    style="background:var(--tm-yellow);color:#000;font-weight:800;padding:0.4rem 0.7rem;border-radius:8px;font-size:0.8rem;cursor:pointer;width:100%;">
-                    💾 Narxni Saqlash
-                  </button>
-                  <button onclick="toggleFlashFromOmbor(${p.id})"
-                    style="background:${p.isFlashDeal ? '#fee2e2' : '#dcfce7'};color:${p.isFlashDeal ? '#dc2626' : '#166534'};font-weight:800;padding:0.4rem 0.7rem;border-radius:8px;font-size:0.8rem;cursor:pointer;width:100%;">
-                    ${p.isFlashDeal ? '❌ Kun Taklifidan chiqar' : "🔥 Kun Taklifiga qo'sh"}
-                  </button>
-                  <button onclick="deleteProductById(${p.id})"
-                    style="background:#fee2e2;color:#dc2626;font-weight:800;padding:0.4rem 0.7rem;border-radius:8px;font-size:0.8rem;cursor:pointer;width:100%;">
-                    🗑️ O'chirish
-                  </button>
-                </div>
-              </td>
-            </tr>`;
-          }).join('')}
+          ${rowsHtml}
         </tbody>
       </table>
     </div>
   `;
 }
 
-// Public wrapper so inline onclick can call it
 window.renderOmborTabPublic = function() {
   renderOmborTab();
 };
@@ -402,7 +399,7 @@ window.saveOmborPrice = function(productId) {
   const products = getAdminProducts();
   const item = products.find(p => p.id === productId);
   if (item) {
-    item.oldPrice = item.price; // old price becomes previous price
+    item.oldPrice = item.price;
     item.price = newPrice;
     item.monthlyPrice = Math.round(newPrice / 12);
     if (window.saveProductsToStorage) window.saveProductsToStorage();

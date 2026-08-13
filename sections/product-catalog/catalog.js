@@ -1,21 +1,8 @@
 /* ==========================================================================
-   TEXNOMART / UZBEKSHOP - Catalog Component & Data Manager (Senior Dev Refactored)
+   TEXNOMART / UZBEKSHOP - Catalog Component & Data Manager
    ========================================================================== */
 
 const PRODUCTS_STORAGE_KEY = 'texnomart_all_products';
-// Always start with localStorage cache, but initCatalogData will refresh from JSON
-window.allProductsList = [];
-try {
-  var _cached = JSON.parse(localStorage.getItem(PRODUCTS_STORAGE_KEY));
-  // Only use cache if it has stock field (new format)
-  if (_cached && _cached.length > 0 && typeof _cached[0].stock !== 'undefined') {
-    window.allProductsList = _cached;
-  }
-} catch(e) {}
-
-let currentCategoryFilter = 'all';
-let currentSearchQuery = '';
-let currentSortOrder = 'default';
 
 const fallbackProductsData = [
   { id: 101, name: "Smartfon Apple iPhone 15 Pro 128GB Natural Titanium", category: "smartfonlar", categoryName: "Smartfonlar", brand: "Apple", price: 14200000, oldPrice: 15800000, monthlyPrice: 1450000, stock: 12, rating: 4.9, reviews: 128, badge: "SUPER NARX", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "A17 Pro chip, Titanium korpus, 48 MP Action kamera va Dynamic Island." },
@@ -28,28 +15,52 @@ const fallbackProductsData = [
   { id: 108, name: "Konditsioner Haier Tundra Inverter 12 HSU-12H", category: "iqlim", categoryName: "Iqlim texnikasi", brand: "Haier", price: 4300000, oldPrice: 4800000, monthlyPrice: 440000, stock: 18, rating: 4.7, reviews: 29, badge: "BEPUL O'RNATISH", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1631545806604-e34988f57fa5?auto=format&fit=crop&w=600&q=80", isFlashDeal: false, description: "Inverter dvigatel va jim ishlash rejimi." }
 ];
 
+// Synchronously initialize window.allProductsList immediately (never empty!)
+window.allProductsList = (function() {
+  try {
+    var stored = JSON.parse(localStorage.getItem(PRODUCTS_STORAGE_KEY));
+    if (Array.isArray(stored) && stored.length > 0) {
+      return stored;
+    }
+  } catch(e) {}
+  return JSON.parse(JSON.stringify(fallbackProductsData));
+})();
+
+let currentCategoryFilter = 'all';
+let currentSearchQuery = '';
+let currentSortOrder = 'default';
+
 async function initCatalogData() {
   try {
-    if (!window.allProductsList || window.allProductsList.length === 0) {
-      try {
-        const res = await fetch('./data/products.json');
-        if (res.ok) {
-          window.allProductsList = await res.json();
-        } else {
-          window.allProductsList = fallbackProductsData;
+    // Try loading fresh json from server
+    try {
+      const res = await fetch('./data/products.json');
+      if (res.ok) {
+        const fetchedData = await res.json();
+        if (Array.isArray(fetchedData) && fetchedData.length > 0) {
+          // Merge with any custom stock/price values from localStorage
+          const localMap = {};
+          (window.allProductsList || []).forEach(p => { localMap[p.id] = p; });
+          
+          window.allProductsList = fetchedData.map(p => {
+            if (localMap[p.id]) {
+              return { ...p, ...localMap[p.id] };
+            }
+            return p;
+          });
+          localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(window.allProductsList));
         }
-      } catch (e) {
-        window.allProductsList = fallbackProductsData;
       }
-      // Ensure every product has a stock field
-      window.allProductsList.forEach(p => { if (!p.stock && p.stock !== 0) p.stock = 10; });
-      localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(window.allProductsList));
+    } catch (e) {
+      console.warn('Network fetch for products.json skipped, using local data');
     }
+
+    // Ensure stock on all items
+    window.allProductsList.forEach(p => { if (typeof p.stock !== 'number') p.stock = 10; });
+
     renderCatalogGrid();
     if (window.renderFlashDealsSection) window.renderFlashDealsSection();
-    // Notify admin panel that products are now ready — re-render Ombor tab if it's open
     if (window.renderAdminDashboardTabs) window.renderAdminDashboardTabs();
-    console.log('Catalog: ' + window.allProductsList.length + ' mahsulot yuklandi ✅');
   } catch (err) {
     console.error('Catalog init error:', err);
   }
@@ -60,7 +71,7 @@ window.saveProductsToStorage = function() {
 };
 
 function getFilteredProductsList() {
-  return window.allProductsList.filter(item => {
+  return (window.allProductsList || []).filter(item => {
     const matchCat = currentCategoryFilter === 'all' || item.category === currentCategoryFilter;
     const matchSearch = item.name.toLowerCase().includes(currentSearchQuery.toLowerCase()) ||
                         (item.description && item.description.toLowerCase().includes(currentSearchQuery.toLowerCase()));
