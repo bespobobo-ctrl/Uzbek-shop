@@ -9,15 +9,19 @@
   <link rel="stylesheet" href="../../sections/header/header.css">
   <link rel="stylesheet" href="../../sections/product-catalog/catalog.css">
   <link rel="stylesheet" href="../../sections/product-card/product-card.css">
+  <link rel="stylesheet" href="../../sections/product-detail/product-detail.css">
+  <link rel="stylesheet" href="../../sections/footer/footer.css">
 </head>
 <body>
+
   <div class="top-bar">
     <div class="container top-bar-container">
       <div class="top-bar-left">
         <span>📍 Shahar: Toshkent</span>
+        <a href="../../index.html" style="color:#ffffff; margin-left:1rem;">← Asosiy Sahifaga Qaytish</a>
       </div>
       <div class="top-bar-right">
-        <span>📞 +998 91 207 00 08</span>
+        <span>📞 Aloqa markazi: +998 91 207 00 08</span>
       </div>
     </div>
   </div>
@@ -28,24 +32,48 @@
         <div class="brand-logo-icon">🧺</div>
         <span>Uzbek<span class="yellow-text">Shop</span></span>
       </a>
-      <h2 style="color:#ffffff;">Maishiy Texnika Bo'limi</h2>
+      <h2 style="color:#ffffff;">🧺 Maishiy Texnika Bo'limi</h2>
     </div>
   </header>
 
   <main class="container" style="margin-top: 3rem;">
     <h1>🧺 Maishiy Texnika Katalogi</h1>
+    <p style="color:var(--text-muted); margin-bottom: 2rem;">LG, Bosch, Samsung va Artel maishiy texnika vositalari 12-24 oyga qulay muddatli to'lov bilan.</p>
+
     <div class="products-grid-container" id="appliancesGrid" style="margin-top:2rem;"></div>
   </main>
+
+  <!-- PRODUCT DETAIL MODAL -->
+  <div class="product-detail-modal-overlay" id="productDetailModalOverlay">
+    <div class="product-detail-modal-box">
+      <button class="product-detail-close-btn" id="closeProductDetailBtn">&times;</button>
+      <div id="productDetailModalContent"></div>
+    </div>
+  </div>
+
+  <footer class="tm-footer" style="margin-top:4rem;">
+    <div class="container footer-bottom-bar">
+      <p>&copy; 2026 UzbekShop TexnoMart. Barcha huquqlar himoyalangan.</p>
+    </div>
+  </footer>
 
   <script src="../../shared/js/toast.js"></script>
   <script src="../../shared/js/storage.js"></script>
   <script src="../../sections/product-card/product-card.js"></script>
+  <script src="../../sections/product-detail/product-detail.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      const res = await fetch('../../data/products.json');
-      const data = await res.json();
-      const items = data.filter(p => p.category === 'maishiy-texnika');
-      document.getElementById('appliancesGrid').innerHTML = items.map(p => renderSingleProductCardHTML(p)).join('');
+      let stored = JSON.parse(localStorage.getItem('texnomart_all_products'));
+      if (!stored || stored.length === 0) {
+        const res = await fetch('../../data/products.json');
+        stored = await res.json();
+      }
+      window.allProductsList = stored;
+      const items = stored.filter(p => p.category === 'maishiy-texnika');
+      const container = document.getElementById('appliancesGrid');
+      if (container) {
+        container.innerHTML = items.map(p => renderSingleProductCardHTML(p)).join('');
+      }
     });
   </script>
 </body>
