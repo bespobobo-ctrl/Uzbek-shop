@@ -822,10 +822,10 @@
         target.style.display = 'block';
         // Always re-render live-data tabs when switching
         var liveRenderMap = {
-          omborTabContent:      function() { if (window.renderAdminDashboardTabs) window.renderAdminDashboardTabs(); },
-          chegirmaTabContent:   function() { if (window.renderAdminDashboardTabs) window.renderAdminDashboardTabs(); },
-          ordersTabContent:     function() { if (window.renderAdminDashboardTabs) window.renderAdminDashboardTabs(); },
-          accountingTabContent: function() { if (window.renderAdminDashboardTabs) window.renderAdminDashboardTabs(); }
+          omborTabContent:      function() { if (window.renderOmborTab) window.renderOmborTab(); else if (window.renderAdminDashboardTabs) window.renderAdminDashboardTabs(); },
+          chegirmaTabContent:   function() { if (window.renderChegirmaTab) window.renderChegirmaTab(); else if (window.renderAdminDashboardTabs) window.renderAdminDashboardTabs(); },
+          ordersTabContent:     function() { if (window.renderOrdersTab) window.renderOrdersTab(); else if (window.renderAdminDashboardTabs) window.renderAdminDashboardTabs(); },
+          accountingTabContent: function() { if (window.renderAccountingTab) window.renderAccountingTab(); else if (window.renderAdminDashboardTabs) window.renderAdminDashboardTabs(); }
         };
         if (liveRenderMap[tabId]) liveRenderMap[tabId]();
       }
