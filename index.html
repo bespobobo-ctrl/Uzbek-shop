@@ -140,6 +140,10 @@
   <!-- 3. MEGA MENU DROPDOWN SECTION -->
   <div class="mega-menu-overlay" id="megaMenuOverlay">
     <div class="mega-menu-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; padding:0 1rem;" class="mobile-only-flex">
+        <h3 style="font-weight:800;">📂 Barcha Kategoriyalar</h3>
+        <button onclick="if(window.toggleMegaMenu) toggleMegaMenu(false);" style="font-size:1.6rem; font-weight:800;">&times;</button>
+      </div>
       <div class="container mega-menu-grid">
         <div class="mega-category-list">
           <a href="./pages/smartfonlar/smartfonlar.html" class="mega-cat-item active">📱 Smartfonlar va gadjetlar</a>
@@ -679,19 +683,19 @@
       <span class="tg-nav-icon">🏠</span>
       <span>Asosiy</span>
     </button>
-    <button class="tg-nav-item" onclick="document.getElementById('openMegaMenuBtn').click()">
+    <button class="tg-nav-item" onclick="if(window.toggleMegaMenu) toggleMegaMenu(true); else document.getElementById('openMegaMenuBtn').click();">
       <span class="tg-nav-icon">📂</span>
       <span>Katalog</span>
     </button>
-    <button class="tg-nav-item" onclick="document.getElementById('openCartBtn').click()">
+    <button class="tg-nav-item" onclick="if(window.openCartDrawer) openCartDrawer(); else document.getElementById('openCartBtn').click();">
       <span class="tg-nav-icon">🛒</span>
       <span>Savatcha</span>
     </button>
-    <button class="tg-nav-item" onclick="document.getElementById('openWishlistBtn').click()">
+    <button class="tg-nav-item" onclick="if(window.openWishlistModal) openWishlistModal(); else document.getElementById('openWishlistBtn').click();">
       <span class="tg-nav-icon">❤️</span>
       <span>Sevimlilar</span>
     </button>
-    <button class="tg-nav-item" onclick="document.getElementById('openUserAuthBtn').click()">
+    <button class="tg-nav-item" onclick="if(window.openAuthModal) openAuthModal(); else document.getElementById('openUserAuthBtn').click();">
       <span class="tg-nav-icon">👤</span>
       <span>Kabinet</span>
     </button>

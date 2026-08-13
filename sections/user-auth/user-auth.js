@@ -24,6 +24,14 @@ function toggleAuthModal(open) {
   }
 }
 
+window.openAuthModal = function() {
+  toggleAuthModal(true);
+};
+
+window.closeAuthModal = function() {
+  toggleAuthModal(false);
+};
+
 function renderAdminCabinetView() {
   const loginView = document.getElementById('authLoginFormView');
   const adminDashboardView = document.getElementById('authAdminDashboardView');

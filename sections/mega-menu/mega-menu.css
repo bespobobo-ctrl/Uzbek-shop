@@ -1,4 +1,4 @@
-/* Mega Menu Component Styles */
+/* Mega Menu Component Styles & Mobile Adaptation */
 .mega-menu-overlay {
   position: fixed;
   inset: 0;
@@ -85,4 +85,35 @@
 .subcat-group ul li a:hover {
   color: var(--tm-yellow-hover);
   font-weight: 600;
+}
+
+/* Mobile Responsive Mega Menu */
+@media (max-width: 768px) {
+  .mega-menu-overlay {
+    top: 0;
+    z-index: 99999;
+  }
+
+  .mega-menu-content {
+    height: 100vh;
+    overflow-y: auto;
+    padding: 1.25rem 1rem;
+  }
+
+  .mega-menu-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .mega-subcategories {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .mega-category-list {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding-right: 0;
+    padding-bottom: 1rem;
+  }
 }

@@ -2,7 +2,7 @@
 <html lang="uz">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Maishiy Texnika | UzbekShop TexnoMart</title>
   <link rel="stylesheet" href="../../shared/css/common.css">
   <link rel="stylesheet" href="../../sections/top-bar/top-bar.css">
@@ -36,11 +36,11 @@
     </div>
   </header>
 
-  <main class="container" style="margin-top: 3rem;">
+  <main class="container" style="margin-top: 2rem;">
     <h1>🧺 Maishiy Texnika Katalogi</h1>
-    <p style="color:var(--text-muted); margin-bottom: 2rem;">LG, Bosch, Samsung va Artel maishiy texnika vositalari 12-24 oyga qulay muddatli to'lov bilan.</p>
+    <p style="color:var(--text-muted); margin-bottom: 1.5rem;">LG, Bosch, Samsung va Artel maishiy texnika vositalari 12-24 oyga qulay muddatli to'lov bilan.</p>
 
-    <div class="products-grid-container" id="appliancesGrid" style="margin-top:2rem;"></div>
+    <div class="products-grid-container" id="appliancesGrid" style="margin-top:1.5rem;"></div>
   </main>
 
   <!-- PRODUCT DETAIL MODAL -->
@@ -49,6 +49,18 @@
       <button class="product-detail-close-btn" id="closeProductDetailBtn">&times;</button>
       <div id="productDetailModalContent"></div>
     </div>
+  </div>
+
+  <!-- TELEGRAM MINI APP BOTTOM MOBILE NAVIGATION BAR -->
+  <div class="tg-mobile-nav-bar">
+    <button class="tg-nav-item" onclick="window.location.href='../../index.html'">
+      <span class="tg-nav-icon">🏠</span>
+      <span>Asosiy</span>
+    </button>
+    <button class="tg-nav-item active" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+      <span class="tg-nav-icon">📂</span>
+      <span>Katalog</span>
+    </button>
   </div>
 
   <footer class="tm-footer" style="margin-top:4rem;">
