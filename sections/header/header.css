@@ -53,6 +53,8 @@ header.main-header {
   align-items: center;
   gap: 0.6rem;
   box-shadow: var(--shadow-sm);
+  cursor: pointer !important;
+  pointer-events: auto !important;
 }
 
 .mega-catalog-btn:hover {
@@ -107,6 +109,11 @@ header.main-header {
   font-weight: 600;
   position: relative;
   gap: 2px;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  background: transparent;
+  border: none;
+  outline: none;
 }
 
 .action-icon-btn:hover {
@@ -115,6 +122,11 @@ header.main-header {
 
 .action-icon-btn .icon {
   font-size: 1.3rem;
+  pointer-events: none;
+}
+
+.action-icon-btn span {
+  pointer-events: none;
 }
 
 .action-badge {
@@ -131,6 +143,7 @@ header.main-header {
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
 }
 
 /* ==========================================================================
@@ -144,8 +157,6 @@ header.main-header {
     flex-wrap: wrap;
   }
 
-  /* Hide crammed header desktop text buttons on mobile screen
-     because they are cleanly provided by the Mobile Bottom Navigation Bar */
   .header-nav-actions {
     display: none !important;
   }
@@ -165,7 +176,6 @@ header.main-header {
     font-size: 0.85rem;
   }
 
-  /* Full-width clean search bar on mobile */
   .header-search-wrap {
     max-width: 100%;
     width: 100%;
