@@ -129,7 +129,7 @@
         </button>
 
         <!-- User Login / Profile Button (Right after Cart) -->
-        <button class="action-icon-btn" id="openUserAuthBtn">
+        <button class="action-icon-btn" id="openUserAuthBtn" onclick="if(window.openAuthModal) window.openAuthModal();">
           <span class="icon" id="headerUserBtnIcon">👤</span>
           <span id="headerUserBtnText" data-i18n="nav_login">Kirish</span>
         </button>
@@ -695,7 +695,7 @@
       <span class="tg-nav-icon">❤️</span>
       <span>Sevimlilar</span>
     </button>
-    <button class="tg-nav-item" onclick="if(window.openAuthModal) openAuthModal(); else document.getElementById('openUserAuthBtn').click();">
+    <button class="tg-nav-item" onclick="if(window.openAuthModal) window.openAuthModal();">
       <span class="tg-nav-icon">👤</span>
       <span>Kabinet</span>
     </button>

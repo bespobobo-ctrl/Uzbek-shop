@@ -5,6 +5,11 @@
 const ADMIN_SESSION_KEY = 'texnomart_admin_logged';
 const TELEGRAM_CHAT_ID_KEY = 'texnomart_telegram_chat_id';
 
+const safeFormatUZS = (num) => {
+  if (typeof formatUZS === 'function') return formatUZS(num);
+  return (num || 0).toLocaleString('uz-UZ') + " so'm";
+};
+
 // Default to false so user sees the Login & Password form (123 / 123) first!
 let isAdminLoggedIn = JSON.parse(localStorage.getItem(ADMIN_SESSION_KEY)) || false;
 let uploadedImageBase64 = "";
@@ -22,18 +27,32 @@ function toggleAuthModal(open) {
       modal.style.display = 'flex';
       modal.style.opacity = '1';
       modal.style.visibility = 'visible';
+      modal.style.pointerEvents = 'auto';
       renderAdminCabinetView();
     } else {
       modal.classList.remove('active');
       modal.style.display = 'none';
       modal.style.opacity = '0';
       modal.style.visibility = 'hidden';
+      modal.style.pointerEvents = 'none';
     }
   }
 }
 
 window.openAuthModal = function() {
-  toggleAuthModal(true);
+  try {
+    toggleAuthModal(true);
+  } catch (err) {
+    console.error("openAuthModal error:", err);
+    const modal = document.getElementById('authModalOverlay');
+    if (modal) {
+      modal.classList.add('active');
+      modal.style.display = 'flex';
+      modal.style.opacity = '1';
+      modal.style.visibility = 'visible';
+      modal.style.pointerEvents = 'auto';
+    }
+  }
 };
 
 window.closeAuthModal = function() {
@@ -113,7 +132,7 @@ function renderAccountingTab() {
       <div class="kpi-card">
         <div class="kpi-card-icon">💰</div>
         <div class="kpi-card-title">Bir oylik jami savdo</div>
-        <div class="kpi-card-value">${formatUZS(148500000)}</div>
+        <div class="kpi-card-value">${safeFormatUZS(148500000)}</div>
         <div class="kpi-card-trend"><span>↑</span> +18.4% o'sish</div>
       </div>
       <div class="kpi-card">
@@ -125,7 +144,7 @@ function renderAccountingTab() {
       <div class="kpi-card">
         <div class="kpi-card-icon">📈</div>
         <div class="kpi-card-title">Oylik sof foyda</div>
-        <div class="kpi-card-value">${formatUZS(22400000)}</div>
+        <div class="kpi-card-value">${safeFormatUZS(22400000)}</div>
         <div class="kpi-card-trend"><span>↑</span> Foyda 15.1%</div>
       </div>
     </div>
@@ -189,7 +208,7 @@ function renderOrdersTab() {
               <td>${o.phone}</td>
               <td>${o.address}</td>
               <td>${o.product}</td>
-              <td><b style="color:var(--tm-dark);">${formatUZS(o.amount)}</b></td>
+              <td><b style="color:var(--tm-dark);">${safeFormatUZS(o.amount)}</b></td>
               <td><span class="order-status-pill ${o.statusType}">${o.status}</span></td>
             </tr>
           `).join('')}
@@ -284,7 +303,7 @@ window.saveUpdatedPrice = function(productId) {
   if (item) {
     item.price = newPrice;
     item.monthlyPrice = Math.round(newPrice / 12);
-    showToast(`"${item.name}" narxi ${formatUZS(newPrice)}ga o'zgartirildi!`, "success");
+    showToast(`"${item.name}" narxi ${safeFormatUZS(newPrice)}ga o'zgartirildi!`, "success");
     if (window.saveProductsToStorage) window.saveProductsToStorage();
     if (window.filterProductsBySearch) window.filterProductsBySearch('');
     if (window.renderFlashDealsSection) window.renderFlashDealsSection();
@@ -386,11 +405,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const addProdForm = document.getElementById('addNewProductForm');
   const fileInput = document.getElementById('newProdFileInput');
 
-  if (openBtn) openBtn.addEventListener('click', () => toggleAuthModal(true));
-  if (closeBtn) closeBtn.addEventListener('click', () => toggleAuthModal(false));
+  if (openBtn) openBtn.addEventListener('click', () => window.openAuthModal());
+  if (closeBtn) closeBtn.addEventListener('click', () => window.closeAuthModal());
   if (modalOverlay) {
     modalOverlay.addEventListener('click', (e) => {
-      if (e.target === modalOverlay) toggleAuthModal(false);
+      if (e.target === modalOverlay) window.closeAuthModal();
     });
   }
 
