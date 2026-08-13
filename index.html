@@ -129,7 +129,7 @@
         </button>
 
         <!-- User Login / Profile Button (Right after Cart) -->
-        <button class="action-icon-btn" id="openUserAuthBtn" onclick="if(window.openAuthModal) window.openAuthModal();">
+        <button class="action-icon-btn" id="openUserAuthBtn" onclick="(function(){var m=document.getElementById('authModalOverlay');if(m){m.style.display='flex';m.classList.add('active');m.style.zIndex='9999999';m.style.pointerEvents='auto';}})()">
           <span class="icon" id="headerUserBtnIcon">👤</span>
           <span id="headerUserBtnText" data-i18n="nav_login">Kirish</span>
         </button>
@@ -695,7 +695,7 @@
       <span class="tg-nav-icon">❤️</span>
       <span>Sevimlilar</span>
     </button>
-    <button class="tg-nav-item" onclick="if(window.openAuthModal) window.openAuthModal();">
+    <button class="tg-nav-item" id="tgKabinetBtn" onclick="(function(){var m=document.getElementById('authModalOverlay');if(m){m.style.display='flex';m.classList.add('active');m.style.zIndex='9999999';m.style.pointerEvents='auto';}else{alert('Modal topilmadi');}})()">
       <span class="tg-nav-icon">👤</span>
       <span>Kabinet</span>
     </button>
@@ -770,6 +770,62 @@
   <script src="./sections/checkout-modal/checkout-modal.js"></script>
   <script src="./sections/user-auth/user-auth.js"></script>
   <script src="./sections/footer/footer.js"></script>
+
+  <!-- FAILSAFE INLINE SCRIPT: Direct modal open without external JS dependency -->
+  <script>
+    // Runs after all HTML is parsed — guarantees modal open works
+    document.addEventListener('DOMContentLoaded', function() {
+      var modal = document.getElementById('authModalOverlay');
+      if (!modal) {
+        console.error('FATAL: #authModalOverlay element not found in DOM!');
+        return;
+      }
+      // Ensure modal starts hidden
+      modal.style.display = 'none';
+      modal.style.pointerEvents = 'none';
+
+      // Global failsafe override
+      window.openAuthModal = function() {
+        var m = document.getElementById('authModalOverlay');
+        if (m) {
+          m.style.cssText = 'display:flex !important; position:fixed !important; inset:0 !important; z-index:9999999 !important; pointer-events:auto !important; background:rgba(15,23,42,0.75) !important; align-items:center !important; justify-content:center !important;';
+          m.classList.add('active');
+          console.log('Failsafe openAuthModal: modal OPENED');
+        }
+      };
+
+      window.closeAuthModal = function() {
+        var m = document.getElementById('authModalOverlay');
+        if (m) {
+          m.style.display = 'none';
+          m.classList.remove('active');
+        }
+      };
+
+      // Bind all Kirish / Kabinet buttons
+      var btns = document.querySelectorAll('#openUserAuthBtn, #tgKabinetBtn, .open-auth-trigger');
+      btns.forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          window.openAuthModal();
+        });
+      });
+
+      // Close on backdrop click
+      if (modal) {
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) window.closeAuthModal();
+        });
+      }
+
+      var closeBtn = document.getElementById('closeAuthModalBtn');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', window.closeAuthModal);
+      }
+
+      console.log('Failsafe inline script loaded. Modal el:', modal ? 'FOUND ✅' : 'MISSING ❌');
+    });
+  </script>
 
 </body>
 </html>
