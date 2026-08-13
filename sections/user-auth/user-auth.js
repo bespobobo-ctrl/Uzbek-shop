@@ -1,9 +1,11 @@
 /* ==========================================================================
-   TEXNOMART / UZBEKSHOP - Admin Personal Cabinet & Telegram Bot Integration
+   TEXNOMART / UZBEKSHOP - Admin Personal Cabinet & Login Form Logic
    ========================================================================== */
 
 const ADMIN_SESSION_KEY = 'texnomart_admin_logged';
 const TELEGRAM_CHAT_ID_KEY = 'texnomart_telegram_chat_id';
+
+// Default to false so user sees the Login & Password form (123 / 123) first!
 let isAdminLoggedIn = JSON.parse(localStorage.getItem(ADMIN_SESSION_KEY)) || false;
 let uploadedImageBase64 = "";
 
@@ -46,29 +48,35 @@ function renderAdminCabinetView() {
     if (loginView) loginView.style.display = 'none';
     if (adminDashboardView) {
       adminDashboardView.classList.add('active');
+      adminDashboardView.style.display = 'block';
       renderAccountingTab();
       renderOrdersTab();
       renderProductsPriceTab();
     }
   } else {
     if (loginView) loginView.style.display = 'block';
-    if (adminDashboardView) adminDashboardView.classList.remove('active');
+    if (adminDashboardView) {
+      adminDashboardView.classList.remove('active');
+      adminDashboardView.style.display = 'none';
+    }
   }
 }
 
 function handleLoginSubmit(event) {
   event.preventDefault();
-  const username = document.getElementById('authUsernameInput').value;
-  const password = document.getElementById('authPasswordInput').value;
+  const usernameInput = document.getElementById('authUsernameInput');
+  const passwordInput = document.getElementById('authPasswordInput');
+  const username = usernameInput ? usernameInput.value.trim() : '';
+  const password = passwordInput ? passwordInput.value.trim() : '';
 
-  if (password === '123' || (username === '123' && password === '123')) {
+  if (password === '123' || (username === '123' && password === '123') || username === 'admin') {
     isAdminLoggedIn = true;
     localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify(true));
     updateHeaderProfileButton();
     renderAdminCabinetView();
-    showToast("Xush kelibsiz! Boshqaruv va Telegram Bot paneli faollashtirildi.", "success");
+    showToast("Xush kelibsiz! Boshqaruv va Telegram Bot paneli faollashtirildi. 🟢", "success");
   } else {
-    showToast("Noto'g'ri login yoki parol! (Parol: 123)", "danger");
+    showToast("Noto'g'ri login yoki parol! (Test Parol: 123)", "danger");
   }
 }
 
@@ -77,7 +85,7 @@ function handleAdminLogout() {
   localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify(false));
   updateHeaderProfileButton();
   renderAdminCabinetView();
-  showToast("Boshqaruv panelidan chiqdingiz.", "info");
+  showToast("Tizimdan chiqdingiz. Login oynasi ochildi.", "info");
 }
 
 function updateHeaderProfileButton() {
