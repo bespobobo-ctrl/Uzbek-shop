@@ -1,4 +1,4 @@
-/* Header Component Styles */
+/* Header Component Styles & Mobile Telegram Mini App UI/UX Adaptation */
 header.main-header {
   position: sticky;
   top: 0;
@@ -131,4 +131,50 @@ header.main-header {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* ==========================================================================
+   MOBILE TELEGRAM MINI APP HEADER UI/UX ADAPTATION
+   ========================================================================== */
+@media (max-width: 768px) {
+  .header-inner {
+    height: auto;
+    padding: 0.6rem 0;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  /* Hide crammed header desktop text buttons on mobile screen
+     because they are cleanly provided by the Mobile Bottom Navigation Bar */
+  .header-nav-actions {
+    display: none !important;
+  }
+
+  .brand-logo {
+    font-size: 1.3rem;
+  }
+
+  .brand-logo-icon {
+    width: 34px;
+    height: 34px;
+    font-size: 1.1rem;
+  }
+
+  .mega-catalog-btn {
+    padding: 0.55rem 0.85rem;
+    font-size: 0.85rem;
+  }
+
+  /* Full-width clean search bar on mobile */
+  .header-search-wrap {
+    max-width: 100%;
+    width: 100%;
+    order: 3;
+    margin-top: 0.2rem;
+  }
+
+  .header-search-wrap input {
+    padding: 0.65rem 1rem 0.65rem 2.5rem;
+    font-size: 0.875rem;
+  }
 }
