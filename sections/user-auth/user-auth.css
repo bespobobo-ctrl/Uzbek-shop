@@ -8,18 +8,20 @@
   inset: 0;
   background: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(8px);
-  z-index: 999999 !important; /* Highest z-index so it always opens on top of all mobile overlays */
+  z-index: 999999 !important;
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
   visibility: hidden;
+  pointer-events: none; /* Prevents invisible overlay from blocking touch clicks on mobile */
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .auth-modal-overlay.active {
   opacity: 1 !important;
   visibility: visible !important;
+  pointer-events: auto !important;
   display: flex !important;
 }
 

@@ -80,12 +80,14 @@
   justify-content: center;
   opacity: 0;
   visibility: hidden;
+  pointer-events: none; /* Prevents invisible overlay from capturing clicks */
   transition: all 0.25s ease;
 }
 
 .topbar-modal-overlay.active {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
 .topbar-modal-box {
