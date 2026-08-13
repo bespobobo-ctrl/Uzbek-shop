@@ -37,12 +37,27 @@ function toggleAuthModal(open) {
 }
 
 window.openAuthModal = function() {
-  console.log('openAuthModal() called');
+  console.log('openAuthModal() called from user-auth.js');
   toggleAuthModal(true);
 };
 
 window.closeAuthModal = function() {
   toggleAuthModal(false);
+};
+
+// Called from inline script after login to render all dashboard tabs
+window.renderAdminDashboardTabs = function() {
+  renderAccountingTab();
+  renderOrdersTab();
+  renderOmborTab();
+  renderChegirmaTab();
+};
+
+// Called when modal opens to show correct view (login vs dashboard)
+window.renderAdminView = function() {
+  var stored = localStorage.getItem('texnomart_admin_logged');
+  isAdminLoggedIn = stored === 'true';
+  renderAdminCabinetView();
 };
 
 window.switchAuthToLoginView = function() {

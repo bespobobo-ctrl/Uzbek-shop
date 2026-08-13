@@ -546,12 +546,12 @@
             <span>💡 Test rejimida login va parol:</span> <b>123</b> / <b>123</b>
           </div>
 
-          <form id="authLoginForm">
+          <form id="authLoginForm" onsubmit="window.adminLogin(event)">
             <div class="auth-form-group">
               <label for="authUsernameInput">Foydalanuvchi Logini:</label>
               <div class="input-with-icon">
                 <span class="input-icon">👤</span>
-                <input type="text" id="authUsernameInput" value="admin" placeholder="admin" required>
+                <input type="text" id="authUsernameInput" value="admin" placeholder="admin">
               </div>
             </div>
 
@@ -559,7 +559,7 @@
               <label for="authPasswordInput">Maxfiy Parol:</label>
               <div class="input-with-icon">
                 <span class="input-icon">🔒</span>
-                <input type="password" id="authPasswordInput" value="123" placeholder="Parolni kiriting" required>
+                <input type="password" id="authPasswordInput" value="123" placeholder="Parolni kiriting">
               </div>
             </div>
 
@@ -783,59 +783,118 @@
   <script src="./sections/user-auth/user-auth.js"></script>
   <script src="./sections/footer/footer.js"></script>
 
-  <!-- FAILSAFE INLINE SCRIPT: Direct modal open without external JS dependency -->
+  <!-- UNIFIED AUTH INIT SCRIPT -->
   <script>
-    // Runs after all HTML is parsed — guarantees modal open works
-    document.addEventListener('DOMContentLoaded', function() {
-      var modal = document.getElementById('authModalOverlay');
-      if (!modal) {
-        console.error('FATAL: #authModalOverlay element not found in DOM!');
-        return;
+    // Define global functions immediately (before DOMContentLoaded)
+    // so onclick attributes can call them at any time
+
+    window.openAuthModal = function() {
+      var m = document.getElementById('authModalOverlay');
+      if (!m) { console.error('authModalOverlay not found!'); return; }
+      m.style.display = 'flex';
+      m.style.position = 'fixed';
+      m.style.inset = '0';
+      m.style.zIndex = '9999999';
+      m.style.pointerEvents = 'auto';
+      m.style.background = 'rgba(15,23,42,0.75)';
+      m.style.alignItems = 'center';
+      m.style.justifyContent = 'center';
+      m.classList.add('active');
+      // Render the correct view (login or dashboard)
+      if (window.renderAdminView) window.renderAdminView();
+      console.log('openAuthModal: OPENED ✅');
+    };
+
+    window.closeAuthModal = function() {
+      var m = document.getElementById('authModalOverlay');
+      if (!m) return;
+      m.style.display = 'none';
+      m.style.pointerEvents = 'none';
+      m.classList.remove('active');
+      console.log('closeAuthModal: CLOSED');
+    };
+
+    window.adminLogin = function(event) {
+      if (event) event.preventDefault();
+      var username = (document.getElementById('authUsernameInput') || {}).value || '';
+      var password = (document.getElementById('authPasswordInput') || {}).value || '';
+      username = username.trim();
+      password = password.trim();
+
+      if (password === '123' || username === 'admin' || username === '123') {
+        // Mark as logged in
+        try { localStorage.setItem('texnomart_admin_logged', 'true'); } catch(e) {}
+
+        // Hide login form, show dashboard
+        var loginView = document.getElementById('authLoginFormView');
+        var dashView = document.getElementById('authAdminDashboardView');
+        if (loginView) loginView.style.display = 'none';
+        if (dashView) {
+          dashView.style.display = 'block';
+          dashView.classList.add('active');
+        }
+
+        // Update header button
+        var btnText = document.getElementById('headerUserBtnText');
+        var btnIcon = document.getElementById('headerUserBtnIcon');
+        if (btnText) btnText.textContent = 'Kabinet';
+        if (btnIcon) btnIcon.textContent = '⚙️';
+
+        // Trigger full render from user-auth.js if available
+        if (window.renderAdminDashboardTabs) {
+          window.renderAdminDashboardTabs();
+        }
+
+        // Show success toast
+        if (window.showToast) window.showToast('Xush kelibsiz! Admin panel ochildi 🟢', 'success');
+        else alert('Xush kelibsiz! Admin panel ochildi.');
+        console.log('adminLogin: SUCCESS ✅');
+      } else {
+        if (window.showToast) window.showToast("Noto'g'ri parol! Test: 123", 'danger');
+        else alert("Noto'g'ri parol! Test: 123");
       }
-      // Ensure modal starts hidden
-      modal.style.display = 'none';
-      modal.style.pointerEvents = 'none';
+    };
 
-      // Global failsafe override
-      window.openAuthModal = function() {
-        var m = document.getElementById('authModalOverlay');
-        if (m) {
-          m.style.cssText = 'display:flex !important; position:fixed !important; inset:0 !important; z-index:9999999 !important; pointer-events:auto !important; background:rgba(15,23,42,0.75) !important; align-items:center !important; justify-content:center !important;';
-          m.classList.add('active');
-          console.log('Failsafe openAuthModal: modal OPENED');
-        }
-      };
-
-      window.closeAuthModal = function() {
-        var m = document.getElementById('authModalOverlay');
-        if (m) {
-          m.style.display = 'none';
-          m.classList.remove('active');
-        }
-      };
-
-      // Bind all Kirish / Kabinet buttons
-      var btns = document.querySelectorAll('#openUserAuthBtn, #tgKabinetBtn, .open-auth-trigger');
-      btns.forEach(function(btn) {
-        btn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          window.openAuthModal();
-        });
-      });
-
-      // Close on backdrop click
+    // Run bindings after DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+      // Ensure modal is hidden at start
+      var modal = document.getElementById('authModalOverlay');
       if (modal) {
+        modal.style.display = 'none';
+        modal.style.pointerEvents = 'none';
+
+        // Close on backdrop click
         modal.addEventListener('click', function(e) {
           if (e.target === modal) window.closeAuthModal();
         });
       }
 
+      // Close button
       var closeBtn = document.getElementById('closeAuthModalBtn');
-      if (closeBtn) {
-        closeBtn.addEventListener('click', window.closeAuthModal);
-      }
+      if (closeBtn) closeBtn.onclick = function(e) { e.preventDefault(); window.closeAuthModal(); };
 
-      console.log('Failsafe inline script loaded. Modal el:', modal ? 'FOUND ✅' : 'MISSING ❌');
+      // Logout button
+      var logoutBtn = document.getElementById('adminLogoutBtn');
+      if (logoutBtn) logoutBtn.onclick = function() {
+        try { localStorage.setItem('texnomart_admin_logged', 'false'); } catch(e) {}
+        var loginView = document.getElementById('authLoginFormView');
+        var dashView = document.getElementById('authAdminDashboardView');
+        if (loginView) loginView.style.display = 'block';
+        if (dashView) { dashView.style.display = 'none'; dashView.classList.remove('active'); }
+        var btnText = document.getElementById('headerUserBtnText');
+        var btnIcon = document.getElementById('headerUserBtnIcon');
+        if (btnText) btnText.textContent = 'Kirish';
+        if (btnIcon) btnIcon.textContent = '👤';
+        if (window.showToast) window.showToast('Tizimdan chiqdingiz.', 'info');
+      };
+
+      // All Kirish/Kabinet buttons
+      ['openUserAuthBtn','tgKabinetBtn'].forEach(function(id) {
+        var btn = document.getElementById(id);
+        if (btn) btn.onclick = function(e) { e.stopPropagation(); window.openAuthModal(); };
+      });
+
+      console.log('AUTH INIT SCRIPT: Ready ✅');
     });
   </script>
 
