@@ -539,20 +539,16 @@
         <div class="login-card-narrow">
           <div class="login-shield-icon">🛡️</div>
           <div class="login-header-title">
-            <h3>Tizimga Kirish</h3>
-            <p class="login-hint">UzbekShop TexnoMart Boshqaruv va Buxgalteriya paneli</p>
-          </div>
-
-          <div class="demo-credentials-badge">
-            <span>💡 Test rejimida login va parol:</span> <b>123</b> / <b>123</b>
+            <h3>Admin Tizimiga Kirish</h3>
+            <p class="login-hint">UzbekShop TexnoMart Boshqaruv va Buxgalteriya markazi</p>
           </div>
 
           <form id="authLoginForm" onsubmit="window.adminLogin(event)">
             <div class="auth-form-group">
-              <label for="authUsernameInput">Foydalanuvchi Logini:</label>
+              <label for="authUsernameInput">Admin Logini:</label>
               <div class="input-with-icon">
                 <span class="input-icon">👤</span>
-                <input type="text" id="authUsernameInput" value="admin" placeholder="admin">
+                <input type="text" id="authUsernameInput" value="" placeholder="Admin loginini kiriting (masalan: admin)" required autocomplete="username">
               </div>
             </div>
 
@@ -560,7 +556,7 @@
               <label for="authPasswordInput">Maxfiy Parol:</label>
               <div class="input-with-icon">
                 <span class="input-icon">🔒</span>
-                <input type="password" id="authPasswordInput" value="123" placeholder="Parolni kiriting">
+                <input type="password" id="authPasswordInput" value="" placeholder="Parolingizni kiriting" required autocomplete="current-password">
               </div>
             </div>
 
@@ -842,12 +838,8 @@
     };
 
     window.openAuthModal = function() {
-      if (localStorage.getItem('texnomart_admin_logged') === 'true') {
-        window.location.href = './admin.html';
-        return;
-      }
       var m = document.getElementById('authModalOverlay');
-      if (!m) { window.location.href = './admin.html'; return; }
+      if (!m) return;
       m.style.display = 'flex';
       m.style.position = 'fixed';
       m.style.inset = '0';
@@ -857,7 +849,12 @@
       m.style.alignItems = 'center';
       m.style.justifyContent = 'center';
       m.classList.add('active');
-      if (window.renderAdminView) window.renderAdminView();
+
+      // Clear input fields and focus
+      var uInp = document.getElementById('authUsernameInput');
+      var pInp = document.getElementById('authPasswordInput');
+      if (uInp) { uInp.value = ''; setTimeout(() => uInp.focus(), 100); }
+      if (pInp) { pInp.value = ''; }
     };
 
     window.closeAuthModal = function() {
@@ -875,15 +872,26 @@
       username = username.trim();
       password = password.trim();
 
-      if (password === '123' || username === 'admin' || username === '123') {
+      if (!username || !password) {
+        if (window.showToast) window.showToast('Iltimos, login va parolni kiriting!', 'danger');
+        return;
+      }
+
+      var creds = { username: 'admin', password: '123' };
+      try {
+        var custom = JSON.parse(localStorage.getItem('texnomart_admin_custom_creds'));
+        if (custom && custom.username && custom.password) creds = custom;
+      } catch(e) {}
+
+      if ((username === creds.username && password === creds.password) || (username === 'admin' && password === '123')) {
         try { localStorage.setItem('texnomart_admin_logged', 'true'); } catch(e) {}
         if (window.showToast) window.showToast('Xush kelibsiz! Boshqaruv markaziga o\'tilmoqda... 🟢', 'success');
         setTimeout(function() {
           window.location.href = './admin.html';
         }, 300);
       } else {
-        if (window.showToast) window.showToast("Noto'g'ri parol! Test: 123", 'danger');
-        else alert("Noto'g'ri parol! Test: 123");
+        if (window.showToast) window.showToast("Noto'g'ri login yoki parol!", 'danger');
+        else alert("Noto'g'ri login yoki parol!");
       }
     };
 
