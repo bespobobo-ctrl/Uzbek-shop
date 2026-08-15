@@ -1,21 +1,25 @@
 /* ==========================================================================
-   TEXNOMART / UZBEKSHOP - 24/7 Telegram AI Assistant Service
-   Bot: @Yordamchishop_bot (Token: 8608763605:AAGKLo260tjBwaty9Q56yOLEAsxRHRgYzXg)
+   TEXNOMART / UZBEKSHOP - Dual Telegram Bots Engine
+   1-Bot: @Uzbekshoptexnomart_bot (Token: 8932753943:AAEgaPfDupiUUZRxm4fSkssuN4TPtti1cmo)
+   2-Bot: @Yordamchishop_bot (Token: 8608763605:AAGKLo260tjBwaty9Q56yOLEAsxRHRgYzXg)
    ========================================================================== */
 
-const TELEGRAM_CONFIG = {
-  BOT_TOKEN: '8608763605:AAGKLo260tjBwaty9Q56yOLEAsxRHRgYzXg',
-  BOT_USERNAME: '@Yordamchishop_bot',
-  DEFAULT_CHAT_ID: localStorage.getItem('texnomart_admin_bot_chat_id') || localStorage.getItem('texnomart_telegram_chat_id') || ''
+const TELEGRAM_BOTS = {
+  CUSTOMER_BOT: {
+    token: '8932753943:AAEgaPfDupiUUZRxm4fSkssuN4TPtti1cmo',
+    username: '@Uzbekshoptexnomart_bot',
+    name: 'UzbekshopTexnomart'
+  },
+  ASSISTANT_BOT: {
+    token: '8608763605:AAGKLo260tjBwaty9Q56yOLEAsxRHRgYzXg',
+    username: '@Yordamchishop_bot',
+    name: 'Yordamchishop'
+  }
 };
 
-// Send Raw Message to Telegram
-async function sendRawTelegramNotification(text, replyMarkup = null, customChatId = null) {
-  const token = localStorage.getItem('texnomart_admin_bot_token') || TELEGRAM_CONFIG.BOT_TOKEN;
-  const chatId = customChatId || localStorage.getItem('texnomart_admin_bot_chat_id') || localStorage.getItem('texnomart_telegram_chat_id') || TELEGRAM_CONFIG.DEFAULT_CHAT_ID;
-
+// Send Message using specified Bot Token
+async function sendTelegramDirect(botToken, chatId, text, replyMarkup = null) {
   if (!chatId) {
-    console.warn('Telegram Chat ID hali kiritilmagan. Sozlamalar bo\'limidan Chat ID kiriting.');
     return { ok: false, reason: 'NO_CHAT_ID' };
   }
 
@@ -27,7 +31,7 @@ async function sendRawTelegramNotification(text, replyMarkup = null, customChatI
       reply_markup: replyMarkup
     };
 
-    const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -41,24 +45,27 @@ async function sendRawTelegramNotification(text, replyMarkup = null, customChatI
   }
 }
 
-// 1. Send Rich New Order Notification with Action Buttons
+// 1. Dispatch New Order Notification to 2-Bot (@Yordamchishop_bot)
 async function notifyTelegramNewOrder(order) {
   if (!order) return;
 
+  const chatId = localStorage.getItem('texnomart_admin_bot_chat_id') || localStorage.getItem('texnomart_telegram_chat_id') || '';
+  if (!chatId) return;
+
   const orderId = order.id || Date.now().toString().slice(-5);
-  const customerName = order.customerName || order.userName || 'Hurmatli Mijoz';
+  const customerName = order.customerName || order.customer || order.userName || 'Mijoz';
   const phone = order.phone || order.phoneNumber || '+998 90 000 00 00';
   const address = order.address || order.deliveryAddress || 'Toshkent shahri';
-  const paymentMethod = order.paymentMethod || 'Payme / Naqd';
-  const totalSum = (order.amount || order.totalPrice || 0).toLocaleString('uz-UZ');
+  const paymentMethod = order.paymentType || order.paymentMethod || 'Payme / Naqd';
+  const totalSum = (order.amount || order.total || order.totalPrice || 0).toLocaleString('uz-UZ');
 
   let itemsText = '';
   if (order.items && Array.isArray(order.items) && order.items.length > 0) {
-    itemsText = order.items.map((it, idx) => `  ${idx + 1}. <b>${it.name || it.title}</b> (${it.quantity || 1}x) - ${(it.price || 0).toLocaleString('uz-UZ')} so'm`).join('\n');
-  } else if (order.productName) {
-    itemsText = `  1. <b>${order.productName}</b> (1x) - ${totalSum} so'm`;
+    itemsText = order.items.map((it, idx) => `  ${idx + 1}. <b>${it.name || it.title}</b> (${it.qty || it.quantity || 1}x) - ${(it.price || 0).toLocaleString('uz-UZ')} so'm`).join('\n');
+  } else if (order.product) {
+    itemsText = `  1. <b>${order.product}</b> (1x) - ${totalSum} so'm`;
   } else {
-    itemsText = `  1. Texnomart Mahsulotlari (Jami)`;
+    itemsText = `  1. Texnomart Mahsulotlari`;
   }
 
   const message = `
@@ -75,7 +82,7 @@ ${itemsText}
 
 🕒 <b>Vaqt:</b> ${new Date().toLocaleString('uz-UZ')}
 ━━━━━━━━━━━━━━━━━━━━
-⚡ <i>Quyidagi tugmalar orqali buyurtma holatini darhol o'zgartiring:</i>
+⚡ <i>Buyurtma holatini Telegram orqali boshqaring:</i>
   `.trim();
 
   const inlineKeyboard = {
@@ -90,48 +97,29 @@ ${itemsText}
     ]
   };
 
-  return await sendRawTelegramNotification(message, inlineKeyboard);
+  return await sendTelegramDirect(TELEGRAM_BOTS.ASSISTANT_BOT.token, chatId, message, inlineKeyboard);
 }
 
-// 2. Send 2FA SMS Security Code
+// 2. Send 2FA SMS Security Code via 2-Bot (@Yordamchishop_bot)
 async function sendTelegramSmsSecurityCode(phone, code) {
+  const chatId = localStorage.getItem('texnomart_admin_bot_chat_id') || localStorage.getItem('texnomart_telegram_chat_id') || '';
+  if (!chatId) return;
+
   const message = `
 🔐 <b>UZBEKSHOP XAVFSIZLIK TASDIQLASH KODI</b>
 ━━━━━━━━━━━━━━━━━━━━
 📞 <b>Admin raqami:</b> <code>${phone}</code>
 ⚡ <b>Tasdiqlash kodi:</b> <code>${code}</code>
 
-⚠️ <i>Ushbu bir martalik kod ma'lumotlarni tozalash (Factory Reset) uchun yuborildi. Kodni begonalarga bermang!</i>
+⚠️ <i>Ushbu bir martalik kod barcha ma'lumotlarni o'chirish (Factory Reset) uchun yuborildi. Kodni begonalarga bermang!</i>
 🕒 <b>Amal qilish muddati:</b> 60 soniya
   `.trim();
 
-  return await sendRawTelegramNotification(message);
+  return await sendTelegramDirect(TELEGRAM_BOTS.ASSISTANT_BOT.token, chatId, message);
 }
 
-// 3. Send Delivery / Status Update
-async function notifyTelegramOrderStatus(orderId, newStatus) {
-  const statusEmoji = {
-    'Yetkazilmoqda': '🚚',
-    'Bajarildi': '✅',
-    'To\'langan': '💳',
-    'Bekor qilindi': '❌'
-  };
-
-  const emoji = statusEmoji[newStatus] || '📦';
-  const message = `
-${emoji} <b>BUYURTMA HOLATI O'ZGARDI!</b>
-━━━━━━━━━━━━━━━━━━━━
-📦 <b>Buyurtma ID:</b> #UZB-${orderId}
-🟡 <b>Yangi holat:</b> <b>${newStatus}</b>
-🕒 <b>Vaqt:</b> ${new Date().toLocaleString('uz-UZ')}
-  `.trim();
-
-  return await sendRawTelegramNotification(message);
-}
-
-// Export Globally
-window.TELEGRAM_CONFIG = TELEGRAM_CONFIG;
+// Global Exports
+window.TELEGRAM_BOTS = TELEGRAM_BOTS;
+window.sendTelegramDirect = sendTelegramDirect;
 window.notifyTelegramNewOrder = notifyTelegramNewOrder;
 window.sendTelegramSmsSecurityCode = sendTelegramSmsSecurityCode;
-window.notifyTelegramOrderStatus = notifyTelegramOrderStatus;
-window.sendRawTelegramNotification = sendRawTelegramNotification;

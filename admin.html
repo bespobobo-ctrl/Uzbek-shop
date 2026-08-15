@@ -672,7 +672,7 @@
               </form>
             </div>
 
-            <!-- 2. IKKITA TELEGRAM BOT INTEGRATSIYASI -->
+            <!-- 2. IKKITA TELEGRAM BOT INTEGRATSIYASI (Built-in Tokens) -->
             <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(460px, 1fr)); gap:1.5rem;">
               
               <!-- BOT 1: Foydalanuvchilar Boti -->
@@ -682,51 +682,44 @@
                     <div style="display:flex; align-items:center; gap:0.75rem;">
                       <div style="width:44px; height:44px; border-radius:12px; background:#e0f2fe; color:#0284c7; display:flex; align-items:center; justify-content:center; font-size:1.4rem;">👥</div>
                       <div>
-                        <h3 style="font-weight:800; font-size:1.1rem; color:#0f172a;">1-Bot: Foydalanuvchilar Boti</h3>
-                        <span style="font-size:0.75rem; color:#0284c7; font-weight:700;">Customer & Mini App Bot</span>
+                        <h3 style="font-weight:800; font-size:1.1rem; color:#0f172a;">1-Bot: Foydalanuvchilar & Mini App</h3>
+                        <a href="https://t.me/Uzbekshoptexnomart_bot" target="_blank" style="font-size:0.8rem; color:#0284c7; font-weight:800; text-decoration:none;">@Uzbekshoptexnomart_bot ↗</a>
                       </div>
                     </div>
-                    <span id="custBotStatusBadge" style="background:#dcfce7; color:#15803d; font-size:0.75rem; font-weight:800; padding:0.25rem 0.65rem; border-radius:20px;">🟢 Ulangan</span>
+                    <span style="background:#dcfce7; color:#15803d; font-size:0.75rem; font-weight:800; padding:0.25rem 0.65rem; border-radius:20px;">🟢 Token Ulangan</span>
                   </div>
 
                   <p style="font-size:0.84rem; color:#64748b; margin-bottom:1.25rem; line-height:1.4;">
-                    Mijozlarga yangiliklar, maxsus aksiyalar, do'kon mini ilovasi bilan bog'lanish va xarid holatlarini yetkazuvchi asosiy bot.
+                    Mijozlarga do'konni Telegram ichida Mini App qilib ochib berish, aksiyalar va xarid holatlarini yetkazuvchi asosiy foydalanuvchilar boti.
                   </p>
 
-                  <form id="customerBotForm" onsubmit="handleSaveCustomerBot(event)">
-                    <div class="auth-form-group">
-                      <label>1-Bot Token (API Key):</label>
-                      <div class="input-with-icon">
-                        <span class="input-icon">🔑</span>
-                        <input type="text" id="custBotTokenInput" placeholder="Masalan: 7123456789:AAHk...xYz" style="font-family:monospace; font-size:0.85rem;">
-                      </div>
+                  <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:1rem; margin-bottom:1.25rem;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.82rem; margin-bottom:0.4rem;">
+                      <span style="color:#64748b; font-weight:700;">Bot API Token:</span>
+                      <span style="color:#16a34a; font-weight:800;">🔒 Tizimga avtomatik biriktirilgan</span>
                     </div>
+                    <div style="display:flex; justify-content:space-between; font-size:0.82rem;">
+                      <span style="color:#64748b; font-weight:700;">Telegram Havolasi:</span>
+                      <a href="https://t.me/Uzbekshoptexnomart_bot" target="_blank" style="color:#0284c7; font-weight:800;">t.me/Uzbekshoptexnomart_bot</a>
+                    </div>
+                  </div>
 
-                    <div class="auth-form-group">
-                      <label>Bot Username / Havolasi:</label>
-                      <div class="input-with-icon">
-                        <span class="input-icon">🔗</span>
-                        <input type="text" id="custBotUsernameInput" placeholder="@UzbekShop_User_Bot">
-                      </div>
+                  <div class="auth-form-group">
+                    <label>Foydalanuvchi / Test Chat ID:</label>
+                    <div class="input-with-icon">
+                      <span class="input-icon">💬</span>
+                      <input type="text" id="custBotChatIdInput" placeholder="Masalan: 123456789 (Botga /start bosing)">
                     </div>
+                  </div>
 
-                    <div class="auth-form-group">
-                      <label>Foydalanuvchi / Test Chat ID:</label>
-                      <div class="input-with-icon">
-                        <span class="input-icon">💬</span>
-                        <input type="text" id="custBotChatIdInput" placeholder="Masalan: 123456789">
-                      </div>
-                    </div>
-
-                    <div style="display:flex; gap:0.75rem; margin-top:1.25rem;">
-                      <button type="submit" style="flex:1; background:#0284c7; color:#ffffff; font-weight:800; padding:0.75rem 1rem; border-radius:10px; border:none; cursor:pointer; font-size:0.88rem;">
-                        💾 1-Botni Saqlash
-                      </button>
-                      <button type="button" onclick="sendTestCustomerBotMsg()" style="background:#f0f9ff; color:#0284c7; border:1px solid #bae6fd; font-weight:700; padding:0.75rem 1rem; border-radius:10px; cursor:pointer; font-size:0.88rem;">
-                        🔔 Test Xabar
-                      </button>
-                    </div>
-                  </form>
+                  <div style="display:flex; gap:0.75rem; margin-top:1.25rem;">
+                    <button type="button" onclick="saveCustomerChatIdOnly()" style="flex:1; background:#0284c7; color:#ffffff; font-weight:800; padding:0.75rem 1rem; border-radius:10px; border:none; cursor:pointer; font-size:0.88rem;">
+                      💾 Chat ID ni Saqlash
+                    </button>
+                    <button type="button" onclick="sendTestCustomerBotMsg()" style="background:#f0f9ff; color:#0284c7; border:1px solid #bae6fd; font-weight:700; padding:0.75rem 1rem; border-radius:10px; cursor:pointer; font-size:0.88rem;">
+                      🔔 1-Botdan Test Xabar
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -738,42 +731,43 @@
                       <div style="width:44px; height:44px; border-radius:12px; background:#f0fdf4; color:#16a34a; display:flex; align-items:center; justify-content:center; font-size:1.4rem;">📊</div>
                       <div>
                         <h3 style="font-weight:800; font-size:1.1rem; color:#0f172a;">2-Bot: Buyurtma & Moliya Yordamchisi</h3>
-                        <span style="font-size:0.75rem; color:#16a34a; font-weight:700;">Admin Orders & Financial AI Assistant</span>
+                        <a href="https://t.me/Yordamchishop_bot" target="_blank" style="font-size:0.8rem; color:#16a34a; font-weight:800; text-decoration:none;">@Yordamchishop_bot ↗</a>
                       </div>
                     </div>
-                    <span id="adminBotStatusBadge" style="background:#dcfce7; color:#15803d; font-size:0.75rem; font-weight:800; padding:0.25rem 0.65rem; border-radius:20px;">🟢 Faol</span>
+                    <span style="background:#dcfce7; color:#15803d; font-size:0.75rem; font-weight:800; padding:0.25rem 0.65rem; border-radius:20px;">🟢 24/7 Webhook Faol</span>
                   </div>
 
                   <p style="font-size:0.84rem; color:#64748b; margin-bottom:1.25rem; line-height:1.4;">
-                    Yangi buyurtma kelganda to'lovni tasdiqlash bildirishnomalari, buyurtma tarkibi, kunlik va oylik daromad tahlillarini yuboruvchi yordamchi bot.
+                    Yangi buyurtma kelganda to'lovni tasdiqlash bildirishnomalari, buyurtma tarkibi, kunlik va oylik daromad tahlillarini yuboruvchi shaxsiy yordamchi bot.
                   </p>
 
-                  <form id="adminBotForm" onsubmit="handleSaveAdminBot(event)">
-                    <div class="auth-form-group">
-                      <label>Boshqaruv Bot Token (API Key):</label>
-                      <div class="input-with-icon">
-                        <span class="input-icon">🔑</span>
-                        <input type="text" id="adminBotTokenInput" placeholder="Masalan: 8987654321:BBGk...aBc" style="font-family:monospace; font-size:0.85rem;">
-                      </div>
+                  <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:1rem; margin-bottom:1.25rem;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.82rem; margin-bottom:0.4rem;">
+                      <span style="color:#64748b; font-weight:700;">Bot API Token:</span>
+                      <span style="color:#16a34a; font-weight:800;">🔒 Tizimga avtomatik biriktirilgan</span>
                     </div>
+                    <div style="display:flex; justify-content:space-between; font-size:0.82rem;">
+                      <span style="color:#64748b; font-weight:700;">Telegram Havolasi:</span>
+                      <a href="https://t.me/Yordamchishop_bot" target="_blank" style="color:#16a34a; font-weight:800;">t.me/Yordamchishop_bot</a>
+                    </div>
+                  </div>
 
-                    <div class="auth-form-group">
-                      <label>Admin / Guruh Chat ID:</label>
-                      <div class="input-with-icon">
-                        <span class="input-icon">💬</span>
-                        <input type="text" id="adminBotChatIdInput" placeholder="Masalan: 123456789 yoki -100123456789">
-                      </div>
+                  <div class="auth-form-group">
+                    <label>Admin / Guruh Chat ID:</label>
+                    <div class="input-with-icon">
+                      <span class="input-icon">💬</span>
+                      <input type="text" id="adminBotChatIdInput" placeholder="Masalan: 123456789 (Botga /id yozing)">
                     </div>
+                  </div>
 
-                    <div style="display:flex; gap:0.75rem; margin-top:1.25rem;">
-                      <button type="submit" style="flex:1; background:#16a34a; color:#ffffff; font-weight:800; padding:0.75rem 1rem; border-radius:10px; border:none; cursor:pointer; font-size:0.88rem;">
-                        💾 2-Botni Saqlash
-                      </button>
-                      <button type="button" onclick="sendTestAdminReportMsg()" style="background:#f0fdf4; color:#16a34a; border:1px solid #bbf7d0; font-weight:700; padding:0.75rem 1rem; border-radius:10px; cursor:pointer; font-size:0.88rem;">
-                        📊 Test Hisobot
-                      </button>
-                    </div>
-                  </form>
+                  <div style="display:flex; gap:0.75rem; margin-top:1.25rem;">
+                    <button type="button" onclick="saveAdminChatIdOnly()" style="flex:1; background:#16a34a; color:#ffffff; font-weight:800; padding:0.75rem 1rem; border-radius:10px; border:none; cursor:pointer; font-size:0.88rem;">
+                      💾 Chat ID ni Saqlash
+                    </button>
+                    <button type="button" onclick="sendTestAdminReportMsg()" style="background:#f0fdf4; color:#16a34a; border:1px solid #bbf7d0; font-weight:700; padding:0.75rem 1rem; border-radius:10px; cursor:pointer; font-size:0.88rem;">
+                      📊 2-Botdan Test Hisobot
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -938,53 +932,42 @@
       const phoneInp = document.getElementById('settingsAdminPhone');
       if (phoneInp) phoneInp.value = localStorage.getItem('texnomart_admin_phone') || '+998 90 123 45 67';
 
-      const custToken = document.getElementById('custBotTokenInput');
-      const custUser = document.getElementById('custBotUsernameInput');
       const custChat = document.getElementById('custBotChatIdInput');
-      if (custToken) custToken.value = localStorage.getItem('texnomart_customer_bot_token') || '';
-      if (custUser) custUser.value = localStorage.getItem('texnomart_customer_bot_username') || '@UzbekShop_User_Bot';
       if (custChat) custChat.value = localStorage.getItem('texnomart_customer_chat_id') || localStorage.getItem('texnomart_admin_bot_chat_id') || '';
 
-      const adminToken = document.getElementById('adminBotTokenInput');
       const adminChat = document.getElementById('adminBotChatIdInput');
-      if (adminToken) adminToken.value = localStorage.getItem('texnomart_admin_bot_token') || '8608763605:AAGKLo260tjBwaty9Q56yOLEAsxRHRgYzXg';
       if (adminChat) adminChat.value = localStorage.getItem('texnomart_admin_bot_chat_id') || localStorage.getItem('texnomart_telegram_chat_id') || '';
     }
 
-    // Save Bot Handlers
-    window.handleSaveCustomerBot = function(e) {
-      if (e) e.preventDefault();
-      const token = (document.getElementById('custBotTokenInput')?.value || '').trim();
-      const username = (document.getElementById('custBotUsernameInput')?.value || '').trim();
+    // Save Chat IDs
+    function saveCustomerChatIdOnly() {
       const chatId = (document.getElementById('custBotChatIdInput')?.value || '').trim();
-      localStorage.setItem('texnomart_customer_bot_token', token);
-      localStorage.setItem('texnomart_customer_bot_username', username);
-      localStorage.setItem('texnomart_customer_chat_id', chatId);
-      if (window.showToast) showToast('1-Bot (Mijozlar boti) sozlamalari saqlandi! 👥', 'success');
-    };
-
-    window.handleSaveAdminBot = function(e) {
-      if (e) e.preventDefault();
-      const token = (document.getElementById('adminBotTokenInput')?.value || '').trim();
-      const chatId = (document.getElementById('adminBotChatIdInput')?.value || '').trim();
-      localStorage.setItem('texnomart_admin_bot_token', token);
-      localStorage.setItem('texnomart_admin_bot_chat_id', chatId);
-      localStorage.setItem('texnomart_telegram_chat_id', chatId);
-      if (window.showToast) showToast('2-Bot (Buyurtma & Moliya Yordamchisi) saqlandi! 📊', 'success');
-    };
-
-    // REAL TELEGRAM API TEST SENDERS
-    async function sendTestCustomerBotMsg() {
-      const token = (document.getElementById('custBotTokenInput')?.value || localStorage.getItem('texnomart_customer_bot_token') || '').trim();
-      let chatId = (document.getElementById('custBotChatIdInput')?.value || localStorage.getItem('texnomart_customer_chat_id') || localStorage.getItem('texnomart_admin_bot_chat_id') || '').trim();
-
-      if (!token) {
-        if (window.showToast) showToast('Iltimos, avval 1-Bot API Tokenini kiriting!', 'danger');
+      if (!chatId) {
+        if (window.showToast) showToast('Iltimos, Chat ID raqamingizni kiriting!', 'danger');
         return;
       }
+      localStorage.setItem('texnomart_customer_chat_id', chatId);
+      if (window.showToast) showToast('1-Bot (Mijozlar boti) Chat ID saqlandi! 👥', 'success');
+    }
+
+    function saveAdminChatIdOnly() {
+      const chatId = (document.getElementById('adminBotChatIdInput')?.value || '').trim();
+      if (!chatId) {
+        if (window.showToast) showToast('Iltimos, Admin Chat ID raqamingizni kiriting!', 'danger');
+        return;
+      }
+      localStorage.setItem('texnomart_admin_bot_chat_id', chatId);
+      localStorage.setItem('texnomart_telegram_chat_id', chatId);
+      if (window.showToast) showToast('2-Bot (Yordamchi Bot) Chat ID saqlandi! 📊', 'success');
+    }
+
+    // 1-CLICK REAL TELEGRAM API TEST SENDERS (Zero token required from user)
+    async function sendTestCustomerBotMsg() {
+      const botToken = (window.TELEGRAM_BOTS && window.TELEGRAM_BOTS.CUSTOMER_BOT) ? window.TELEGRAM_BOTS.CUSTOMER_BOT.token : '8932753943:AAEgaPfDupiUUZRxm4fSkssuN4TPtti1cmo';
+      let chatId = (document.getElementById('custBotChatIdInput')?.value || localStorage.getItem('texnomart_customer_chat_id') || localStorage.getItem('texnomart_admin_bot_chat_id') || '').trim();
 
       if (!chatId) {
-        chatId = prompt('Telegram Chat ID raqamingizni kiriting (Botga /id yozib oling):', '123456789');
+        chatId = prompt('Xabar qaysi Telegram profilingizga borishi uchun Chat ID kiriting (@Uzbekshoptexnomart_bot ga /start bosing):');
         if (!chatId) return;
         localStorage.setItem('texnomart_customer_chat_id', chatId);
         const inp = document.getElementById('custBotChatIdInput');
@@ -999,9 +982,9 @@
 ━━━━━━━━━━━━━━━━━━━━
 👋 <b>Assalomu alaykum, hurmatli mijoz!</b>
 
-Bu 1-Bot (Foydalanuvchilar va Mini App Boti)dan yuborilgan <b>rasmiy TEST XABARI</b> hisoblanadi.
+Bu 1-Bot (<b>@Uzbekshoptexnomart_bot</b>)dan yuborilgan <b>rasmiy TEST XABARI</b> hisoblanadi.
 
-Do'konimizning barcha 24+ xil tovarlarini Telegram ichida to'liq Mini App shaklida ko'rish va xarid qilish imkoniyati faol!
+Do'konimizning barcha 24+ xil tovarlarini Telegram ichida to'liq Mini App shaklida ochish va xarid qilish imkoniyati faol!
 
 🎁 <b>Bugungi aksiya:</b> 15% gacha super chegirmalar!
 🚚 <b>Yetkazib berish:</b> Butun O'zbekiston bo'ylab 24 soatda.
@@ -1016,7 +999,7 @@ Do'konimizning barcha 24+ xil tovarlarini Telegram ichida to'liq Mini App shakli
       };
 
       try {
-        const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -1029,7 +1012,7 @@ Do'konimizning barcha 24+ xil tovarlarini Telegram ichida to'liq Mini App shakli
 
         const resData = await response.json();
         if (resData.ok) {
-          if (window.showToast) showToast('✅ 1-Bot (Mijozlar Boti): Telegramga test xabari muvaffaqiyatli yetkazildi! 📲', 'success');
+          if (window.showToast) showToast('✅ 1-Bot (@Uzbekshoptexnomart_bot): Telegramga xabar yetkazildi! 📲', 'success');
         } else {
           if (window.showToast) showToast(`Telegram xatolik: ${resData.description || 'Botga avval /start bosing!'}`, 'danger');
         }
@@ -1039,13 +1022,8 @@ Do'konimizning barcha 24+ xil tovarlarini Telegram ichida to'liq Mini App shakli
     }
 
     async function sendTestAdminReportMsg() {
-      const token = (document.getElementById('adminBotTokenInput')?.value || localStorage.getItem('texnomart_admin_bot_token') || '8608763605:AAGKLo260tjBwaty9Q56yOLEAsxRHRgYzXg').trim();
+      const botToken = (window.TELEGRAM_BOTS && window.TELEGRAM_BOTS.ASSISTANT_BOT) ? window.TELEGRAM_BOTS.ASSISTANT_BOT.token : '8608763605:AAGKLo260tjBwaty9Q56yOLEAsxRHRgYzXg';
       let chatId = (document.getElementById('adminBotChatIdInput')?.value || localStorage.getItem('texnomart_admin_bot_chat_id') || localStorage.getItem('texnomart_telegram_chat_id') || '').trim();
-
-      if (!token) {
-        if (window.showToast) showToast('Iltimos, 2-Bot API Tokenini kiriting!', 'danger');
-        return;
-      }
 
       if (!chatId) {
         chatId = prompt('Telegram Chat ID raqamingizni kiriting (@Yordamchishop_bot ga /id deb yozing):');
@@ -1088,7 +1066,7 @@ Do'konimizning barcha 24+ xil tovarlarini Telegram ichida to'liq Mini App shakli
       };
 
       try {
-        const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -1101,7 +1079,7 @@ Do'konimizning barcha 24+ xil tovarlarini Telegram ichida to'liq Mini App shakli
 
         const resData = await response.json();
         if (resData.ok) {
-          if (window.showToast) showToast('✅ 2-Bot (Yordamchi Bot): Telegramga moliyaviy hisobot muvaffaqiyatli yuborildi! 📈', 'success');
+          if (window.showToast) showToast('✅ 2-Bot (@Yordamchishop_bot): Moliyaviy hisobot yetkazildi! 📈', 'success');
         } else {
           if (window.showToast) showToast(`Telegram xatolik: ${resData.description || 'Botga avval /start bosing!'}`, 'danger');
         }
