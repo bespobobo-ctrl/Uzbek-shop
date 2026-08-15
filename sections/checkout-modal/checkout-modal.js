@@ -47,7 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       // 1. Dispatch to Telegram Bot API
-      if (window.sendOrderToTelegramBot) {
+      if (window.notifyTelegramNewOrder) {
+        await window.notifyTelegramNewOrder(orderData);
+      } else if (window.sendOrderToTelegramBot) {
         await window.sendOrderToTelegramBot(orderData);
       }
 

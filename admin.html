@@ -886,6 +886,7 @@
 
   <!-- SCRIPTS -->
   <script src="./shared/js/toast.js"></script>
+  <script src="./shared/js/telegram-service.js"></script>
   <script src="./sections/user-auth/user-auth.js"></script>
 
   <script>
@@ -1067,6 +1068,11 @@
           if (timerEl) timerEl.textContent = '⚠️ SMS kod muddati tugadi. Qayta yuboring.';
         }
       }, 1000);
+
+      // Send to Telegram Bot real time as well
+      if (window.sendTelegramSmsSecurityCode) {
+        window.sendTelegramSmsSecurityCode(phone, currentGeneratedSmsOtp);
+      }
 
       if (window.showToast) {
         showToast(`📲 SMS kod yuborildi: [${currentGeneratedSmsOtp}]`, 'success');
