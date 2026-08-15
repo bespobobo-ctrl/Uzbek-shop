@@ -1,9 +1,12 @@
-/* Footer Component Styles */
+/* ==========================================================================
+   TEXNOMART / UZBEKSHOP - Footer Component & Telegram Mini App Mobile Styles
+   ========================================================================== */
+
 footer.tm-footer {
   background-color: var(--tm-dark);
   color: #94a3b8;
   padding: 4rem 0 2rem;
-  margin-top: 5rem;
+  margin-top: 4rem;
   border-top: 4px solid var(--tm-yellow);
 }
 
@@ -11,18 +14,28 @@ footer.tm-footer {
   display: grid;
   grid-template-columns: 2fr repeat(3, 1fr);
   gap: 3rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
 }
 
 .footer-brand-box h2 {
   color: #ffffff;
   font-size: 1.6rem;
   font-weight: 800;
-  margin-bottom: 1rem;
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .footer-brand-box h2 span {
   color: var(--tm-yellow);
+}
+
+.footer-brand-box p {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: #94a3b8;
+  max-width: 380px;
 }
 
 .footer-column-box h4 {
@@ -30,14 +43,24 @@ footer.tm-footer {
   font-size: 1.05rem;
   font-weight: 700;
   margin-bottom: 1.25rem;
+  letter-spacing: 0.02em;
 }
 
 .footer-column-box ul {
   list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .footer-column-box ul li {
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.footer-column-box ul li a {
+  color: #cbd5e1;
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 .footer-column-box ul li a:hover {
@@ -47,22 +70,116 @@ footer.tm-footer {
 .payment-badges-row {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-top: 1rem;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
 }
 
 .payment-badge-pill {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f8fafc;
   padding: 0.35rem 0.75rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.8rem;
-  font-weight: 700;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+}
+
+.payment-badge-pill:hover {
+  background: var(--tm-yellow);
+  color: #000000;
+  border-color: var(--tm-yellow);
 }
 
 .footer-bottom-bar {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 2rem;
+  padding-top: 1.75rem;
   text-align: center;
   font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* ==========================================================================
+   TELEGRAM MINI APP & MOBILE RESPONSIVE UI/UX ADAPTATION
+   ========================================================================== */
+@media (max-width: 768px) {
+  footer.tm-footer {
+    padding: 2.5rem 0 6.5rem; /* Extra bottom padding so Telegram Mini App bottom navbar never overlaps content */
+    margin-top: 2.5rem;
+  }
+
+  .footer-grid-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .footer-brand-box {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 1.5rem 1.25rem;
+    border-radius: 16px;
+  }
+
+  .footer-brand-box h2 {
+    justify-content: center;
+    font-size: 1.35rem;
+  }
+
+  .footer-brand-box p {
+    max-width: 100%;
+    font-size: 0.85rem;
+  }
+
+  .payment-badges-row {
+    justify-content: center;
+    gap: 0.4rem;
+  }
+
+  /* Two column layout for Categories & Help on Mobile */
+  .footer-links-mobile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .footer-column-box h4 {
+    font-size: 0.95rem;
+    margin-bottom: 0.85rem;
+    color: var(--tm-yellow);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.4rem;
+  }
+
+  .footer-column-box ul li {
+    margin-bottom: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .footer-contact-mobile {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 1.25rem;
+    border-radius: 16px;
+  }
+
+  .footer-contact-mobile ul li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .footer-contact-mobile a {
+    color: #38bdf8 !important;
+    font-weight: 700;
+  }
+
+  .footer-bottom-bar {
+    padding-top: 1.25rem;
+    font-size: 0.78rem;
+    line-height: 1.4;
+  }
 }
