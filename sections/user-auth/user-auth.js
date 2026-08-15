@@ -13,6 +13,8 @@ const safeFormatUZS = (num) => {
 
 let isAdminLoggedIn = localStorage.getItem(ADMIN_SESSION_KEY) === 'true';
 let uploadedImageBase64 = '';
+let currentOmborCategoryFilter = 'all';
+let currentOmborSearchQuery = '';
 
 let storeOrdersList = [];
 try {
@@ -24,28 +26,59 @@ try {
 
 const defaultFallbackProducts = [
   { id: 101, name: "Smartfon Apple iPhone 15 Pro 128GB Natural Titanium", category: "smartfonlar", categoryName: "Smartfonlar", brand: "Apple", price: 14200000, oldPrice: 15800000, monthlyPrice: 1450000, stock: 12, rating: 4.9, reviews: 128, badge: "SUPER NARX", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "A17 Pro chip, Titanium korpus, 48 MP Action kamera va Dynamic Island." },
-  { id: 102, name: "Smartfon Samsung Galaxy S24 Ultra 12/512GB Titanium Black", category: "smartfonlar", categoryName: "Smartfonlar", brand: "Samsung", price: 15900000, oldPrice: 17200000, monthlyPrice: 1620000, stock: 8, rating: 4.9, reviews: 94, badge: "0-0-12", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "Galaxy AI imkoniyatlari, 200MP kamera va Snapdragon 8 Gen 3." },
-  { id: 103, name: "Noutbuk Apple MacBook Air 13 M2 8/256GB Midnight", category: "kompyuterlar", categoryName: "Kompyuterlar", brand: "Apple", price: 12800000, oldPrice: 14100000, monthlyPrice: 1290000, stock: 5, rating: 4.8, reviews: 65, badge: "HIT SOTUV", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "M2 protsessor, Liquid Retina ekrani va ingichka dizayn." },
+  { id: 102, name: "Smartfon Samsung Galaxy S24 Ultra 12/512GB Titanium Black", category: "smartfonlar", categoryName: "Smartfonlar", brand: "Samsung", price: 15900000, oldPrice: 17200000, monthlyPrice: 1620000, stock: 8, rating: 4.9, reviews: 94, badge: "0-0-12", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=600&q=80", isFlashDeal: false, description: "Galaxy AI imkoniyatlari, 200MP kamera, S-Pen ruchkasi va Snapdragon 8 Gen 3." },
+  { id: 103, name: "Noutbuk Apple MacBook Air 13 M2 8/256GB Midnight", category: "kompyuterlar", categoryName: "Kompyuterlar", brand: "Apple", price: 12800000, oldPrice: 14100000, monthlyPrice: 1290000, stock: 5, rating: 4.8, reviews: 65, badge: "HIT SOTUV", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "M2 protsessor, Liquid Retina ekrani, 18 soatgacha batareya va ingichka dizayn." },
   { id: 104, name: "Noutbuk ASUS TUF Gaming F15 i5-12500H RTX 3050 16GB", category: "kompyuterlar", categoryName: "Kompyuterlar", brand: "ASUS", price: 9800000, oldPrice: 10900000, monthlyPrice: 990000, stock: 14, rating: 4.7, reviews: 42, badge: "AKSIYA", badgeColor: "red", image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=600&q=80", isFlashDeal: false, description: "Kuchli o'yin noutbuki, 144Hz IPS ekran va harbiylarcha baquvvat korpus." },
-  { id: 105, name: "Televizor Artel 55AU90G 4K UHD Smart Android TV", category: "tv-audio", categoryName: "TV va Audio", brand: "Artel", price: 4800000, oldPrice: 5300000, monthlyPrice: 490000, stock: 20, rating: 4.6, reviews: 88, badge: "0% TO'LOV", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1593784991095-a205069470b6?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "55 dyuymli 4K UHD tasvirlash va Android TV." },
-  { id: 106, name: "Muzlatgich LG GR-B569BLCZ No Frost Inverter", category: "maishiy-texnika", categoryName: "Maishiy texnika", brand: "LG", price: 8600000, oldPrice: 9400000, monthlyPrice: 870000, stock: 7, rating: 4.9, reviews: 31, badge: "TOP KAFOLAT", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?auto=format&fit=crop&w=600&q=80", isFlashDeal: false, description: "Smart Inverter kompressor, Total No Frost va A++ sinf." },
-  { id: 107, name: "Kir yuvish mashinasi Bosch WAN24200ME 8 kg Inverter", category: "maishiy-texnika", categoryName: "Maishiy texnika", brand: "Bosch", price: 6200000, oldPrice: 6900000, monthlyPrice: 630000, stock: 3, rating: 4.9, reviews: 56, badge: "GERMAN QUALITY", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "EcoSilence Drive vositasi va gigiyenik bug'da yuvish." },
-  { id: 108, name: "Konditsioner Haier Tundra Inverter 12 HSU-12H", category: "iqlim", categoryName: "Iqlim texnikasi", brand: "Haier", price: 4300000, oldPrice: 4800000, monthlyPrice: 440000, stock: 18, rating: 4.7, reviews: 29, badge: "BEPUL O'RNATISH", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1631545806604-e34988f57fa5?auto=format&fit=crop&w=600&q=80", isFlashDeal: false, description: "Inverter dvigatel va jim ishlash rejimi." }
+  { id: 105, name: "Televizor Artel 55AU90G 4K UHD Smart Android TV", category: "tv-audio", categoryName: "TV va Audio", brand: "Artel", price: 4800000, oldPrice: 5300000, monthlyPrice: 490000, stock: 20, rating: 4.6, reviews: 88, badge: "0% OLDINDAN TO'LOV", badgeColor: "primary", image: "https://images.unsplash.com/photo-1593784991095-a205069470b6?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "55 dyuymli 4K UHD tasvirlash, Android TV va ovozli boshqaruv pulti." },
+  { id: 106, name: "Muzlatgich LG GR-B569BLCZ No Frost Inverter", category: "maishiy-texnika", categoryName: "Maishiy texnika", brand: "LG", price: 8600000, oldPrice: 9400000, monthlyPrice: 870000, stock: 7, rating: 4.9, reviews: 31, badge: "TOP KAFOLAT", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?auto=format&fit=crop&w=600&q=80", isFlashDeal: false, description: "Smart Inverter kompressor, Total No Frost va energiya tejamkor A++ sinf." },
+  { id: 107, name: "Kir yuvish mashinasi Bosch WAN24200ME 8 kg Inverter", category: "maishiy-texnika", categoryName: "Maishiy texnika", brand: "Bosch", price: 6200000, oldPrice: 6900000, monthlyPrice: 630000, stock: 3, rating: 4.9, reviews: 56, badge: "GERMAN QUALITY", badgeColor: "primary", image: "https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "EcoSilence Drive vositasi, anti-vibratsiya paneli va gigiyenik bug'da yuvish." },
+  { id: 108, name: "Konditsioner Haier Tundra Inverter 12 HSU-12H", category: "iqlim", categoryName: "Iqlim texnikasi", brand: "Haier", price: 4300000, oldPrice: 4800000, monthlyPrice: 440000, stock: 18, rating: 4.7, reviews: 29, badge: "BEPUL O'RNATISH", badgeColor: "yellow", image: "https://images.unsplash.com/photo-1631545806604-e34988f57fa5?auto=format&fit=crop&w=600&q=80", isFlashDeal: false, description: "Inverter dvigatel, 35-40 m² maydonga mo'ljallangan va jim ishlash rejimi." },
+  { id: 109, name: "Smartfon Xiaomi 14 Ultra 16/512GB Leica Professional", category: "smartfonlar", categoryName: "Smartfonlar", brand: "Xiaomi", price: 13500000, oldPrice: 14900000, monthlyPrice: 1380000, stock: 10, rating: 4.9, reviews: 76, badge: "LEICA KAMERA", badgeColor: "accent", image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "1 dyuymli Leica sensori, Snapdragon 8 Gen 3 va WQHD+ AMOLED displey." },
+  { id: 110, name: "Smartfon Apple iPhone 14 128GB Midnight Blue", category: "smartfonlar", categoryName: "Smartfonlar", brand: "Apple", price: 9200000, oldPrice: 10100000, monthlyPrice: 940000, stock: 15, rating: 4.8, reviews: 112, badge: "TOP HIT", badgeColor: "primary", image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80", isFlashDeal: false, description: "Super Retina XDR ekran, A15 Bionic chip va uzoq batareya quvvati." },
+  { id: 111, name: "Smartfon Samsung Galaxy A55 5G 8/256GB Awesome Navy", category: "smartfonlar", categoryName: "Smartfonlar", brand: "Samsung", price: 4600000, oldPrice: 5100000, monthlyPrice: 470000, stock: 22, rating: 4.7, reviews: 84, badge: "YANGI MODEL", badgeColor: "accent", image: "https://images.unsplash.com/photo-1580910051074-3eb694886505?auto=format&fit=crop&w=600&q=80", isFlashDeal: false, description: "Metall korpus, 50MP OIS kamera va 120Hz Super AMOLED ekran." },
+  { id: 112, name: "Smartfon Xiaomi Redmi Note 13 Pro+ 5G 12/512GB", category: "smartfonlar", categoryName: "Smartfonlar", brand: "Xiaomi", price: 4900000, oldPrice: 5400000, monthlyPrice: 500000, stock: 18, rating: 4.8, reviews: 105, badge: "200 MP", badgeColor: "accent", image: "https://images.unsplash.com/photo-1567581935884-3349723552ca?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "200 MP flagman kamera, 120W tezkor quvvatlash va IP68 suvdan himoya." },
+  { id: 113, name: "Noutbuk Apple MacBook Pro 14 M3 Pro 18/512GB Space Black", category: "kompyuterlar", categoryName: "Kompyuterlar", brand: "Apple", price: 24500000, oldPrice: 26900000, monthlyPrice: 2490000, stock: 4, rating: 5.0, reviews: 38, badge: "PRO POWER", badgeColor: "primary", image: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&w=600&q=80", isFlashDeal: false, description: "M3 Pro chip, Liquid Retina XDR 120Hz ekran va 22 soatlik rekord batareya." },
+  { id: 114, name: "Noutbuk Lenovo Legion 5 Pro Ryzen 7 7745HX RTX 4060 16GB", category: "kompyuterlar", categoryName: "Kompyuterlar", brand: "Lenovo", price: 15200000, oldPrice: 16800000, monthlyPrice: 1550000, stock: 7, rating: 4.9, reviews: 49, badge: "GAMING MONSTR", badgeColor: "danger", image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "240Hz 2.5K WQXGA displey, RTX 4060 140W grafikasi va Legion ColdFront sovitish." },
+  { id: 115, name: "Noutbuk HP Victus 15 i5-13420H RTX 3050 16GB SSD 512GB", category: "kompyuterlar", categoryName: "Kompyuterlar", brand: "HP", price: 8900000, oldPrice: 9800000, monthlyPrice: 910000, stock: 11, rating: 4.7, reviews: 53, badge: "HAMYONBOP", badgeColor: "accent", image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=600&q=80", isFlashDeal: false, description: "144Hz FHD ekran, 13-avlod Intel i5 protsessori va OMEN Gaming Hub." },
+  { id: 116, name: "Televizor Samsung 65\" QLED 4K Q60C Smart TV", category: "tv-audio", categoryName: "TV va Audio", brand: "Samsung", price: 11500000, oldPrice: 12800000, monthlyPrice: 1170000, stock: 6, rating: 4.9, reviews: 64, badge: "QLED 4K", badgeColor: "primary", image: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "Quantum Dot ranglar palitrasi, Dual LED yoritish va AirSlim ultra yupqa dizayn." },
+  { id: 117, name: "Televizor LG OLED 55\" C3 4K 120Hz Cinema HDR", category: "tv-audio", categoryName: "TV va Audio", brand: "LG", price: 16800000, oldPrice: 18500000, monthlyPrice: 1720000, stock: 3, rating: 5.0, reviews: 41, badge: "OLED CINEMA", badgeColor: "accent", image: "https://images.unsplash.com/photo-1461151304267-38535e780c79?auto=format&fit=crop&w=600&q=80", isFlashDeal: false, description: "O'z-o'zini yorituvchi piksellar, a9 AI Gen6 protsessori va Dolby Vision/Atmos." },
+  { id: 118, name: "Audio tizim JBL PartyBox 310 Bluetooth 240W", category: "tv-audio", categoryName: "TV va Audio", brand: "JBL", price: 6400000, oldPrice: 7100000, monthlyPrice: 650000, stock: 8, rating: 4.9, reviews: 79, badge: "BAS BOOM", badgeColor: "accent", image: "https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "240W kuchli JBL Pro Sound, rangli yorug'lik effektlari va 18 soat batareya." },
+  { id: 119, name: "Simsiz Changyutgich Dyson V15 Detect Absolute", category: "maishiy-texnika", categoryName: "Maishiy texnika", brand: "Dyson", price: 9400000, oldPrice: 10500000, monthlyPrice: 960000, stock: 8, rating: 4.9, reviews: 52, badge: "LASER DETECT", badgeColor: "primary", image: "https://images.unsplash.com/photo-1558317374-067fb5f30001?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "Lazerli chang aniqlash, 240 AW kuchli so'rish quvvati va LCD axborot ekrani." },
+  { id: 120, name: "Muzlatgich Samsung Bespoke RB38 Custom Design", category: "maishiy-texnika", categoryName: "Maishiy texnika", brand: "Samsung", price: 10900000, oldPrice: 12200000, monthlyPrice: 1110000, stock: 5, rating: 4.8, reviews: 34, badge: "BESPOKE LUX", badgeColor: "accent", image: "https://images.unsplash.com/photo-1584992236310-6edddc08acff?auto=format&fit=crop&w=600&q=80", isFlashDeal: false, description: "Moslashuvchan modulli dizayn, SpaceMax texnologiyasi va All-Around Cooling." },
+  { id: 121, name: "Konditsioner Shivaki Elegant Inverter 12 HD-12", category: "iqlim", categoryName: "Iqlim texnikasi", brand: "Shivaki", price: 3900000, oldPrice: 4400000, monthlyPrice: 400000, stock: 14, rating: 4.6, reviews: 45, badge: "YANGI NARX", badgeColor: "primary", image: "https://images.unsplash.com/photo-1631545806604-e34988f57fa5?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "Tezkor isitish va sovitish rejimi, A++ energiya samaradorligi va 35 m² maydon." },
+  { id: 122, name: "Konditsioner Gree Fairy Inverter 18 CH-S18", category: "iqlim", categoryName: "Iqlim texnikasi", brand: "Gree", price: 7200000, oldPrice: 7900000, monthlyPrice: 740000, stock: 6, rating: 4.9, reviews: 23, badge: "55 M² UCHUN", badgeColor: "accent", image: "https://images.unsplash.com/photo-1631545806604-e34988f57fa5?auto=format&fit=crop&w=600&q=80", isFlashDeal: false, description: "55-60 m² gacha kuchli sovitish, Wi-Fi smart boshqaruv va Cold Plasma filtri." },
+  { id: 123, name: "Qahva mashinasi DeLonghi Magnifica S Otomatik", category: "oshxona", categoryName: "Oshxona texnikasi", brand: "DeLonghi", price: 5400000, oldPrice: 6100000, monthlyPrice: 550000, stock: 10, rating: 4.9, reviews: 67, badge: "ITALIAN COFFEE", badgeColor: "accent", image: "https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?auto=format&fit=crop&w=600&q=80", isFlashDeal: true, description: "Donali qahva maydalagich, 15 bar bosim va mukammal kapuchino ko'pigi." },
+  { id: 124, name: "Airfryer Philips XXL HD9650/90 Yog'siz Qovurish", category: "oshxona", categoryName: "Oshxona texnikasi", brand: "Philips", price: 2800000, oldPrice: 3200000, monthlyPrice: 290000, stock: 16, rating: 4.8, reviews: 89, badge: "DIET OSHXONA", badgeColor: "primary", image: "https://images.unsplash.com/photo-1585515320310-259814833e62?auto=format&fit=crop&w=600&q=80", isFlashDeal: false, description: "Twin TurboStar texnologiyasi, 1.4 kg sig'im va 90% kamroq yog' bilan pishirish." }
 ];
 
-/* =================== HELPER: Get Products (always fresh) =================== */
+/* =================== HELPER: Get Products (always fresh & full) =================== */
 function getAdminProducts() {
-  if (window.allProductsList && Array.isArray(window.allProductsList) && window.allProductsList.length > 0) {
+  if (window.allProductsList && Array.isArray(window.allProductsList) && window.allProductsList.length >= defaultFallbackProducts.length) {
     return window.allProductsList;
   }
   try {
     var stored = JSON.parse(localStorage.getItem(PRODUCTS_STORAGE_KEY));
-    if (Array.isArray(stored) && stored.length > 0) {
+    if (Array.isArray(stored) && stored.length >= defaultFallbackProducts.length) {
       window.allProductsList = stored;
       return window.allProductsList;
     }
   } catch(e) {}
-  window.allProductsList = JSON.parse(JSON.stringify(defaultFallbackProducts));
+  
+  // Merge or restore full catalog
+  let baseList = [];
+  try {
+    baseList = JSON.parse(localStorage.getItem(PRODUCTS_STORAGE_KEY)) || [];
+  } catch(e) { baseList = []; }
+
+  const existingIds = new Set(baseList.map(p => p.id));
+  defaultFallbackProducts.forEach(p => {
+    if (!existingIds.has(p.id)) {
+      baseList.push(p);
+    }
+  });
+
+  window.allProductsList = baseList.length > 0 ? baseList : JSON.parse(JSON.stringify(defaultFallbackProducts));
+  localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(window.allProductsList));
   return window.allProductsList;
 }
 
@@ -84,11 +117,10 @@ window.renderAdminDashboardTabs = function() {
   try { renderChegirmaTab(); } catch(e) { console.error('ChegirmaTab error:', e); }
 };
 
-window.renderOmborTab = function() { renderOmborTab(); };
-window.renderChegirmaTab = function() { renderChegirmaTab(); };
-window.renderOrdersTab = function() { renderOrdersTab(); };
-window.renderAccountingTab = function() { renderAccountingTab(); };
-
+window.renderOmborTab = renderOmborTab;
+window.renderChegirmaTab = renderChegirmaTab;
+window.renderOrdersTab = renderOrdersTab;
+window.renderAccountingTab = renderAccountingTab;
 
 // Called when modal opens
 window.renderAdminView = function() {
@@ -112,8 +144,10 @@ function handleLoginSubmit(event) {
     isAdminLoggedIn = true;
     localStorage.setItem(ADMIN_SESSION_KEY, 'true');
     updateHeaderProfileButton();
-    renderAdminCabinetView();
-    if (window.showToast) showToast('Xush kelibsiz! Boshqaruv paneli faollashtirildi 🟢', 'success');
+    if (window.showToast) showToast('Xush kelibsiz! Boshqaruv markaziga o\'tilmoqda... 🟢', 'success');
+    setTimeout(() => {
+      window.location.href = './admin.html';
+    }, 250);
   } else {
     if (window.showToast) showToast("Noto'g'ri login yoki parol! Test: 123 / 123", 'danger');
   }
@@ -143,14 +177,22 @@ function updateHeaderProfileButton() {
 function renderAdminCabinetView() {
   const loginView = document.getElementById('authLoginFormView');
   const dashView = document.getElementById('authAdminDashboardView');
+  const modalBox = document.querySelector('.auth-modal-box');
+  
   if (isAdminLoggedIn) {
+    if (modalBox) {
+      modalBox.classList.add('admin-fullscreen-mode');
+    }
     if (loginView) loginView.style.display = 'none';
     if (dashView) {
-      dashView.style.display = 'block';
+      dashView.style.display = 'flex';
       dashView.classList.add('active');
       window.renderAdminDashboardTabs();
     }
   } else {
+    if (modalBox) {
+      modalBox.classList.remove('admin-fullscreen-mode', 'pure-fullscreen');
+    }
     if (loginView) loginView.style.display = 'block';
     if (dashView) {
       dashView.style.display = 'none';
@@ -158,6 +200,22 @@ function renderAdminCabinetView() {
     }
   }
 }
+
+window.toggleAdminFullscreen = function() {
+  const modalBox = document.querySelector('.auth-modal-box');
+  const btnText = document.getElementById('adminFullscreenBtnText');
+  if (!modalBox) return;
+  if (modalBox.classList.contains('pure-fullscreen')) {
+    modalBox.classList.remove('pure-fullscreen');
+    modalBox.classList.add('admin-fullscreen-mode');
+    if (btnText) btnText.textContent = '100% Ekran';
+    if (window.showToast) showToast('Kengaytirilgan oyna rejimi', 'info');
+  } else {
+    modalBox.classList.add('pure-fullscreen');
+    if (btnText) btnText.textContent = 'Oyna Rejimi';
+    if (window.showToast) showToast('To\'liq 100% ekran rejimi ⛶', 'success');
+  }
+};
 
 /* =================== TAB 1: MOLIYA & TELEGRAM =================== */
 function renderAccountingTab() {
@@ -273,30 +331,37 @@ function renderOmborTab() {
   var container = document.getElementById('omborTabContent');
   if (!container) return;
 
-  var products = getAdminProducts();
-  console.log('renderOmborTab executing. Products count:', products.length);
+  var allProducts = getAdminProducts();
+  console.log('renderOmborTab executing. Products count:', allProducts.length);
 
-  if (products.length === 0) {
-    container.innerHTML = `
-      <div style="text-align:center; padding:3rem 1rem; color:#64748b;">
-        <div style="font-size:3rem; margin-bottom:1rem;">⏳</div>
-        <h3 style="font-weight:800; margin-bottom:0.5rem;">Mahsulotlar yuklanmoqda...</h3>
-        <p style="margin-bottom:1.5rem;">Web saytdagi mahsulotlar yuklangach bu yerda ko'rinadi.</p>
-        <button onclick="renderOmborTabPublic()" style="background:#FBC100; color:#000; font-weight:800; padding:0.75rem 1.5rem; border-radius:12px; cursor:pointer; font-size:1rem;">
-          🔄 Yangilash
-        </button>
-      </div>
-    `;
-    return;
-  }
+  var catCounts = {
+    all: allProducts.length,
+    smartfonlar: allProducts.filter(p => p.category === 'smartfonlar').length,
+    kompyuterlar: allProducts.filter(p => p.category === 'kompyuterlar').length,
+    'tv-audio': allProducts.filter(p => p.category === 'tv-audio').length,
+    'maishiy-texnika': allProducts.filter(p => p.category === 'maishiy-texnika').length,
+    iqlim: allProducts.filter(p => p.category === 'iqlim').length,
+    oshxona: allProducts.filter(p => p.category === 'oshxona').length
+  };
 
-  var catEmoji = { smartfonlar:'📱', kompyuterlar:'💻', 'tv-audio':'📺', 'maishiy-texnika':'🧺', iqlim:'❄️' };
-  var lowStock = products.filter(function(p){ return (p.stock||0) <= 5; }).length;
-  var totalStock = products.reduce(function(s,p){ return s+(p.stock||0); }, 0);
+  // Filter by category and search
+  var filteredProducts = allProducts.filter(p => {
+    var matchCat = currentOmborCategoryFilter === 'all' || p.category === currentOmborCategoryFilter;
+    var query = currentOmborSearchQuery.toLowerCase();
+    var matchSearch = !query || 
+      p.name.toLowerCase().includes(query) || 
+      (p.brand && p.brand.toLowerCase().includes(query)) ||
+      (p.categoryName && p.categoryName.toLowerCase().includes(query));
+    return matchCat && matchSearch;
+  });
+
+  var catEmoji = { smartfonlar:'📱', kompyuterlar:'💻', 'tv-audio':'📺', 'maishiy-texnika':'🧺', iqlim:'❄️', oshxona:'🍳' };
+  var lowStock = allProducts.filter(function(p){ return (p.stock||0) <= 5; }).length;
+  var totalStock = allProducts.reduce(function(s,p){ return s+(p.stock||0); }, 0);
 
   var rowsHtml = '';
-  for (var i = 0; i < products.length; i++) {
-    var p = products[i];
+  for (var i = 0; i < filteredProducts.length; i++) {
+    var p = filteredProducts[i];
     var stockNum = p.stock || 0;
     var stockColor = stockNum <= 3 ? '#dc2626' : stockNum <= 7 ? '#d97706' : '#16a34a';
     var stockLabel = stockNum <= 3 ? '🔴 Tugayapti!' : stockNum <= 7 ? '🟡 Kam qoldi' : '🟢 Yetarli';
@@ -305,7 +370,7 @@ function renderOmborTab() {
     var catName = p.categoryName || p.category || '';
     var flashBg = p.isFlashDeal ? '#fef3c7' : '#f1f5f9';
     var flashColor = p.isFlashDeal ? '#b45309' : '#64748b';
-    var flashLabel = p.isFlashDeal ? '🔥 Faol' : 'Yoq';
+    var flashLabel = p.isFlashDeal ? '🔥 Faol' : 'Yo\'q';
     var btnBg = p.isFlashDeal ? '#fee2e2' : '#dcfce7';
     var btnColor = p.isFlashDeal ? '#dc2626' : '#166534';
     var btnLabel = p.isFlashDeal ? 'Chegirmadan chiqar' : 'Kun Taklifiga qo\'sh';
@@ -313,44 +378,44 @@ function renderOmborTab() {
     rowsHtml += `
       <tr id="omborRow_${p.id}">
         <td>
-          <div style="display:flex;align-items:center;gap:0.6rem;">
-            <img src="${p.image}" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;" onerror="this.src='https://via.placeholder.com/44'">
+          <div style="display:flex;align-items:center;gap:0.75rem;">
+            <img src="${p.image}" style="width:48px;height:48px;border-radius:10px;object-fit:cover;flex-shrink:0;border:1px solid #e2e8f0;" onerror="this.src='https://via.placeholder.com/48'">
             <div>
-              <div style="font-weight:700;font-size:0.82rem;line-height:1.3;max-width:180px;">${p.name}</div>
-              <div style="font-size:0.72rem;color:#64748b;">${p.brand || ''}</div>
+              <div style="font-weight:700;font-size:0.85rem;line-height:1.3;max-width:220px;color:#1e293b;">${p.name}</div>
+              <div style="font-size:0.75rem;color:#64748b;margin-top:2px;"><b>Brend:</b> ${p.brand || 'Boshqa'} &nbsp;|&nbsp; <b>ID:</b> #${p.id}</div>
             </div>
           </div>
         </td>
         <td>
-          <span style="background:#f1f5f9;padding:0.25rem 0.6rem;border-radius:20px;font-size:0.75rem;font-weight:700;">
+          <span style="background:#f1f5f9;padding:0.3rem 0.65rem;border-radius:20px;font-size:0.78rem;font-weight:700;white-space:nowrap;">
             ${emoji} ${catName}
           </span>
         </td>
         <td>
           <div style="display:flex;align-items:center;gap:0.4rem;">
-            <input type="number" id="stockInput_${p.id}" value="${stockNum}" min="0" style="width:65px;padding:0.35rem 0.4rem;border:1.5px solid #e2e8f0;border-radius:8px;font-weight:800;text-align:center;font-size:0.9rem;color:${stockColor};">
-            <button onclick="saveStock(${p.id})" style="background:#dbeafe;color:#1d4ed8;font-weight:700;padding:0.35rem 0.55rem;border-radius:8px;font-size:0.75rem;cursor:pointer;">💾</button>
+            <input type="number" id="stockInput_${p.id}" value="${stockNum}" min="0" style="width:65px;padding:0.35rem 0.4rem;border:1.5px solid #cbd5e1;border-radius:8px;font-weight:800;text-align:center;font-size:0.9rem;color:${stockColor};">
+            <button onclick="saveStock(${p.id})" style="background:#dbeafe;color:#1d4ed8;font-weight:700;padding:0.35rem 0.55rem;border-radius:8px;font-size:0.75rem;cursor:pointer;" title="Saqlash">💾</button>
           </div>
-          <div style="font-size:0.7rem;color:${stockColor};font-weight:700;margin-top:2px;">${stockLabel}</div>
+          <div style="font-size:0.72rem;color:${stockColor};font-weight:700;margin-top:2px;">${stockLabel}</div>
         </td>
         <td>
-          <input type="number" id="priceInput_${p.id}" value="${p.price}" style="width:130px;padding:0.35rem 0.5rem;border:1.5px solid #e2e8f0;border-radius:8px;font-weight:800;font-size:0.85rem;">
-          <div style="font-size:0.7rem;color:#64748b;margin-top:2px;">${safeFormatUZS(p.price)}</div>
+          <input type="number" id="priceInput_${p.id}" value="${p.price}" style="width:130px;padding:0.35rem 0.5rem;border:1.5px solid #cbd5e1;border-radius:8px;font-weight:800;font-size:0.85rem;">
+          <div style="font-size:0.72rem;color:#64748b;margin-top:2px;font-weight:600;">${safeFormatUZS(p.price)}</div>
         </td>
         <td>
           ${p.oldPrice && discountPct > 0
             ? `<span style="background:#fee2e2;color:#dc2626;padding:0.25rem 0.65rem;border-radius:20px;font-weight:800;font-size:0.8rem;">-${discountPct}%</span>
                <div style="font-size:0.7rem;color:#64748b;margin-top:2px;text-decoration:line-through;">${safeFormatUZS(p.oldPrice)}</div>`
-            : `<span style="color:#64748b;font-size:0.8rem;">—</span>`}
+            : `<span style="color:#94a3b8;font-size:0.8rem;">—</span>`}
         </td>
         <td>
-          <span style="background:${flashBg};color:${flashColor};padding:0.3rem 0.7rem;border-radius:20px;font-size:0.78rem;font-weight:800;">${flashLabel}</span>
+          <span style="background:${flashBg};color:${flashColor};padding:0.3rem 0.7rem;border-radius:20px;font-size:0.78rem;font-weight:800;display:inline-block;">${flashLabel}</span>
         </td>
         <td>
-          <div style="display:flex;flex-direction:column;gap:0.4rem;">
-            <button onclick="saveOmborPrice(${p.id})" style="background:#FBC100;color:#000;font-weight:800;padding:0.4rem 0.7rem;border-radius:8px;font-size:0.8rem;cursor:pointer;width:100%;">💾 Narxni Saqlash</button>
-            <button onclick="toggleFlashFromOmbor(${p.id})" style="background:${btnBg};color:${btnColor};font-weight:800;padding:0.4rem 0.7rem;border-radius:8px;font-size:0.8rem;cursor:pointer;width:100%;">${btnLabel}</button>
-            <button onclick="deleteProductById(${p.id})" style="background:#fee2e2;color:#dc2626;font-weight:800;padding:0.4rem 0.7rem;border-radius:8px;font-size:0.8rem;cursor:pointer;width:100%;">🗑️ O'chirish</button>
+          <div style="display:flex;flex-direction:column;gap:0.35rem;">
+            <button onclick="saveOmborPrice(${p.id})" style="background:#FBC100;color:#000;font-weight:800;padding:0.4rem 0.65rem;border-radius:8px;font-size:0.78rem;cursor:pointer;width:100%;border:none;">💾 Narxni Saqlash</button>
+            <button onclick="toggleFlashFromOmbor(${p.id})" style="background:${btnBg};color:${btnColor};font-weight:800;padding:0.4rem 0.65rem;border-radius:8px;font-size:0.78rem;cursor:pointer;width:100%;border:none;">${btnLabel}</button>
+            <button onclick="deleteProductById(${p.id})" style="background:#fee2e2;color:#dc2626;font-weight:800;padding:0.35rem 0.65rem;border-radius:8px;font-size:0.75rem;cursor:pointer;width:100%;border:none;">🗑️ O'chirish</button>
           </div>
         </td>
       </tr>
@@ -358,36 +423,110 @@ function renderOmborTab() {
   }
 
   container.innerHTML = `
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.25rem;">
+    <!-- Ombor Top Header & Stats -->
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1rem;background:#f8fafc;padding:1rem 1.25rem;border-radius:16px;border:1px solid #e2e8f0;">
       <div>
-        <h3 style="font-weight:800;font-size:1.15rem;">🏪 Ombor — Barcha Mahsulotlar (${products.length} ta)</h3>
-        <p style="font-size:0.85rem;color:#64748b;margin-top:0.2rem;">
-          Jami ombor: <b>${totalStock} dona</b> &nbsp;|&nbsp;
-          <span style="color:#ef4444;font-weight:700;">⚠️ Kam qolgan: ${lowStock} ta</span>
+        <h3 style="font-weight:800;font-size:1.2rem;color:#0f172a;display:flex;align-items:center;gap:0.5rem;">
+          🏪 Ombor Boshqaruvi — <span style="color:#d97706;">${allProducts.length} xil Mahsulot</span>
+        </h3>
+        <p style="font-size:0.85rem;color:#64748b;margin-top:0.3rem;">
+          Jami mavjud tovar: <b style="color:#0f172a;">${totalStock} dona</b> &nbsp;|&nbsp;
+          <span style="color:#dc2626;font-weight:700;">⚠️ Kam qolgan: ${lowStock} xil tovar</span>
         </p>
       </div>
-      <button onclick="renderOmborTabPublic()" style="background:#f1f5f9;color:#1e293b;font-weight:700;padding:0.5rem 1rem;border-radius:8px;font-size:0.85rem;cursor:pointer;">🔄 Yangilash</button>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+        <button onclick="syncFullWarehouseDatabase()" style="background:#FBC100;color:#000;font-weight:800;padding:0.6rem 1.1rem;border-radius:10px;font-size:0.85rem;cursor:pointer;box-shadow:0 2px 6px rgba(251,193,0,0.3);border:none;">
+          🔄 To'liq Bazani Qayta Yuklash (${defaultFallbackProducts.length}+)
+        </button>
+        <button onclick="renderOmborTab()" style="background:#ffffff;border:1.5px solid #cbd5e1;color:#1e293b;font-weight:700;padding:0.6rem 1rem;border-radius:10px;font-size:0.85rem;cursor:pointer;">
+          🔄 Yangilash
+        </button>
+      </div>
     </div>
-    <div class="table-responsive-wrap">
-      <table class="admin-table">
-        <thead>
+
+    <!-- Category Filter Tabs inside Ombor -->
+    <div style="display:flex;gap:0.5rem;overflow-x:auto;padding-bottom:0.75rem;margin-bottom:0.75rem;scrollbar-width:thin;">
+      <button onclick="filterOmborCategory('all')" style="padding:0.45rem 0.9rem;border-radius:20px;font-size:0.82rem;font-weight:800;cursor:pointer;white-space:nowrap;border:none;background:${currentOmborCategoryFilter === 'all' ? '#0f172a' : '#e2e8f0'};color:${currentOmborCategoryFilter === 'all' ? '#ffffff' : '#334155'};">
+        Barchasi (${catCounts.all})
+      </button>
+      <button onclick="filterOmborCategory('smartfonlar')" style="padding:0.45rem 0.9rem;border-radius:20px;font-size:0.82rem;font-weight:800;cursor:pointer;white-space:nowrap;border:none;background:${currentOmborCategoryFilter === 'smartfonlar' ? '#0f172a' : '#e2e8f0'};color:${currentOmborCategoryFilter === 'smartfonlar' ? '#ffffff' : '#334155'};">
+        📱 Smartfonlar (${catCounts.smartfonlar})
+      </button>
+      <button onclick="filterOmborCategory('kompyuterlar')" style="padding:0.45rem 0.9rem;border-radius:20px;font-size:0.82rem;font-weight:800;cursor:pointer;white-space:nowrap;border:none;background:${currentOmborCategoryFilter === 'kompyuterlar' ? '#0f172a' : '#e2e8f0'};color:${currentOmborCategoryFilter === 'kompyuterlar' ? '#ffffff' : '#334155'};">
+        💻 Kompyuterlar (${catCounts.kompyuterlar})
+      </button>
+      <button onclick="filterOmborCategory('tv-audio')" style="padding:0.45rem 0.9rem;border-radius:20px;font-size:0.82rem;font-weight:800;cursor:pointer;white-space:nowrap;border:none;background:${currentOmborCategoryFilter === 'tv-audio' ? '#0f172a' : '#e2e8f0'};color:${currentOmborCategoryFilter === 'tv-audio' ? '#ffffff' : '#334155'};">
+        📺 TV & Audio (${catCounts['tv-audio']})
+      </button>
+      <button onclick="filterOmborCategory('maishiy-texnika')" style="padding:0.45rem 0.9rem;border-radius:20px;font-size:0.82rem;font-weight:800;cursor:pointer;white-space:nowrap;border:none;background:${currentOmborCategoryFilter === 'maishiy-texnika' ? '#0f172a' : '#e2e8f0'};color:${currentOmborCategoryFilter === 'maishiy-texnika' ? '#ffffff' : '#334155'};">
+        🧺 Maishiy (${catCounts['maishiy-texnika']})
+      </button>
+      <button onclick="filterOmborCategory('iqlim')" style="padding:0.45rem 0.9rem;border-radius:20px;font-size:0.82rem;font-weight:800;cursor:pointer;white-space:nowrap;border:none;background:${currentOmborCategoryFilter === 'iqlim' ? '#0f172a' : '#e2e8f0'};color:${currentOmborCategoryFilter === 'iqlim' ? '#ffffff' : '#334155'};">
+        ❄️ Iqlim (${catCounts.iqlim})
+      </button>
+      <button onclick="filterOmborCategory('oshxona')" style="padding:0.45rem 0.9rem;border-radius:20px;font-size:0.82rem;font-weight:800;cursor:pointer;white-space:nowrap;border:none;background:${currentOmborCategoryFilter === 'oshxona' ? '#0f172a' : '#e2e8f0'};color:${currentOmborCategoryFilter === 'oshxona' ? '#ffffff' : '#334155'};">
+        🍳 Oshxona (${catCounts.oshxona})
+      </button>
+    </div>
+
+    <!-- Live Search Box inside Ombor -->
+    <div style="margin-bottom:1rem;">
+      <input type="text" id="omborLiveSearch" value="${currentOmborSearchQuery}" oninput="searchOmborProducts(this.value)" placeholder="🔍 Ombordagi mahsulotlarni qidirish (nom, brend, model)..."
+        style="width:100%;padding:0.75rem 1rem;border:1.5px solid #cbd5e1;border-radius:12px;font-size:0.9rem;font-weight:600;background:#ffffff;">
+    </div>
+
+    <!-- Scrollable Table Container -->
+    <div class="table-responsive-wrap" style="max-height: 520px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 14px;">
+      <table class="admin-table" style="position:relative;">
+        <thead style="position:sticky;top:0;z-index:5;background:#f1f5f9;">
           <tr>
-            <th style="min-width:240px;">📦 Mahsulot</th>
+            <th style="min-width:260px;">📦 Mahsulot (${filteredProducts.length})</th>
             <th>Kategoriya</th>
             <th>Ombor soni</th>
             <th>Joriy Narx</th>
             <th>Chegirma %</th>
             <th>Kun Taklifi</th>
-            <th style="min-width:220px;">Amallar</th>
+            <th style="min-width:200px;">Amallar</th>
           </tr>
         </thead>
         <tbody>
-          ${rowsHtml}
+          ${rowsHtml || `<tr><td colspan="7" style="text-align:center;padding:2.5rem;color:#64748b;">Keltirilgan qidiruv yoki kategoriya bo'yicha mahsulot topilmadi.</td></tr>`}
         </tbody>
       </table>
     </div>
   `;
 }
+
+window.filterOmborCategory = function(cat) {
+  currentOmborCategoryFilter = cat;
+  renderOmborTab();
+};
+
+window.searchOmborProducts = function(query) {
+  currentOmborSearchQuery = query;
+  renderOmborTab();
+  // Keep focus on input
+  setTimeout(() => {
+    const input = document.getElementById('omborLiveSearch');
+    if (input) {
+      input.focus();
+      input.selectionStart = input.selectionEnd = input.value.length;
+    }
+  }, 10);
+};
+
+window.syncFullWarehouseDatabase = function() {
+  if (confirm("Ombor bazasini barcha 24+ mahsulotlar bilan to'liq yangilashni xohlaysizmi?")) {
+    window.allProductsList = JSON.parse(JSON.stringify(defaultFallbackProducts));
+    localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(window.allProductsList));
+    if (window.filterProductsBySearch) window.filterProductsBySearch('');
+    if (window.renderFlashDealsSection) window.renderFlashDealsSection();
+    renderOmborTab();
+    renderChegirmaTab();
+    renderAccountingTab();
+    if (window.showToast) showToast('Ombor bazasi to\'liq sinxronlandi: ' + defaultFallbackProducts.length + ' ta mahsulot! 🚀', 'success');
+  }
+};
 
 window.renderOmborTabPublic = function() {
   renderOmborTab();
@@ -536,7 +675,7 @@ function handleAddNewProductSubmit(event) {
   const imageUrl = document.getElementById('newProdImage')?.value || '';
   const desc = document.getElementById('newProdDesc')?.value || '';
   const finalImage = uploadedImageBase64 || imageUrl || 'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?auto=format&fit=crop&w=600&q=80';
-  const categoryNames = { smartfonlar:'Smartfonlar', kompyuterlar:'Kompyuterlar', 'tv-audio':'TV va Audio', 'maishiy-texnika':'Maishiy texnika', iqlim:'Iqlim texnikasi' };
+  const categoryNames = { smartfonlar:'Smartfonlar', kompyuterlar:'Kompyuterlar', 'tv-audio':'TV va Audio', 'maishiy-texnika':'Maishiy texnika', iqlim:'Iqlim texnikasi', oshxona:'Oshxona texnikasi' };
   if (!name || !price) { if(window.showToast) showToast("Iltimos, nom va narxni kiriting!", 'danger'); return; }
 
   const newProduct = {

@@ -77,10 +77,16 @@
   <script src="../../sections/product-detail/product-detail.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      let stored = JSON.parse(localStorage.getItem('texnomart_all_products'));
-      if (!stored || stored.length === 0) {
+      let stored = [];
+      try {
         const res = await fetch('../../data/products.json');
-        stored = await res.json();
+        if (res.ok) {
+          stored = await res.json();
+          localStorage.setItem('texnomart_all_products', JSON.stringify(stored));
+        }
+      } catch(e) {}
+      if (!stored || stored.length === 0) {
+        try { stored = JSON.parse(localStorage.getItem('texnomart_all_products')) || []; } catch(e){}
       }
       window.allProductsList = stored;
       const smartphones = stored.filter(p => p.category === 'smartfonlar');
