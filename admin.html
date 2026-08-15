@@ -933,46 +933,30 @@
       if (phoneInp) phoneInp.value = localStorage.getItem('texnomart_admin_phone') || '+998 90 123 45 67';
 
       const custChat = document.getElementById('custBotChatIdInput');
-      if (custChat) custChat.value = localStorage.getItem('texnomart_customer_chat_id') || localStorage.getItem('texnomart_admin_bot_chat_id') || '';
+      if (custChat) custChat.value = localStorage.getItem('texnomart_customer_chat_id') || '6535893117';
 
       const adminChat = document.getElementById('adminBotChatIdInput');
-      if (adminChat) adminChat.value = localStorage.getItem('texnomart_admin_bot_chat_id') || localStorage.getItem('texnomart_telegram_chat_id') || '';
+      if (adminChat) adminChat.value = localStorage.getItem('texnomart_admin_bot_chat_id') || localStorage.getItem('texnomart_telegram_chat_id') || '6535893117';
     }
 
     // Save Chat IDs
     function saveCustomerChatIdOnly() {
-      const chatId = (document.getElementById('custBotChatIdInput')?.value || '').trim();
-      if (!chatId) {
-        if (window.showToast) showToast('Iltimos, Chat ID raqamingizni kiriting!', 'danger');
-        return;
-      }
+      const chatId = (document.getElementById('custBotChatIdInput')?.value || '6535893117').trim();
       localStorage.setItem('texnomart_customer_chat_id', chatId);
       if (window.showToast) showToast('1-Bot (Mijozlar boti) Chat ID saqlandi! 👥', 'success');
     }
 
     function saveAdminChatIdOnly() {
-      const chatId = (document.getElementById('adminBotChatIdInput')?.value || '').trim();
-      if (!chatId) {
-        if (window.showToast) showToast('Iltimos, Admin Chat ID raqamingizni kiriting!', 'danger');
-        return;
-      }
+      const chatId = (document.getElementById('adminBotChatIdInput')?.value || '6535893117').trim();
       localStorage.setItem('texnomart_admin_bot_chat_id', chatId);
       localStorage.setItem('texnomart_telegram_chat_id', chatId);
       if (window.showToast) showToast('2-Bot (Yordamchi Bot) Chat ID saqlandi! 📊', 'success');
     }
 
-    // 1-CLICK REAL TELEGRAM API TEST SENDERS (Zero token required from user)
+    // 1-CLICK REAL TELEGRAM API TEST SENDERS (Zero popups, instant delivery)
     async function sendTestCustomerBotMsg() {
       const botToken = (window.TELEGRAM_BOTS && window.TELEGRAM_BOTS.CUSTOMER_BOT) ? window.TELEGRAM_BOTS.CUSTOMER_BOT.token : '8932753943:AAEgaPfDupiUUZRxm4fSkssuN4TPtti1cmo';
-      let chatId = (document.getElementById('custBotChatIdInput')?.value || localStorage.getItem('texnomart_customer_chat_id') || localStorage.getItem('texnomart_admin_bot_chat_id') || '').trim();
-
-      if (!chatId) {
-        chatId = prompt('Xabar qaysi Telegram profilingizga borishi uchun Chat ID kiriting (@Uzbekshoptexnomart_bot ga /start bosing):');
-        if (!chatId) return;
-        localStorage.setItem('texnomart_customer_chat_id', chatId);
-        const inp = document.getElementById('custBotChatIdInput');
-        if (inp) inp.value = chatId;
-      }
+      let chatId = (document.getElementById('custBotChatIdInput')?.value || localStorage.getItem('texnomart_customer_chat_id') || '6535893117').trim();
 
       if (window.showToast) showToast('1-Bot: Telegramga xabar yuborilmoqda... ⏳', 'info');
 
@@ -1014,7 +998,7 @@ Do'konimizning barcha 24+ xil tovarlarini Telegram ichida to'liq Mini App shakli
         if (resData.ok) {
           if (window.showToast) showToast('✅ 1-Bot (@Uzbekshoptexnomart_bot): Telegramga xabar yetkazildi! 📲', 'success');
         } else {
-          if (window.showToast) showToast(`Telegram xatolik: ${resData.description || 'Botga avval /start bosing!'}`, 'danger');
+          if (window.showToast) showToast(`Telegram: ${resData.description || 'Botga avval /start bosing!'}`, 'danger');
         }
       } catch (err) {
         if (window.showToast) showToast(`Ulanish xatosi: ${err.message}`, 'danger');
@@ -1023,16 +1007,7 @@ Do'konimizning barcha 24+ xil tovarlarini Telegram ichida to'liq Mini App shakli
 
     async function sendTestAdminReportMsg() {
       const botToken = (window.TELEGRAM_BOTS && window.TELEGRAM_BOTS.ASSISTANT_BOT) ? window.TELEGRAM_BOTS.ASSISTANT_BOT.token : '8608763605:AAGKLo260tjBwaty9Q56yOLEAsxRHRgYzXg';
-      let chatId = (document.getElementById('adminBotChatIdInput')?.value || localStorage.getItem('texnomart_admin_bot_chat_id') || localStorage.getItem('texnomart_telegram_chat_id') || '').trim();
-
-      if (!chatId) {
-        chatId = prompt('Telegram Chat ID raqamingizni kiriting (@Yordamchishop_bot ga /id deb yozing):');
-        if (!chatId) return;
-        localStorage.setItem('texnomart_admin_bot_chat_id', chatId);
-        localStorage.setItem('texnomart_telegram_chat_id', chatId);
-        const inp = document.getElementById('adminBotChatIdInput');
-        if (inp) inp.value = chatId;
-      }
+      let chatId = (document.getElementById('adminBotChatIdInput')?.value || localStorage.getItem('texnomart_admin_bot_chat_id') || localStorage.getItem('texnomart_telegram_chat_id') || '6535893117').trim();
 
       if (window.showToast) showToast('2-Bot: Telegramga moliyaviy hisobot yuborilmoqda... ⏳', 'info');
 
@@ -1081,7 +1056,7 @@ Do'konimizning barcha 24+ xil tovarlarini Telegram ichida to'liq Mini App shakli
         if (resData.ok) {
           if (window.showToast) showToast('✅ 2-Bot (@Yordamchishop_bot): Moliyaviy hisobot yetkazildi! 📈', 'success');
         } else {
-          if (window.showToast) showToast(`Telegram xatolik: ${resData.description || 'Botga avval /start bosing!'}`, 'danger');
+          if (window.showToast) showToast(`Telegram: ${resData.description || 'Botga avval /start bosing!'}`, 'danger');
         }
       } catch (err) {
         if (window.showToast) showToast(`Ulanish xatosi: ${err.message}`, 'danger');
