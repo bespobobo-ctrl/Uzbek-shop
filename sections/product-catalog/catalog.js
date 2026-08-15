@@ -31,15 +31,20 @@ const fallbackProductsData = [
   { id: 124, name: "Airfryer Philips XXL HD9650/90 Yog'siz Qovurish", category: "oshxona", categoryName: "Oshxona texnikasi", brand: "Philips", price: 2800000, oldPrice: 3200000, monthlyPrice: 290000, stock: 16, rating: 4.8, reviews: 89, badge: "DIET OSHXONA", badgeColor: "primary", image: "https://images.unsplash.com/photo-1585515320310-259814833e62?auto=format&fit=crop&w=600&q=80", isFlashDeal: false, description: "Twin TurboStar texnologiyasi, 1.4 kg sig'im va 90% kamroq yog' bilan pishirish." }
 ];
 
-// Synchronously initialize window.allProductsList immediately (never empty!)
+// Synchronously initialize window.allProductsList immediately from localStorage (or seed once)
 window.allProductsList = (function() {
   try {
-    var stored = JSON.parse(localStorage.getItem(PRODUCTS_STORAGE_KEY));
-    if (Array.isArray(stored) && stored.length >= fallbackProductsData.length) {
-      return stored;
+    var raw = localStorage.getItem(PRODUCTS_STORAGE_KEY);
+    if (raw !== null) {
+      var stored = JSON.parse(raw);
+      if (Array.isArray(stored)) {
+        return stored;
+      }
     }
   } catch(e) {}
-  return JSON.parse(JSON.stringify(fallbackProductsData));
+  var initial = JSON.parse(JSON.stringify(fallbackProductsData));
+  try { localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(initial)); } catch(e) {}
+  return initial;
 })();
 
 let currentCategoryFilter = 'all';
@@ -48,37 +53,18 @@ let currentSortOrder = 'default';
 
 async function initCatalogData() {
   try {
-    // 1. Fetch products.json data to ensure the latest full product list is loaded
-    let jsonProducts = [];
-    try {
-      const res = await fetch('./data/products.json');
-      if (res.ok) {
-        jsonProducts = await res.json();
-      }
-    } catch(e) {
-      console.warn('Local fetch products.json error, using fallback');
-    }
-
-    const sourceData = (jsonProducts && jsonProducts.length > 0) ? jsonProducts : fallbackProductsData;
-
-    // Retrieve currently stored products
-    let stored = [];
-    try {
-      stored = JSON.parse(localStorage.getItem(PRODUCTS_STORAGE_KEY)) || [];
-    } catch(e) { stored = []; }
-
-    // Merge: if stored list is smaller or missing items, sync with sourceData
-    if (!stored || stored.length < sourceData.length) {
-      const existingIds = new Set((stored || []).map(p => p.id));
-      sourceData.forEach(p => {
-        if (!existingIds.has(p.id)) {
-          stored.push(p);
+    // 1. Retrieve products directly from unified storage
+    var raw = localStorage.getItem(PRODUCTS_STORAGE_KEY);
+    if (raw !== null) {
+      try {
+        var stored = JSON.parse(raw);
+        if (Array.isArray(stored)) {
+          window.allProductsList = stored;
         }
-      });
-      window.allProductsList = stored;
-      localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(window.allProductsList));
+      } catch(e) {}
     } else {
-      window.allProductsList = stored;
+      window.allProductsList = JSON.parse(JSON.stringify(fallbackProductsData));
+      try { localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(window.allProductsList)); } catch(e) {}
     }
 
     // Ensure stock field on all items
@@ -87,7 +73,7 @@ async function initCatalogData() {
     renderCatalogGrid();
     if (window.renderFlashDealsSection) window.renderFlashDealsSection();
     if (window.renderAdminDashboardTabs) window.renderAdminDashboardTabs();
-    console.log('Catalog ready: ' + window.allProductsList.length + ' mahsulot ✅');
+    console.log('Catalog synchronized: ' + window.allProductsList.length + ' mahsulot ✅');
   } catch (err) {
     console.error('Catalog init error:', err);
   }

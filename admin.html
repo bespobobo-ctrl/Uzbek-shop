@@ -1145,6 +1145,18 @@ Do'konimizning barcha 24+ xil tovarlarini Telegram ichida to'liq Mini App shakli
       }
     }
 
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'texnomart_all_products') {
+        try {
+          window.allProductsList = JSON.parse(e.newValue) || [];
+          if (window.renderOmborTab) window.renderOmborTab();
+          if (window.renderChegirmaTab) window.renderChegirmaTab();
+          if (window.renderAccountingTab) window.renderAccountingTab();
+          if (typeof updateSidebarBadges === 'function') updateSidebarBadges();
+        } catch(err) {}
+      }
+    });
+
     document.addEventListener('DOMContentLoaded', () => {
       checkAuthStatus();
     });

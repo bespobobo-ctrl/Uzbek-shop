@@ -51,34 +51,32 @@ const defaultFallbackProducts = [
   { id: 124, name: "Airfryer Philips XXL HD9650/90 Yog'siz Qovurish", category: "oshxona", categoryName: "Oshxona texnikasi", brand: "Philips", price: 2800000, oldPrice: 3200000, monthlyPrice: 290000, stock: 16, rating: 4.8, reviews: 89, badge: "DIET OSHXONA", badgeColor: "primary", image: "https://images.unsplash.com/photo-1585515320310-259814833e62?auto=format&fit=crop&w=600&q=80", isFlashDeal: false, description: "Twin TurboStar texnologiyasi, 1.4 kg sig'im va 90% kamroq yog' bilan pishirish." }
 ];
 
-/* =================== HELPER: Get Products (always fresh & full) =================== */
-function getAdminProducts() {
-  if (window.allProductsList && Array.isArray(window.allProductsList) && window.allProductsList.length >= defaultFallbackProducts.length) {
-    return window.allProductsList;
-  }
+/* =================== HELPER: Get Products (Always synchronized with localStorage) =================== */
+window.saveProductsToStorage = function() {
   try {
-    var stored = JSON.parse(localStorage.getItem(PRODUCTS_STORAGE_KEY));
-    if (Array.isArray(stored) && stored.length >= defaultFallbackProducts.length) {
-      window.allProductsList = stored;
-      return window.allProductsList;
+    localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(window.allProductsList || []));
+    if (typeof window.upsertSupabaseProduct === 'function') {
+      (window.allProductsList || []).forEach(p => window.upsertSupabaseProduct(p));
+    }
+  } catch(e) {
+    console.error('Storage Save Error:', e);
+  }
+};
+
+function getAdminProducts() {
+  try {
+    var raw = localStorage.getItem(PRODUCTS_STORAGE_KEY);
+    if (raw !== null) {
+      var stored = JSON.parse(raw);
+      if (Array.isArray(stored)) {
+        window.allProductsList = stored;
+        return window.allProductsList;
+      }
     }
   } catch(e) {}
   
-  // Merge or restore full catalog
-  let baseList = [];
-  try {
-    baseList = JSON.parse(localStorage.getItem(PRODUCTS_STORAGE_KEY)) || [];
-  } catch(e) { baseList = []; }
-
-  const existingIds = new Set(baseList.map(p => p.id));
-  defaultFallbackProducts.forEach(p => {
-    if (!existingIds.has(p.id)) {
-      baseList.push(p);
-    }
-  });
-
-  window.allProductsList = baseList.length > 0 ? baseList : JSON.parse(JSON.stringify(defaultFallbackProducts));
-  localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(window.allProductsList));
+  window.allProductsList = JSON.parse(JSON.stringify(defaultFallbackProducts));
+  try { localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(window.allProductsList)); } catch(e) {}
   return window.allProductsList;
 }
 
@@ -1114,8 +1112,11 @@ function handleAddNewProductSubmit(event) {
     description: desc || `${name} — kafolatli sifat va rasmiy servis xizmati bilan taqdim etiladi.`
   };
 
-  if (!window.allProductsList) window.allProductsList = [];
+  if (!window.allProductsList || !Array.isArray(window.allProductsList)) {
+    window.allProductsList = getAdminProducts();
+  }
   window.allProductsList.unshift(newProduct);
+  localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(window.allProductsList));
 
   if (window.saveProductsToStorage) window.saveProductsToStorage();
   if (window.showToast) showToast(`"${name}" 3-5 ta rasmlari bilan do'konga muvaffaqiyatli qo'shildi! 🎉📸`, 'success');

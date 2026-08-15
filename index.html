@@ -920,10 +920,15 @@
         if (window.showToast) window.showToast('Tizimdan chiqdingiz.', 'info');
       };
 
-      // All Kirish/Kabinet buttons
-      ['openUserAuthBtn','tgKabinetBtn'].forEach(function(id) {
-        var btn = document.getElementById(id);
-        if (btn) btn.onclick = function(e) { e.stopPropagation(); window.openAuthModal(); };
+      // Real-time Storage Sync: When products are added or deleted in admin.html, update catalog immediately
+      window.addEventListener('storage', function(e) {
+        if (e.key === 'texnomart_all_products') {
+          try {
+            window.allProductsList = JSON.parse(e.newValue) || [];
+            if (window.renderCatalogGrid) window.renderCatalogGrid();
+            if (window.renderFlashDealsSection) window.renderFlashDealsSection();
+          } catch(err) {}
+        }
       });
 
       console.log('AUTH INIT SCRIPT: Ready ✅');
