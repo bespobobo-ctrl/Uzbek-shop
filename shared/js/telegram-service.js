@@ -17,15 +17,15 @@ const TELEGRAM_BOTS = {
   }
 };
 
+const DEFAULT_STORE_OWNER_CHAT_ID = '6535893117';
+
 // Send Message using specified Bot Token
 async function sendTelegramDirect(botToken, chatId, text, replyMarkup = null) {
-  if (!chatId) {
-    return { ok: false, reason: 'NO_CHAT_ID' };
-  }
+  const targetChatId = chatId || DEFAULT_STORE_OWNER_CHAT_ID;
 
   try {
     const payload = {
-      chat_id: chatId,
+      chat_id: targetChatId,
       text: text,
       parse_mode: 'HTML',
       reply_markup: replyMarkup
@@ -49,8 +49,9 @@ async function sendTelegramDirect(botToken, chatId, text, replyMarkup = null) {
 async function notifyTelegramNewOrder(order) {
   if (!order) return;
 
-  const chatId = localStorage.getItem('texnomart_admin_bot_chat_id') || localStorage.getItem('texnomart_telegram_chat_id') || '';
-  if (!chatId) return;
+  const chatId = localStorage.getItem('texnomart_admin_bot_chat_id') || 
+                 localStorage.getItem('texnomart_telegram_chat_id') || 
+                 DEFAULT_STORE_OWNER_CHAT_ID;
 
   const orderId = order.id || Date.now().toString().slice(-5);
   const customerName = order.customerName || order.customer || order.userName || 'Mijoz';

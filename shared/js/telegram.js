@@ -63,23 +63,22 @@ ${itemsFormatted}
 ⏱️ <b>Sana:</b> ${new Date().toLocaleString('uz-UZ')}
   `.trim();
 
-  // If Admin configured Chat ID, send directly via Telegram Bot API
-  if (chatId) {
-    try {
-      const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-      await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: textMessage,
-          parse_mode: 'HTML'
-        })
-      });
-      console.log('Telegram order notification sent to chat_id:', chatId);
-    } catch (err) {
-      console.error('Telegram notification fetch error:', err);
-    }
+  const chatId = localStorage.getItem(TELEGRAM_CHAT_ID_KEY) || "6535893117";
+
+  try {
+    const url = `https://api.telegram.org/bot8608763605:AAGKLo260tjBwaty9Q56yOLEAsxRHRgYzXg/sendMessage`;
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: textMessage,
+        parse_mode: 'HTML'
+      })
+    });
+    console.log('Telegram order notification sent to chat_id:', chatId);
+  } catch (err) {
+    console.error('Telegram notification fetch error:', err);
   }
 }
 
