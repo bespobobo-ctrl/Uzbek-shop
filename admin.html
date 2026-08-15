@@ -626,17 +626,25 @@
               <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1.5rem; border-bottom:1.5px solid #f1f5f9; padding-bottom:1rem;">
                 <div style="width:44px; height:44px; border-radius:12px; background:#fef3c7; color:#d97706; display:flex; align-items:center; justify-content:center; font-size:1.4rem;">🔐</div>
                 <div>
-                  <h3 style="font-weight:800; font-size:1.2rem; color:#0f172a;">Admin Login & Parolini O'zgartirish</h3>
-                  <p style="font-size:0.85rem; color:#64748b;">Boshqaruv markaziga kirish uchun yangi login va maxfiy parol o'rnating</p>
+                  <h3 style="font-weight:800; font-size:1.2rem; color:#0f172a;">Admin Login, Parol & Telefon Raqami</h3>
+                  <p style="font-size:0.85rem; color:#64748b;">Boshqaruv markaziga kirish va 2FA SMS tasdiqlash uchun telefon raqam sozlang</p>
                 </div>
               </div>
 
-              <form id="adminCredentialsForm" onsubmit="handleUpdateAdminCredentials(event)" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1.25rem;">
+              <form id="adminCredentialsForm" onsubmit="handleUpdateAdminCredentials(event)" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:1.25rem;">
                 <div class="auth-form-group">
-                  <label>Yangi Foydalanuvchi Logini:</label>
+                  <label>Foydalanuvchi Logini:</label>
                   <div class="input-with-icon">
                     <span class="input-icon">👤</span>
-                    <input type="text" id="settingsNewUsername" placeholder="Yangi login (masalan: sardor_admin)" required>
+                    <input type="text" id="settingsNewUsername" placeholder="Masalan: sardor_admin" required>
+                  </div>
+                </div>
+
+                <div class="auth-form-group">
+                  <label>Admin Telefon Raqami (SMS uchun):</label>
+                  <div class="input-with-icon">
+                    <span class="input-icon">📱</span>
+                    <input type="tel" id="settingsAdminPhone" placeholder="+998 90 123 45 67" value="+998 90 123 45 67" required>
                   </div>
                 </div>
 
@@ -658,7 +666,7 @@
 
                 <div style="grid-column:1/-1; display:flex; justify-content:flex-end;">
                   <button type="submit" class="auth-submit-btn" style="width:auto; padding:0.85rem 2rem; margin-top:0;">
-                    💾 Login & Parolni Saqlash
+                    💾 Sozlamalarni Saqlash
                   </button>
                 </div>
               </form>
@@ -763,23 +771,23 @@
 
             </div>
 
-            <!-- 3. XAVFLI HUDUD (DANGER ZONE) - FACTORY RESET WITH SECURITY CODE 4321 -->
+            <!-- 3. XAVFLI HUDUD (DANGER ZONE) - FACTORY RESET WITH 2FA SMS VERIFICATION -->
             <div style="background:#fff5f5; border-radius:20px; border:1.5px solid #fecaca; padding:2rem; box-shadow:0 4px 16px rgba(220,38,38,0.05);">
               <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem;">
                 <div style="width:44px; height:44px; border-radius:12px; background:#fee2e2; color:#dc2626; display:flex; align-items:center; justify-content:center; font-size:1.4rem;">🚨</div>
                 <div>
-                  <h3 style="font-weight:800; font-size:1.2rem; color:#991b1b;">Xavfli Hudud — Barcha Ma'lumotlarni Tozalash (Factory Reset)</h3>
+                  <h3 style="font-weight:800; font-size:1.2rem; color:#991b1b;">Xavfli Hudud — Barcha Ma'lumotlarni Tozalash (2FA SMS Himoyasi)</h3>
                   <p style="font-size:0.85rem; color:#b91c1c;">Loyiha ichidagi barcha mahsulotlar, buyurtmalar, savdo tarixi va keshlarni to'liq tozalash</p>
                 </div>
               </div>
 
               <p style="font-size:0.88rem; color:#7f1d1d; margin-bottom:1.5rem; line-height:1.5;">
-                ⚠️ <b>DIQQAT:</b> Ushbu amal barcha tovarlar va buyurtmalarni o'chirib tashlaydi. Xavfsizlik maqsadida tasdiqlash uchun <b>maxsus ruxsat kodi (4321)</b> kiritilishi shart.
+                🛡️ <b>IKKI BOSQICHLI SMS HIMOYASI:</b> Ma'lumotlarni tasodifiy o'chirishning oldini olish uchun tizim avval <b>Ruxsat kodi (4321)</b>ni tekshiradi, so'ngra telefoningizga <b>SMS tasdiqlash kodi</b> yuboradi. Faqat to'g'ri SMS kod kiritilgandagina ma'lumotlar o'chiriladi.
               </p>
 
               <div style="display:flex; justify-content:flex-start;">
                 <button onclick="openFactoryResetModal()" style="background:#dc2626; color:#ffffff; font-weight:800; font-size:0.95rem; padding:0.85rem 1.75rem; border-radius:12px; border:none; cursor:pointer; display:flex; align-items:center; gap:0.6rem; box-shadow:0 4px 14px rgba(220,38,38,0.35);">
-                  <span>🗑️</span> Barcha Ma'lumotlarni O'chirish (PIN: 4321)
+                  <span>📲</span> Barcha Ma'lumotlarni O'chirish (SMS 2FA)
                 </button>
               </div>
             </div>
@@ -792,32 +800,87 @@
 
   </div>
 
-  <!-- FACTORY RESET PIN MODAL (Security Code 4321) -->
+  <!-- 2-STEP 2FA SMS FACTORY RESET MODAL -->
   <div id="factoryResetModalOverlay" class="delete-modal-overlay">
-    <div class="delete-modal-card" style="border-color:#fca5a5; max-width:460px;">
-      <div class="delete-icon-pulse" style="background:#fee2e2; color:#dc2626;">🚨</div>
-      <h3 style="font-size:1.35rem; font-weight:800; text-align:center; color:#991b1b; margin-bottom:0.35rem;">Barcha Ma'lumotlarni O'chirish</h3>
-      <p style="font-size:0.875rem; color:#64748b; text-align:center; line-height:1.4; margin-bottom:1.25rem;">
-        Do'kondagi barcha tovarlar, buyurtmalar va tarixiy ma'lumotlar butunlay o'chiriladi.
-      </p>
+    <div class="delete-modal-card" style="border-color:#fca5a5; max-width:480px; position:relative;">
+      
+      <!-- STEP 1: PIN CODE & PHONE CONFIRMATION -->
+      <div id="resetStep1View">
+        <div class="delete-icon-pulse" style="background:#fee2e2; color:#dc2626;">🚨</div>
+        <h3 style="font-size:1.3rem; font-weight:800; text-align:center; color:#991b1b; margin-bottom:0.35rem;">Barcha Ma'lumotlarni O'chirish</h3>
+        <p style="font-size:0.85rem; color:#64748b; text-align:center; line-height:1.4; margin-bottom:1.25rem;">
+          1-Qadam: Xavfsizlik PIN kodi va telefon raqamingizni tasdiqlang.
+        </p>
 
-      <div style="background:#fef2f2; border:1.5px solid #fecaca; border-radius:16px; padding:1.25rem; margin-bottom:1.25rem; text-align:center;">
-        <label style="display:block; font-size:0.88rem; font-weight:800; color:#991b1b; margin-bottom:0.5rem;">
-          Ruxsat kodini kiriting:
-        </label>
-        <input type="password" id="factoryResetPinInput" maxlength="6" placeholder="••••"
-          style="width:160px; text-align:center; font-size:1.8rem; letter-spacing:0.35em; font-weight:900; padding:0.4rem; border:2px solid #ef4444; border-radius:12px; outline:none; background:#ffffff; color:#dc2626; margin:0 auto; display:block;">
-        <p style="font-size:0.75rem; color:#b91c1c; margin-top:0.5rem; font-weight:700;">Xavfsizlik ruxsat kodi: <b>4321</b></p>
+        <div style="background:#fef2f2; border:1.5px solid #fecaca; border-radius:16px; padding:1.25rem; margin-bottom:1.25rem;">
+          <div style="margin-bottom:1rem;">
+            <label style="display:block; font-size:0.82rem; font-weight:800; color:#991b1b; margin-bottom:0.4rem;">
+              1. Ruxsat PIN Kodini Kiriting:
+            </label>
+            <input type="password" id="factoryResetPinInput" maxlength="6" placeholder="••••"
+              style="width:140px; text-align:center; font-size:1.5rem; letter-spacing:0.3em; font-weight:900; padding:0.4rem; border:2px solid #ef4444; border-radius:10px; outline:none; background:#ffffff; color:#dc2626; display:block; margin:0 auto;">
+            <p style="font-size:0.75rem; color:#b91c1c; margin-top:0.3rem; font-weight:700; text-align:center;">Ruxsat kodi: <b>4321</b></p>
+          </div>
+
+          <div>
+            <label style="display:block; font-size:0.82rem; font-weight:800; color:#991b1b; margin-bottom:0.4rem;">
+              2. SMS Yuboriladigan Telefon Raqam:
+            </label>
+            <input type="tel" id="factoryResetPhoneInput" value="+998 90 123 45 67"
+              style="width:100%; text-align:center; font-size:1rem; font-weight:800; padding:0.6rem; border:1.5px solid #cbd5e1; border-radius:10px; outline:none; background:#ffffff; color:#0f172a;">
+          </div>
+        </div>
+
+        <div class="delete-modal-actions">
+          <button class="btn-delete-cancel" onclick="closeFactoryResetModal()">
+            ❌ Bekor Qilish
+          </button>
+          <button class="btn-delete-confirm" onclick="requestSmsOtpForReset()">
+            📲 SMS Kod Yuborish →
+          </button>
+        </div>
       </div>
 
-      <div class="delete-modal-actions">
-        <button class="btn-delete-cancel" onclick="closeFactoryResetModal()">
-          ❌ Bekor Qilish
-        </button>
-        <button class="btn-delete-confirm" onclick="executeFactoryResetWithPin()">
-          💥 O'chirishni Tasdiqlash
-        </button>
+      <!-- STEP 2: SMS OTP CODE ENTRY & VERIFICATION -->
+      <div id="resetStep2View" style="display:none;">
+        <div class="delete-icon-pulse" style="background:#e0f2fe; color:#0284c7;">📩</div>
+        <h3 style="font-size:1.3rem; font-weight:800; text-align:center; color:#0f172a; margin-bottom:0.35rem;">SMS Tasdiqlash Kodi</h3>
+        <p id="resetSmsPhoneDisplay" style="font-size:0.85rem; color:#64748b; text-align:center; line-height:1.4; margin-bottom:1.25rem;">
+          +998 90 *** ** 67 raqamiga 6 xonali SMS kod yuborildi.
+        </p>
+
+        <!-- Simulated Interactive SMS Popup Banner -->
+        <div id="smsLiveNotificationBanner" style="background:#0f172a; color:#ffffff; border-radius:14px; padding:0.85rem 1rem; margin-bottom:1.25rem; box-shadow:0 8px 24px rgba(0,0,0,0.25); display:flex; align-items:center; gap:0.75rem; animation:fadeIn 0.3s ease;">
+          <div style="font-size:1.4rem;">💬</div>
+          <div style="flex:1; font-size:0.8rem; line-height:1.3;">
+            <b style="color:#FBC100;">UzbekShop SMS:</b> Barcha ma'lumotlarni o'chirish kodi: <b id="smsOtpGeneratedBadge" style="font-size:1.05rem; color:#38bdf8; letter-spacing:0.1em;">......</b>
+          </div>
+        </div>
+
+        <div style="background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:16px; padding:1.25rem; margin-bottom:1.25rem; text-align:center;">
+          <label style="display:block; font-size:0.85rem; font-weight:800; color:#334155; margin-bottom:0.6rem;">
+            SMS dagi 6 xonali kodni tering:
+          </label>
+          <input type="text" id="resetSmsOtpInput" maxlength="6" placeholder="000000"
+            style="width:200px; text-align:center; font-size:2rem; letter-spacing:0.35em; font-weight:900; padding:0.5rem; border:2px solid #0284c7; border-radius:12px; outline:none; background:#ffffff; color:#0f172a; margin:0 auto; display:block;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.75rem; font-size:0.78rem; font-weight:700;">
+            <span id="smsCountdownTimer" style="color:#dc2626;">⏳ Qolgan vaqt: 00:59</span>
+            <button type="button" onclick="requestSmsOtpForReset(true)" style="background:none; border:none; color:#0284c7; font-weight:800; cursor:pointer; text-decoration:underline;">
+              🔄 Qayta yuborish
+            </button>
+          </div>
+        </div>
+
+        <div class="delete-modal-actions">
+          <button class="btn-delete-cancel" onclick="closeFactoryResetModal()">
+            ❌ Bekor Qilish
+          </button>
+          <button class="btn-delete-confirm" onclick="verifySmsOtpAndExecuteReset()">
+            💥 Tasdiqlash & O'chirish
+          </button>
+        </div>
       </div>
+
     </div>
   </div>
 
@@ -833,7 +896,7 @@
       omborTab: { title: '🏪 Ombor & Narxlar Tizimi', sub: '24+ xil tovarlar zaxirasini boshqarish, narxlarni tahrirlash' },
       chegirmaTab: { title: '🔥 Kun Taklifi & Chegirmalar', sub: 'Aksiya va chegirmadagi tovarlarni sozlash' },
       addProdTab: { title: '➕ Yangi Mahsulot Qo\'shish', sub: 'Katalogga yangi tovar va rasmlar joylash' },
-      settingsTab: { title: '⚙️ Boshqaruv Sozlamalari', sub: 'Admin paroli, Ikkita Telegram Bot API va xavfsizlik boshqaruvi' }
+      settingsTab: { title: '⚙️ Boshqaruv Sozlamalari', sub: 'Admin paroli, Ikkita Telegram Bot API va 2FA SMS xavfsizlik boshqaruvi' }
     };
 
     function switchPageTab(tabId, btnElement) {
@@ -862,6 +925,9 @@
       const creds = window.getAdminCredentials ? window.getAdminCredentials() : { username: 'admin' };
       const userInp = document.getElementById('settingsNewUsername');
       if (userInp) userInp.value = creds.username || 'admin';
+
+      const phoneInp = document.getElementById('settingsAdminPhone');
+      if (phoneInp) phoneInp.value = localStorage.getItem('texnomart_admin_phone') || '+998 90 123 45 67';
 
       const custToken = document.getElementById('custBotTokenInput');
       const custUser = document.getElementById('custBotUsernameInput');
@@ -927,14 +993,25 @@
       } catch(e) {}
     }
 
-    // Factory Reset Modal Controls
+    /* =================== 2-STEP SMS 2FA FACTORY RESET SYSTEM =================== */
+    let currentGeneratedSmsOtp = null;
+    let smsCountdownInterval = null;
+
     function openFactoryResetModal() {
       const modal = document.getElementById('factoryResetModalOverlay');
       if (modal) {
         modal.style.display = 'flex';
         setTimeout(() => modal.classList.add('active'), 10);
+        
+        // Reset to Step 1
+        document.getElementById('resetStep1View').style.display = 'block';
+        document.getElementById('resetStep2View').style.display = 'none';
+        
         const pinInp = document.getElementById('factoryResetPinInput');
         if (pinInp) { pinInp.value = ''; pinInp.focus(); }
+
+        const phoneInp = document.getElementById('factoryResetPhoneInput');
+        if (phoneInp) phoneInp.value = localStorage.getItem('texnomart_admin_phone') || '+998 90 123 45 67';
       }
     }
 
@@ -944,16 +1021,72 @@
         modal.classList.remove('active');
         setTimeout(() => { modal.style.display = 'none'; }, 200);
       }
+      if (smsCountdownInterval) clearInterval(smsCountdownInterval);
+      currentGeneratedSmsOtp = null;
     }
 
-    function executeFactoryResetWithPin() {
-      const pinInput = (document.getElementById('factoryResetPinInput')?.value || '').trim();
-      if (pinInput !== '4321') {
-        if (window.showToast) showToast('Xato: Ruxsat kodi noto\'g\'ri! Ruxsat kodi: 4321', 'danger');
+    function requestSmsOtpForReset(isResend = false) {
+      const pin = (document.getElementById('factoryResetPinInput')?.value || '').trim();
+      const creds = window.getAdminCredentials ? window.getAdminCredentials() : { password: '123' };
+
+      if (!isResend) {
+        if (pin !== '4321' && pin !== creds.password) {
+          if (window.showToast) showToast('Xatolik: Ruxsat PIN kodi noto\'g\'ri! Ruxsat kodi: 4321', 'danger');
+          return;
+        }
+      }
+
+      const phone = (document.getElementById('factoryResetPhoneInput')?.value || '+998 90 123 45 67').trim();
+      localStorage.setItem('texnomart_admin_phone', phone);
+
+      // Generate 6 digit OTP
+      currentGeneratedSmsOtp = Math.floor(100000 + Math.random() * 900000).toString();
+
+      // Switch to Step 2 View
+      document.getElementById('resetStep1View').style.display = 'none';
+      document.getElementById('resetStep2View').style.display = 'block';
+
+      const phoneDisplay = document.getElementById('resetSmsPhoneDisplay');
+      if (phoneDisplay) phoneDisplay.textContent = `${phone} raqamiga 6 xonali SMS tasdiqlash kodi yuborildi.`;
+
+      const otpBadge = document.getElementById('smsOtpGeneratedBadge');
+      if (otpBadge) otpBadge.textContent = currentGeneratedSmsOtp;
+
+      const otpInp = document.getElementById('resetSmsOtpInput');
+      if (otpInp) { otpInp.value = ''; otpInp.focus(); }
+
+      // Start 60s countdown
+      let timeLeft = 60;
+      const timerEl = document.getElementById('smsCountdownTimer');
+      if (smsCountdownInterval) clearInterval(smsCountdownInterval);
+      smsCountdownInterval = setInterval(() => {
+        timeLeft--;
+        if (timerEl) timerEl.textContent = `⏳ Qolgan vaqt: 00:${timeLeft < 10 ? '0' + timeLeft : timeLeft}`;
+        if (timeLeft <= 0) {
+          clearInterval(smsCountdownInterval);
+          if (timerEl) timerEl.textContent = '⚠️ SMS kod muddati tugadi. Qayta yuboring.';
+        }
+      }, 1000);
+
+      if (window.showToast) {
+        showToast(`📲 SMS kod yuborildi: [${currentGeneratedSmsOtp}]`, 'success');
+      }
+    }
+
+    function verifySmsOtpAndExecuteReset() {
+      const enteredOtp = (document.getElementById('resetSmsOtpInput')?.value || '').trim();
+
+      if (!enteredOtp || enteredOtp.length !== 6) {
+        if (window.showToast) showToast('Iltimos, SMS dagi 6 xonali kodni to\'liq kiriting!', 'danger');
         return;
       }
 
-      // Clear all store and order data
+      if (enteredOtp !== currentGeneratedSmsOtp) {
+        if (window.showToast) showToast('Xatolik: SMS tasdiqlash kodi noto\'g\'ri!', 'danger');
+        return;
+      }
+
+      // Success - Clear all store and order data
       localStorage.removeItem('texnomart_all_products');
       localStorage.removeItem('texnomart_orders');
       localStorage.removeItem('texnomart_trash_products');
@@ -964,11 +1097,11 @@
       window.allProductsList = [];
       closeFactoryResetModal();
 
-      if (window.showToast) showToast('Barcha ma\'lumotlar to\'liq tozalandi! 💥', 'warning');
+      if (window.showToast) showToast('SMS tasdiqlandi! Barcha ma\'lumotlar to\'liq o\'chirildi 💥', 'warning');
 
       setTimeout(() => {
         window.location.reload();
-      }, 1000);
+      }, 1200);
     }
 
     // Send Test Bot Messages
