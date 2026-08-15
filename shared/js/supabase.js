@@ -1,105 +1,124 @@
 /* ==========================================================================
-   TEXNOMART / UZBEKSHOP - Supabase Cloud Database Integration SDK
+   TEXNOMART / UZBEKSHOP - Supabase Cloud Database Integration & Sync Engine
    ========================================================================== */
 
 const SUPABASE_URL = 'https://yttzgafjhujjhwkcmasb.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0dHpnYWZqaHVqamh3a2NtYXNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2MjI4OTYsImV4cCI6MjEwMjE5ODg5Nn0.v_j4uxRiyox4FrBxPy6Bcmwf4uLqDFCWUWOeMoR9oUs';
-const SUPABASE_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0dHpnYWZqaHVqamh3a2NtYXNiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NjYyMjg5NiwiZXhwIjoyMTAyMTk4ODk2fQ.JDShpQHdz7bzm26I3AHsTSA47KUBLPhmJ3woAwBocDY';
 
-window.supabaseClient = null;
-
-// Initialize Supabase JS Client if SDK script is loaded
-if (window.supabase && typeof window.supabase.createClient === 'function') {
-  window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  console.log('Supabase Cloud Database Client Initialized 🚀');
-}
+const SUPABASE_HEADERS = {
+  'apikey': SUPABASE_ANON_KEY,
+  'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+  'Content-Type': 'application/json'
+};
 
 /**
- * Fetch products from Supabase database
- * Returns array of products or null if table/network not ready
+ * 1. Fetch latest products from Supabase cloud database
  */
 window.fetchSupabaseProducts = async function() {
-  if (!window.supabaseClient) return null;
   try {
-    const { data, error } = await window.supabaseClient
-      .from('products')
-      .select('*')
-      .order('id', { ascending: true });
-    
-    if (error) {
-      console.warn('Supabase fetch products warning:', error.message);
-      return null;
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/products?select=*&order=id.asc`, {
+      method: 'GET',
+      headers: SUPABASE_HEADERS
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        console.log(`Supabase Cloud: ${data.length} ta mahsulot yuklandi ☁️✅`);
+        return data;
+      }
     }
-    return data;
   } catch (err) {
-    console.warn('Supabase products fetch failed:', err.message);
-    return null;
+    console.warn('Supabase fetch error:', err.message);
   }
+  return null;
 };
 
 /**
- * Sync single product upsert (insert or update) to Supabase
+ * 2. Upsert single product (Create or Update) in Supabase cloud
  */
 window.upsertSupabaseProduct = async function(product) {
-  if (!window.supabaseClient) return false;
+  if (!product || !product.id) return false;
   try {
-    const { error } = await window.supabaseClient
-      .from('products')
-      .upsert([product]);
-    
-    if (error) {
-      console.warn('Supabase upsert product error:', error.message);
-      return false;
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/products`, {
+      method: 'POST',
+      headers: {
+        ...SUPABASE_HEADERS,
+        'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify(product)
+    });
+    if (res.ok || res.status === 201 || res.status === 200 || res.status === 204) {
+      console.log(`Supabase: "${product.name}" bulutga saqlandi ✅`);
+      return true;
+    } else {
+      const errTxt = await res.text();
+      console.warn('Supabase upsert status:', res.status, errTxt);
     }
-    console.log('Supabase product synced ✅:', product.name);
-    return true;
   } catch (err) {
-    console.warn('Supabase upsert error:', err.message);
-    return false;
+    console.warn('Supabase upsert failed:', err.message);
   }
+  return false;
 };
 
 /**
- * Delete product from Supabase
+ * 3. Delete product permanently from Supabase cloud
  */
 window.deleteSupabaseProduct = async function(productId) {
-  if (!window.supabaseClient) return false;
+  if (!productId) return false;
   try {
-    const { error } = await window.supabaseClient
-      .from('products')
-      .delete()
-      .eq('id', productId);
-    
-    if (error) {
-      console.warn('Supabase delete product error:', error.message);
-      return false;
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${productId}`, {
+      method: 'DELETE',
+      headers: SUPABASE_HEADERS
+    });
+    if (res.ok || res.status === 204 || res.status === 200) {
+      console.log(`Supabase: Mahsulot ID #${productId} bulutdan o'chirildi 🗑️✅`);
+      return true;
     }
-    console.log('Supabase product deleted ✅ ID:', productId);
-    return true;
   } catch (err) {
-    console.warn('Supabase delete error:', err.message);
-    return false;
+    console.warn('Supabase delete failed:', err.message);
   }
+  return false;
 };
 
 /**
- * Save new order to Supabase
+ * 4. Sync full array of products to Supabase cloud
  */
-window.saveSupabaseOrder = async function(orderData) {
-  if (!window.supabaseClient) return false;
+window.syncAllProductsToSupabase = async function(products) {
+  if (!Array.isArray(products) || products.length === 0) return false;
   try {
-    const { error } = await window.supabaseClient
-      .from('orders')
-      .insert([orderData]);
-    
-    if (error) {
-      console.warn('Supabase save order error:', error.message);
-      return false;
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/products`, {
+      method: 'POST',
+      headers: {
+        ...SUPABASE_HEADERS,
+        'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify(products)
+    });
+    if (res.ok || res.status === 201 || res.status === 200 || res.status === 204) {
+      console.log(`Supabase: Barcha ${products.length} ta mahsulot bulutga sinxronlandi ☁️🚀`);
+      return true;
     }
-    console.log('Supabase order saved ✅');
-    return true;
   } catch (err) {
-    console.warn('Supabase save order error:', err.message);
-    return false;
+    console.warn('Supabase bulk sync failed:', err.message);
   }
+  return false;
+};
+
+/**
+ * 5. Pull latest live products from Supabase and update local storage & UI
+ */
+window.pullLatestFromSupabase = async function() {
+  const cloudProducts = await window.fetchSupabaseProducts();
+  if (cloudProducts && Array.isArray(cloudProducts) && cloudProducts.length > 0) {
+    window.allProductsList = cloudProducts;
+    localStorage.setItem('texnomart_all_products', JSON.stringify(cloudProducts));
+    if (window.renderCatalogGrid) window.renderCatalogGrid();
+    if (window.renderFlashDealsSection) window.renderFlashDealsSection();
+    if (window.renderOmborTab) window.renderOmborTab();
+    if (window.renderChegirmaTab) window.renderChegirmaTab();
+    if (window.renderAccountingTab) window.renderAccountingTab();
+    if (typeof updateSidebarBadges === 'function') updateSidebarBadges();
+    return true;
+  }
+  return false;
 };

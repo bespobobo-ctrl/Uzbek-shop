@@ -51,12 +51,12 @@ const defaultFallbackProducts = [
   { id: 124, name: "Airfryer Philips XXL HD9650/90 Yog'siz Qovurish", category: "oshxona", categoryName: "Oshxona texnikasi", brand: "Philips", price: 2800000, oldPrice: 3200000, monthlyPrice: 290000, stock: 16, rating: 4.8, reviews: 89, badge: "DIET OSHXONA", badgeColor: "primary", image: "https://images.unsplash.com/photo-1585515320310-259814833e62?auto=format&fit=crop&w=600&q=80", isFlashDeal: false, description: "Twin TurboStar texnologiyasi, 1.4 kg sig'im va 90% kamroq yog' bilan pishirish." }
 ];
 
-/* =================== HELPER: Get Products (Always synchronized with localStorage) =================== */
+/* =================== HELPER: Get Products (Always synchronized with localStorage & Supabase) =================== */
 window.saveProductsToStorage = function() {
   try {
     localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(window.allProductsList || []));
-    if (typeof window.upsertSupabaseProduct === 'function') {
-      (window.allProductsList || []).forEach(p => window.upsertSupabaseProduct(p));
+    if (typeof window.syncAllProductsToSupabase === 'function') {
+      window.syncAllProductsToSupabase(window.allProductsList || []);
     }
   } catch(e) {
     console.error('Storage Save Error:', e);
@@ -639,17 +639,21 @@ window.searchOmborProducts = function(query) {
   }, 10);
 };
 
-window.syncFullWarehouseDatabase = function() {
-  if (confirm("Ombor bazasini barcha 24+ mahsulotlar bilan to'liq yangilashni xohlaysizmi?")) {
-    window.allProductsList = JSON.parse(JSON.stringify(defaultFallbackProducts));
-    localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(window.allProductsList));
-    if (window.filterProductsBySearch) window.filterProductsBySearch('');
-    if (window.renderFlashDealsSection) window.renderFlashDealsSection();
-    renderOmborTab();
-    renderChegirmaTab();
-    renderAccountingTab();
-    if (window.showToast) showToast('Ombor bazasi to\'liq sinxronlandi: ' + defaultFallbackProducts.length + ' ta mahsulot! 🚀', 'success');
+window.syncFullWarehouseDatabase = async function() {
+  if (window.showToast) showToast('Bulutli Supabase bazasi bilan sinxronlanmoqda... ⏳', 'info');
+
+  if (typeof window.pullLatestFromSupabase === 'function') {
+    const success = await window.pullLatestFromSupabase();
+    if (success) {
+      if (window.showToast) showToast('Bulutli Supabase bazasi bilan to\'liq sinxronlandi! ☁️✅', 'success');
+      return;
+    }
   }
+
+  renderOmborTab();
+  renderChegirmaTab();
+  renderAccountingTab();
+  if (window.showToast) showToast('Ombor ma\'lumotlari yangilandi! 📦', 'success');
 };
 
 window.renderOmborTabPublic = function() {
