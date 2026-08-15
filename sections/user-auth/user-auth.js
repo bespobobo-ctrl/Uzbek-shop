@@ -699,9 +699,10 @@ window.toggleFlashFromOmbor = function(productId) {
   if (item.isFlashDeal && !item.oldPrice) {
     item.oldPrice = Math.round(item.price * 1.2);
   }
+  localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(products));
   if (window.saveProductsToStorage) window.saveProductsToStorage();
   if (window.renderFlashDealsSection) window.renderFlashDealsSection();
-  if(window.showToast) showToast(item.isFlashDeal ? '"' + item.name + '" 🔥 Kun Taklifiga qo\'shildi!' : '"' + item.name + '" chegirmadan chiqarildi.', item.isFlashDeal ? 'success' : 'info');
+  if (window.showToast) showToast(item.isFlashDeal ? '"' + item.name + '" 🔥 Kun Taklifiga qo\'shildi!' : '"' + item.name + '" chegirmadan chiqarildi.', item.isFlashDeal ? 'success' : 'info');
   renderOmborTab();
   renderChegirmaTab();
   renderAccountingTab();
