@@ -7,7 +7,7 @@
   inset: 0;
   background: rgba(15, 23, 42, 0.78);
   backdrop-filter: blur(8px);
-  z-index: 4000;
+  z-index: 1000000 !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -276,16 +276,17 @@
   .product-detail-modal-overlay {
     align-items: flex-end !important;
     padding: 0 !important;
+    z-index: 1000000 !important;
   }
 
   .product-detail-modal-box {
     width: 100% !important;
     max-width: 100% !important;
     border-radius: 28px 28px 0 0 !important;
-    padding: 1.25rem 1rem 2.5rem !important;
+    padding: 1.25rem 1rem 6rem !important; /* Generous bottom padding for fixed action bar */
     max-height: 88vh !important;
     margin: 0 !important;
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.35) !important;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4) !important;
     animation: slideUpBottomSheet 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
   }
 
@@ -308,9 +309,9 @@
   .product-detail-close-btn {
     top: 1rem !important;
     right: 1rem !important;
-    width: 32px !important;
-    height: 32px !important;
-    font-size: 1.1rem !important;
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 1.15rem !important;
     background: #f1f5f9 !important;
   }
 
@@ -379,32 +380,40 @@
 
   .specs-table {
     font-size: 0.8rem !important;
-    margin-bottom: 1rem !important;
+    margin-bottom: 1.5rem !important;
   }
 
   .specs-table td {
     padding: 0.35rem 0 !important;
   }
 
+  /* Fixed Floating Bottom Purchase Bar on Mobile */
   .detail-actions-row {
-    position: sticky !important;
+    position: fixed !important;
     bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
     background: #ffffff !important;
-    padding-top: 0.6rem !important;
+    padding: 0.75rem 1rem 1.1rem !important;
     gap: 0.5rem !important;
-    border-top: 1px solid #f1f5f9 !important;
+    border-top: 1.5px solid #e2e8f0 !important;
+    box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.15) !important;
+    z-index: 1000005 !important;
+    display: flex !important;
+    align-items: center !important;
+    border-radius: 20px 20px 0 0 !important;
   }
 
   .detail-add-cart-btn {
-    padding: 0.75rem 1rem !important;
-    font-size: 0.92rem !important;
-    border-radius: 12px !important;
+    padding: 0.85rem 1rem !important;
+    font-size: 0.95rem !important;
+    border-radius: 14px !important;
   }
 
   .detail-icon-action-btn {
-    width: 42px !important;
-    height: 42px !important;
-    font-size: 1.1rem !important;
-    border-radius: 12px !important;
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 1.15rem !important;
+    border-radius: 14px !important;
   }
 }
