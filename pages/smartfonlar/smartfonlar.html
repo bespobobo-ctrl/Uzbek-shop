@@ -3,46 +3,241 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Smartfonlar va Gadjetlar | UzbekShop TexnoMart</title>
+  <title>Smartfonlar va Telefonlar | UzbekShop TexnoMart Rasmiy Do'koni</title>
+  <meta name="description" content="Eng so'nggi Apple iPhone, Samsung Galaxy, Xiaomi va boshqa flagman smartfonlar 12 oyga 0% muddatli to'lov evaziga.">
+
+  <!-- Core & Component Stylesheets -->
   <link rel="stylesheet" href="../../shared/css/common.css">
   <link rel="stylesheet" href="../../sections/top-bar/top-bar.css">
   <link rel="stylesheet" href="../../sections/header/header.css">
   <link rel="stylesheet" href="../../sections/product-catalog/catalog.css">
   <link rel="stylesheet" href="../../sections/product-card/product-card.css">
   <link rel="stylesheet" href="../../sections/product-detail/product-detail.css">
+  <link rel="stylesheet" href="../../sections/cart-drawer/cart-drawer.css">
+  <link rel="stylesheet" href="../../sections/wishlist/wishlist.css">
+  <link rel="stylesheet" href="../../sections/compare/compare.css">
   <link rel="stylesheet" href="../../sections/footer/footer.css">
+
+  <style>
+    /* Category Page Header Enhancements */
+    .cat-hero-banner {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      border-radius: var(--radius-lg);
+      padding: 2.25rem;
+      margin: 1.5rem 0 2rem;
+      color: #ffffff;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+    .cat-hero-banner::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(251, 193, 0, 0.18) 0%, rgba(251, 193, 0, 0) 70%);
+      pointer-events: none;
+    }
+    .cat-breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .cat-breadcrumbs a {
+      color: #cbd5e1;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .cat-breadcrumbs a:hover {
+      color: var(--tm-yellow);
+    }
+    .cat-filter-pills {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 1.25rem;
+    }
+    .cat-filter-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 0.5rem 1.15rem;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(8px);
+    }
+    .cat-filter-btn:hover, .cat-filter-btn.active {
+      background: var(--tm-yellow);
+      color: #000000;
+      border-color: var(--tm-yellow);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(251, 193, 0, 0.3);
+    }
+    .cat-sort-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .cat-sort-select {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: 1.5px solid #cbd5e1;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--tm-dark);
+      background: #f8fafc;
+      cursor: pointer;
+      outline: none;
+    }
+    .btn-topbar-return {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--tm-yellow);
+      color: #000000;
+      font-weight: 800;
+      font-size: 0.82rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 20px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .btn-topbar-return:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(251, 193, 0, 0.4);
+    }
+  </style>
 </head>
 <body>
 
+  <!-- 1. TOP BAR -->
   <div class="top-bar">
     <div class="container top-bar-container">
       <div class="top-bar-left">
-        <span>📍 Shahar: Toshkent</span>
-        <a href="../../index.html" style="color:#ffffff; margin-left:1rem;">← Asosiy Sahifaga Qaytish</a>
+        <a href="../../index.html" class="btn-topbar-return">
+          <span>←</span> <span>Asosiy Do'konga Qaytish</span>
+        </a>
+        <div class="city-selector" onclick="alert('Tanlangan shahar: Toshkent')">
+          <span>📍</span> <span>Toshkent</span>
+        </div>
+        <span class="top-link" onclick="window.location.href='../../index.html#b2bSection'">🏢 Yuridik shaxslarga</span>
       </div>
       <div class="top-bar-right">
-        <span>📞 Aloqa markazi: +998 91 207 00 08</span>
+        <a href="tel:+998912070008" class="call-center-link">
+          <span>📞</span> <span>+998 91 207 00 08 (24/7)</span>
+        </a>
       </div>
     </div>
   </div>
 
+  <!-- 2. MAIN HEADER -->
   <header class="main-header">
     <div class="container header-inner">
       <a href="../../index.html" class="brand-logo">
-        <div class="brand-logo-icon">📱</div>
-        <span>Uzbek<span class="yellow-text">Shop</span></span>
+        <div class="brand-logo-icon">⚡</div>
+        <div class="brand-logo-text">
+          <span>Uzbek<span class="yellow-text">Shop</span></span>
+          <small class="brand-tagline">TexnoMart Rasmiy Do'koni</small>
+        </div>
       </a>
-      <h2 style="color:#ffffff;">📱 Smartfonlar Bo'limi</h2>
+
+      <div class="header-search-bar" style="flex:1; max-width:600px; margin:0 1.5rem;">
+        <input type="text" id="catSearchInput" placeholder="Smartfonlar orasidan qidirish (iPhone, Galaxy, Xiaomi)..." oninput="handleCatSearch(this.value)">
+        <button class="search-btn">🔍</button>
+      </div>
+
+      <div class="header-actions">
+        <button class="action-btn" onclick="window.openCompareModal ? window.openCompareModal() : window.location.href='../../index.html'">
+          <span class="action-icon">⚖️</span>
+          <span class="action-label">Taqqoslash</span>
+          <span class="badge" id="compareBadgeCount">0</span>
+        </button>
+        <button class="action-btn" onclick="window.location.href='../../index.html'">
+          <span class="action-icon">❤️</span>
+          <span class="action-label">Sevimlilar</span>
+          <span class="badge" id="wishlistBadgeCount">0</span>
+        </button>
+        <button class="action-btn cart-btn-active" onclick="window.location.href='../../index.html'">
+          <span class="action-icon">🛒</span>
+          <span class="action-label">Savatcha</span>
+          <span class="badge" id="cartBadgeCount">0</span>
+        </button>
+        <button class="action-btn" onclick="window.location.href='../../admin.html'">
+          <span class="action-icon">👤</span>
+          <span class="action-label">Kirish</span>
+        </button>
+      </div>
     </div>
   </header>
 
-  <main class="container" style="margin-top: 2rem;">
-    <h1>📱 Smartfonlar va Gadjetlar Katalogi</h1>
-    <p style="color:var(--text-muted); margin-bottom: 1.5rem;">Apple iPhone, Samsung Galaxy, Xiaomi va boshqa brendlar hamyonbop muddatli to'lov evaziga.</p>
+  <!-- 3. CATEGORY CONTENT & HERO BANNER -->
+  <main class="container">
+    
+    <!-- Hero Banner -->
+    <section class="cat-hero-banner">
+      <div class="cat-breadcrumbs">
+        <a href="../../index.html">🏠 Asosiy Sahifa</a>
+        <span>/</span>
+        <a href="../../index.html">Katalog</a>
+        <span>/</span>
+        <span style="color:var(--tm-yellow); font-weight:700;">📱 Smartfonlar va Gadjetlar</span>
+      </div>
 
-    <div class="products-grid-container" id="smartphonesGrid">
-      <!-- Smartphones Category Products -->
+      <h1 style="font-size:2rem; font-weight:900; margin-bottom:0.4rem; display:flex; align-items:center; gap:0.6rem;">
+        <span>📱</span> Smartfonlar va Gadjetlar Katalogi
+      </h1>
+      <p style="color:#94a3b8; max-width:700px; font-size:0.95rem; line-height:1.5;">
+        Eng so'nggi flagman telefonlar: Apple iPhone 15 Pro, Samsung Galaxy S24 Ultra, Xiaomi Leica va boshqa barcha rasmiy kafolatli modellar 12 oyga 0% muddatli to'lov evaziga.
+      </p>
+
+      <div class="cat-filter-pills">
+        <button class="cat-filter-btn active" onclick="filterByBrand('all', this)">Barchasi</button>
+        <button class="cat-filter-btn" onclick="filterByBrand('Apple', this)">🍏 Apple</button>
+        <button class="cat-filter-btn" onclick="filterByBrand('Samsung', this)">🌌 Samsung</button>
+        <button class="cat-filter-btn" onclick="filterByBrand('Xiaomi', this)">⚡ Xiaomi</button>
+      </div>
+    </section>
+
+    <!-- Sort & Stats Bar -->
+    <div class="cat-sort-bar">
+      <div style="font-weight:800; color:var(--tm-dark); font-size:1rem;" id="catCountIndicator">
+        Yuklanmoqda...
+      </div>
+
+      <div style="display:flex; align-items:center; gap:0.75rem;">
+        <label style="font-size:0.88rem; font-weight:700; color:#64748b;">Saralash:</label>
+        <select class="cat-sort-select" onchange="handleCatSort(this.value)">
+          <option value="default">Tavsiya etilganlar</option>
+          <option value="price-asc">Avval arzonroq</option>
+          <option value="price-desc">Avval qimmatroq</option>
+          <option value="rating">Yuqori reytingli</option>
+        </select>
+      </div>
     </div>
+
+    <!-- Products Grid -->
+    <div class="products-grid-container" id="smartphonesGrid" style="margin-bottom:4rem;">
+      <!-- Populated dynamically via JS -->
+    </div>
+
   </main>
 
   <!-- PRODUCT DETAIL MODAL -->
@@ -53,6 +248,22 @@
     </div>
   </div>
 
+  <!-- COMPARE MODAL -->
+  <div class="compare-modal-overlay" id="compareModalOverlay">
+    <div class="compare-modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--tm-yellow); padding-bottom:0.75rem; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+        <h3 style="font-size:1.3rem; font-weight:800; display:flex; align-items:center; gap:0.5rem; margin:0;">⚖️ Mahsulotlarni Taqqoslash</h3>
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <button id="clearCompareBtn" onclick="window.clearAllCompare()" style="padding:0.45rem 0.9rem; background:#fee2e2; color:#dc2626; font-size:0.82rem; font-weight:800; border:1px solid #fca5a5; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; gap:0.35rem;">
+            <span>🗑️</span> <span>Ro'yxatni Tozalash</span>
+          </button>
+          <button id="closeCompareBtn" style="font-size:1.5rem; background:transparent; border:none; cursor:pointer; color:#64748b;">&times;</button>
+        </div>
+      </div>
+      <div id="compareTableContainer"></div>
+    </div>
+  </div>
+
   <!-- TELEGRAM MINI APP BOTTOM MOBILE NAVIGATION BAR -->
   <div class="tg-mobile-nav-bar">
     <button class="tg-nav-item" onclick="window.location.href='../../index.html'">
@@ -60,39 +271,119 @@
       <span>Asosiy</span>
     </button>
     <button class="tg-nav-item active" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-      <span class="tg-nav-icon">📂</span>
-      <span>Katalog</span>
+      <span class="tg-nav-icon">📱</span>
+      <span>Smartfonlar</span>
+    </button>
+    <button class="tg-nav-item" onclick="window.location.href='../../index.html'">
+      <span class="tg-nav-icon">🛒</span>
+      <span>Savatcha</span>
+    </button>
+    <button class="tg-nav-item" onclick="window.location.href='../../admin.html'">
+      <span class="tg-nav-icon">👤</span>
+      <span>Kabinet</span>
     </button>
   </div>
 
-  <footer class="tm-footer" style="margin-top:4rem;">
-    <div class="container footer-bottom-bar">
-      <p>&copy; 2026 UzbekShop TexnoMart. Barcha huquqlar himoyalangan.</p>
+  <!-- FOOTER -->
+  <footer class="tm-footer">
+    <div class="container footer-bottom-bar" style="text-align:center; padding:2rem 0;">
+      <p>&copy; 2026 UzbekShop TexnoMart Rasmiy Do'koni. Barcha huquqlar himoyalangan.</p>
     </div>
   </footer>
 
+  <!-- Scripts -->
   <script src="../../shared/js/toast.js"></script>
   <script src="../../shared/js/storage.js"></script>
   <script src="../../sections/product-card/product-card.js"></script>
   <script src="../../sections/product-detail/product-detail.js"></script>
+  <script src="../../sections/compare/compare.js"></script>
+
   <script>
-    document.addEventListener('DOMContentLoaded', async () => {
+    let currentBrand = 'all';
+    let currentSearch = '';
+    let currentSort = 'default';
+    let categoryProducts = [];
+
+    function loadCategoryData() {
       let stored = [];
       try {
-        const res = await fetch('../../data/products.json');
-        if (res.ok) {
-          stored = await res.json();
-          localStorage.setItem('texnomart_all_products', JSON.stringify(stored));
-        }
-      } catch(e) {}
-      if (!stored || stored.length === 0) {
-        try { stored = JSON.parse(localStorage.getItem('texnomart_all_products')) || []; } catch(e){}
-      }
-      window.allProductsList = stored;
-      const smartphones = stored.filter(p => p.category === 'smartfonlar');
+        stored = JSON.parse(localStorage.getItem('texnomart_all_products')) || [];
+      } catch(e) { stored = []; }
+
+      // Filter smartphones category
+      categoryProducts = stored.filter(p => p.category === 'smartfonlar');
+      renderCategoryGrid();
+    }
+
+    function renderCategoryGrid() {
       const container = document.getElementById('smartphonesGrid');
-      if (container) {
-        container.innerHTML = smartphones.map(p => renderSingleProductCardHTML(p)).join('');
+      const countEl = document.getElementById('catCountIndicator');
+      if (!container) return;
+
+      let filtered = [...categoryProducts];
+
+      // Brand filter
+      if (currentBrand !== 'all') {
+        filtered = filtered.filter(p => (p.brand || '').toLowerCase().includes(currentBrand.toLowerCase()) || (p.name || '').toLowerCase().includes(currentBrand.toLowerCase()));
+      }
+
+      // Search filter
+      if (currentSearch) {
+        filtered = filtered.filter(p => (p.name || '').toLowerCase().includes(currentSearch.toLowerCase()) || (p.brand || '').toLowerCase().includes(currentSearch.toLowerCase()));
+      }
+
+      // Sort
+      if (currentSort === 'price-asc') {
+        filtered.sort((a,b) => (a.price || 0) - (b.price || 0));
+      } else if (currentSort === 'price-desc') {
+        filtered.sort((a,b) => (b.price || 0) - (a.price || 0));
+      } else if (currentSort === 'rating') {
+        filtered.sort((a,b) => (b.rating || 0) - (a.rating || 0));
+      }
+
+      if (countEl) {
+        countEl.innerHTML = `📦 Jami: <span style="color:#0284c7;">${filtered.length} ta</span> smartfon topildi`;
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column:1/-1; text-align:center; padding:3.5rem; background:#ffffff; border-radius:18px; border:1px dashed #cbd5e1;">
+            <span style="font-size:3rem; display:block; margin-bottom:0.5rem;">🔍</span>
+            <h3 style="font-weight:800; color:#0f172a; margin-bottom:0.35rem;">Ushbu so'rov bo'yicha mahsulot topilmadi</h3>
+            <p style="color:#64748b; font-size:0.9rem;">Boshqa brend yoki qidiruv so'zini sinab ko'ring.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(p => renderSingleProductCardHTML(p)).join('');
+    }
+
+    function filterByBrand(brand, btn) {
+      currentBrand = brand;
+      document.querySelectorAll('.cat-filter-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderCategoryGrid();
+    }
+
+    function handleCatSearch(val) {
+      currentSearch = (val || '').trim();
+      renderCategoryGrid();
+    }
+
+    function handleCatSort(val) {
+      currentSort = val;
+      renderCategoryGrid();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCategoryData();
+      if (typeof updateHeaderBadges === 'function') updateHeaderBadges();
+    });
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'texnomart_all_products') {
+        loadCategoryData();
       }
     });
   </script>
