@@ -25,15 +25,15 @@
     .cat-filter-btn:hover, .cat-filter-btn.active { background: var(--tm-yellow); color: #000000; border-color: var(--tm-yellow); transform: translateY(-2px); }
     .cat-sort-bar { display: flex; justify-content: space-between; align-items: center; background: #ffffff; padding: 1rem 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border); margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
     .cat-sort-select { padding: 0.5rem 1rem; border-radius: 8px; border: 1.5px solid #cbd5e1; font-weight: 700; font-size: 0.88rem; color: var(--tm-dark); background: #f8fafc; cursor: pointer; outline: none; }
-    .btn-topbar-return { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--tm-yellow); color: #000000; font-weight: 800; font-size: 0.82rem; padding: 0.35rem 0.85rem; border-radius: 20px; text-decoration: none; transition: all 0.2s ease; }
-    .btn-topbar-return:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(251, 193, 0, 0.4); }
   </style>
 </head>
 <body>
   <div class="top-bar">
     <div class="container top-bar-container">
       <div class="top-bar-left">
-        <a href="../../index.html" class="btn-topbar-return"><span>←</span> <span>Asosiy Do'konga Qaytish</span></a>
+        <a href="../../index.html" style="display:inline-flex; align-items:center; gap:0.4rem; background:var(--tm-yellow); color:#000000; font-weight:800; font-size:0.82rem; padding:0.35rem 0.85rem; border-radius:20px; text-decoration:none; transition:all 0.2s ease;">
+          <span>←</span> <span>Asosiy Sahifaga Qaytish</span>
+        </a>
         <div class="city-selector" onclick="alert('Tanlangan shahar: Toshkent')"><span>📍</span> <span>Toshkent</span></div>
         <span class="top-link" onclick="window.location.href='../../index.html#b2bSection'">🏢 Yuridik shaxslarga</span>
       </div>
@@ -47,27 +47,29 @@
     <div class="container header-inner">
       <a href="../../index.html" class="brand-logo">
         <div class="brand-logo-icon">⚡</div>
-        <div class="brand-logo-text">
-          <span>Uzbek<span class="yellow-text">Shop</span></span>
-          <small class="brand-tagline">TexnoMart Rasmiy Do'koni</small>
-        </div>
+        <span>Uzbek<span class="yellow-text">Shop</span></span>
       </a>
-      <div class="header-search-bar" style="flex:1; max-width:600px; margin:0 1.5rem;">
-        <input type="text" id="catSearchInput" placeholder="Iqlim texnikalarini qidirish (Haier, Shivaki, Gree konditsioner)..." oninput="handleCatSearch(this.value)">
-        <button class="search-btn">🔍</button>
+      <button class="mega-catalog-btn" onclick="window.location.href='../../index.html'">
+        <span>☰</span> <span>Katalog</span>
+      </button>
+      <div class="header-search-wrap">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        <input type="text" id="catSearchInput" placeholder="Iqlim texnikalarini qidirish (Haier, Shivaki, Gree)..." oninput="handleCatSearch(this.value)">
       </div>
-      <div class="header-actions">
-        <button class="action-btn" onclick="window.openCompareModal ? window.openCompareModal() : window.location.href='../../index.html'">
-          <span class="action-icon">⚖️</span><span class="action-label">Taqqoslash</span><span class="badge" id="compareBadgeCount">0</span>
+      <div class="header-nav-actions">
+        <button class="action-icon-btn" onclick="window.openCompareModal ? window.openCompareModal() : window.location.href='../../index.html'">
+          <span class="icon">⚖️</span><span>Taqqoslash</span><span class="action-badge" id="compareBadgeCount">0</span>
         </button>
-        <button class="action-btn" onclick="window.location.href='../../index.html'">
-          <span class="action-icon">❤️</span><span class="action-label">Sevimlilar</span><span class="badge" id="wishlistBadgeCount">0</span>
+        <button class="action-icon-btn" onclick="window.location.href='../../index.html'">
+          <span class="icon">❤️</span><span>Sevimlilar</span><span class="action-badge" id="wishlistBadgeCount">0</span>
         </button>
-        <button class="action-btn cart-btn-active" onclick="window.location.href='../../index.html'">
-          <span class="action-icon">🛒</span><span class="action-label">Savatcha</span><span class="badge" id="cartBadgeCount">0</span>
+        <button class="action-icon-btn" onclick="window.location.href='../../index.html'">
+          <span class="icon">🛒</span><span>Savatcha</span><span class="action-badge" id="cartBadgeCount">0</span>
         </button>
-        <button class="action-btn" onclick="window.location.href='../../admin.html'">
-          <span class="action-icon">👤</span><span class="action-label">Kirish</span>
+        <button class="action-icon-btn" onclick="window.location.href='../../admin.html'">
+          <span class="icon">👤</span><span>Kirish</span>
         </button>
       </div>
     </div>

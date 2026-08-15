@@ -6,7 +6,7 @@
   <title>Noutbuklar va Kompyuterlar | UzbekShop TexnoMart Rasmiy Do'koni</title>
   <meta name="description" content="Eng kuchli Apple MacBook, ASUS TUF Gaming, Lenovo Legion, HP noutbuklari va ofis kompyuterlari 0% muddatli to'lov evaziga.">
 
-  <!-- Core & Component Stylesheets -->
+  <!-- Core Stylesheets -->
   <link rel="stylesheet" href="../../shared/css/common.css">
   <link rel="stylesheet" href="../../sections/top-bar/top-bar.css">
   <link rel="stylesheet" href="../../sections/header/header.css">
@@ -106,23 +106,6 @@
       cursor: pointer;
       outline: none;
     }
-    .btn-topbar-return {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: var(--tm-yellow);
-      color: #000000;
-      font-weight: 800;
-      font-size: 0.82rem;
-      padding: 0.35rem 0.85rem;
-      border-radius: 20px;
-      text-decoration: none;
-      transition: all 0.2s ease;
-    }
-    .btn-topbar-return:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 10px rgba(251, 193, 0, 0.4);
-    }
   </style>
 </head>
 <body>
@@ -131,17 +114,17 @@
   <div class="top-bar">
     <div class="container top-bar-container">
       <div class="top-bar-left">
-        <a href="../../index.html" class="btn-topbar-return">
-          <span>←</span> <span>Asosiy Do'konga Qaytish</span>
+        <a href="../../index.html" style="display:inline-flex; align-items:center; gap:0.4rem; background:var(--tm-yellow); color:#000000; font-weight:800; font-size:0.82rem; padding:0.35rem 0.85rem; border-radius:20px; text-decoration:none; transition:all 0.2s ease;">
+          <span>←</span> <span>Asosiy Sahifaga Qaytish</span>
         </a>
         <div class="city-selector" onclick="alert('Tanlangan shahar: Toshkent')">
-          <span>📍</span> <span>Toshkent</span>
+          📍 <span>Toshkent</span>
         </div>
         <span class="top-link" onclick="window.location.href='../../index.html#b2bSection'">🏢 Yuridik shaxslarga</span>
       </div>
       <div class="top-bar-right">
         <a href="tel:+998912070008" class="call-center-link">
-          <span>📞</span> <span>+998 91 207 00 08 (24/7)</span>
+          📞 <span>Aloqa markazi</span>: +998 91 207 00 08 (24/7)
         </a>
       </div>
     </div>
@@ -152,36 +135,42 @@
     <div class="container header-inner">
       <a href="../../index.html" class="brand-logo">
         <div class="brand-logo-icon">⚡</div>
-        <div class="brand-logo-text">
-          <span>Uzbek<span class="yellow-text">Shop</span></span>
-          <small class="brand-tagline">TexnoMart Rasmiy Do'koni</small>
-        </div>
+        <span>Uzbek<span class="yellow-text">Shop</span></span>
       </a>
 
-      <div class="header-search-bar" style="flex:1; max-width:600px; margin:0 1.5rem;">
-        <input type="text" id="catSearchInput" placeholder="Noutbuklar orasidan qidirish (MacBook, Gaming, ASUS, Lenovo)..." oninput="handleCatSearch(this.value)">
-        <button class="search-btn">🔍</button>
+      <!-- Mega Catalog Button -->
+      <button class="mega-catalog-btn" onclick="window.location.href='../../index.html'">
+        <span>☰</span> <span>Katalog</span>
+      </button>
+
+      <!-- Global Styled Search Box -->
+      <div class="header-search-wrap">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        <input type="text" id="catSearchInput" placeholder="Noutbuklar orasidan qidirish (MacBook, ASUS, Lenovo)..." oninput="handleCatSearch(this.value)">
       </div>
 
-      <div class="header-actions">
-        <button class="action-btn" onclick="window.openCompareModal ? window.openCompareModal() : window.location.href='../../index.html'">
-          <span class="action-icon">⚖️</span>
-          <span class="action-label">Taqqoslash</span>
-          <span class="badge" id="compareBadgeCount">0</span>
+      <!-- Action Buttons with Live Badges -->
+      <div class="header-nav-actions">
+        <button class="action-icon-btn" onclick="window.openCompareModal ? window.openCompareModal() : window.location.href='../../index.html'">
+          <span class="icon">⚖️</span>
+          <span>Taqqoslash</span>
+          <span class="action-badge" id="compareBadgeCount">0</span>
         </button>
-        <button class="action-btn" onclick="window.location.href='../../index.html'">
-          <span class="action-icon">❤️</span>
-          <span class="action-label">Sevimlilar</span>
-          <span class="badge" id="wishlistBadgeCount">0</span>
+        <button class="action-icon-btn" onclick="window.location.href='../../index.html'">
+          <span class="icon">❤️</span>
+          <span>Sevimlilar</span>
+          <span class="action-badge" id="wishlistBadgeCount">0</span>
         </button>
-        <button class="action-btn cart-btn-active" onclick="window.location.href='../../index.html'">
-          <span class="action-icon">🛒</span>
-          <span class="action-label">Savatcha</span>
-          <span class="badge" id="cartBadgeCount">0</span>
+        <button class="action-icon-btn" onclick="window.location.href='../../index.html'">
+          <span class="icon">🛒</span>
+          <span>Savatcha</span>
+          <span class="action-badge" id="cartBadgeCount">0</span>
         </button>
-        <button class="action-btn" onclick="window.location.href='../../admin.html'">
-          <span class="action-icon">👤</span>
-          <span class="action-label">Kirish</span>
+        <button class="action-icon-btn" onclick="window.location.href='../../admin.html'">
+          <span class="icon">👤</span>
+          <span>Kirish</span>
         </button>
       </div>
     </div>
@@ -204,7 +193,7 @@
         <span>💻</span> Noutbuk va Kompyuterlar Katalogi
       </h1>
       <p style="color:#94a3b8; max-width:700px; font-size:0.95rem; line-height:1.5;">
-        O'yinbop gaming kompyuterlar, ofis noutbuklari, ultrabooklar va Apple MacBook Pro/Air modellari rasmiy servis kafolati bilan.
+        O'yinbop gaming noutbuklar, ofis kompyuterlari, ultrabooklar va Apple MacBook Pro/Air modellari rasmiy servis kafolati bilan.
       </p>
 
       <div class="cat-filter-pills">
@@ -212,7 +201,7 @@
         <button class="cat-filter-btn" onclick="filterByBrand('Apple', this)">🍏 Apple MacBook</button>
         <button class="cat-filter-btn" onclick="filterByBrand('ASUS', this)">⚡ ASUS TUF / ROG</button>
         <button class="cat-filter-btn" onclick="filterByBrand('Lenovo', this)">🔥 Lenovo Legion</button>
-        <button class="cat-filter-btn" onclick="filterByBrand('HP', this)">💼 HP Victus / Pavilion</button>
+        <button class="cat-filter-btn" onclick="filterByBrand('HP', this)">💼 HP Victus</button>
       </div>
     </section>
 
