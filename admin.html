@@ -342,25 +342,180 @@
       box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.5);
     }
 
-    /* Responsive */
-    @media (max-width: 900px) {
-      .admin-sidebar {
-        width: 72px;
+    /* ==========================================================================
+       MOBILE & TELEGRAM MINI APP ADAPTIVE STYLES (Screen <= 768px)
+       PC/Desktop remains 100% untouched above 768px
+       ========================================================================== */
+    @media (max-width: 768px) {
+      body {
+        background-color: #f8fafc;
+        overflow-x: hidden;
       }
-      .admin-sidebar .admin-logo-text,
-      .admin-sidebar .nav-text,
-      .admin-sidebar .nav-badge-pill,
-      .admin-sidebar .nav-section-title,
-      .admin-sidebar .btn-return-shop span,
-      .admin-sidebar .btn-sidebar-logout span {
+
+      .admin-app-shell {
+        flex-direction: column;
+        width: 100vw;
+        min-height: 100vh;
+      }
+
+      /* 1. Mobile Top Header */
+      .admin-sidebar {
+        width: 100%;
+        height: auto;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: #0f172a;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        border-right: none;
+        border-bottom: 2px solid var(--tm-yellow);
+      }
+
+      .admin-sidebar-header {
+        padding: 0.75rem 1rem;
+        justify-content: space-between;
+      }
+
+      .admin-logo-box {
+        width: 36px;
+        height: 36px;
+        font-size: 1.15rem;
+        border-radius: 10px;
+      }
+
+      .admin-logo-text h2 {
+        font-size: 1.05rem;
+      }
+
+      .admin-logo-text span {
+        font-size: 0.65rem;
+      }
+
+      .admin-sidebar-footer {
+        display: none !important;
+      }
+
+      .mobile-header-actions {
+        display: flex !important;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      /* 2. Swipeable Horizontal Scrollable Tab Bar */
+      .admin-nav-menu {
+        display: flex !important;
+        flex-direction: row !important;
+        overflow-x: auto !important;
+        gap: 0.4rem !important;
+        padding: 0.5rem 0.75rem !important;
+        background: #1e293b;
+        white-space: nowrap !important;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .admin-nav-menu::-webkit-scrollbar {
         display: none;
       }
-      .admin-nav-link {
-        justify-content: center;
-        padding: 0.85rem;
+
+      .nav-section-title {
+        display: none !important;
       }
+
+      .admin-nav-link {
+        padding: 0.45rem 0.85rem !important;
+        font-size: 0.8rem !important;
+        border-radius: 30px !important;
+        background: rgba(255,255,255,0.08) !important;
+        color: #cbd5e1 !important;
+        flex-shrink: 0 !important;
+        margin-bottom: 0 !important;
+      }
+
+      .admin-nav-link.active {
+        background: var(--tm-yellow) !important;
+        color: #000000 !important;
+        font-weight: 800 !important;
+        box-shadow: 0 2px 8px rgba(251,193,0,0.35);
+      }
+
+      .admin-nav-link .nav-left {
+        gap: 0.35rem !important;
+      }
+
+      /* 3. Main Body & Content */
+      .admin-main-wrapper {
+        width: 100%;
+        min-width: 0;
+      }
+
+      .admin-topbar {
+        display: none !important;
+      }
+
       .admin-content-body {
-        padding: 1.25rem;
+        padding: 0.85rem 0.75rem 5.5rem !important; /* Safe padding for bottom navigation */
+      }
+
+      /* KPI Cards */
+      .kpi-cards-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.65rem !important;
+      }
+
+      .kpi-card {
+        padding: 1rem 0.85rem !important;
+      }
+
+      .kpi-card-value {
+        font-size: 1.15rem !important;
+      }
+
+      /* Forms Grid */
+      .form-grid-2col {
+        grid-template-columns: 1fr !important;
+        gap: 0.85rem !important;
+      }
+
+      .add-product-card-form {
+        padding: 1.25rem 1rem !important;
+      }
+
+      /* Mobile Bottom Admin Bar */
+      .admin-tg-bottom-bar {
+        display: flex !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: #0f172a;
+        border-top: 1.5px solid rgba(255,255,255,0.1);
+        z-index: 99999;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: 0 -4px 15px rgba(0,0,0,0.15);
+      }
+
+      .admin-tg-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: #94a3b8;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+      }
+
+      .admin-tg-item.active, .admin-tg-item:hover {
+        color: var(--tm-yellow);
+      }
+
+      .admin-tg-icon {
+        font-size: 1.2rem;
       }
     }
   </style>
@@ -411,13 +566,24 @@
   <!-- DEDICATED ADMIN APP SHELL -->
   <div class="admin-app-shell" id="adminAppShell">
     
-    <!-- LEFT SIDEBAR NAVIGATION -->
+    <!-- LEFT SIDEBAR NAVIGATION (Adaptive on Mobile) -->
     <aside class="admin-sidebar">
       <div class="admin-sidebar-header">
-        <div class="admin-logo-box">⚡</div>
-        <div class="admin-logo-text">
-          <h2>UzbekShop</h2>
-          <span>Boshqaruv Markazi</span>
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <div class="admin-logo-box">⚡</div>
+          <div class="admin-logo-text">
+            <h2>UzbekShop</h2>
+            <span>Boshqaruv Markazi</span>
+          </div>
+        </div>
+
+        <div class="mobile-header-actions" style="display:none;">
+          <a href="./index.html" style="background:rgba(255,255,255,0.12); color:#ffffff; font-size:0.75rem; font-weight:700; padding:0.35rem 0.65rem; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:0.25rem;">
+            <span>🌐</span> <span>Do'kon</span>
+          </a>
+          <button onclick="handleStandaloneLogout()" style="background:#fee2e2; color:#dc2626; border:none; font-size:0.75rem; font-weight:700; padding:0.35rem 0.65rem; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; gap:0.25rem;">
+            <span>🚪</span> <span>Chiqish</span>
+          </button>
         </div>
       </div>
 
@@ -986,11 +1152,23 @@
 
     function switchPageTab(tabId, btnElement) {
       document.querySelectorAll('.admin-nav-link').forEach(b => b.classList.remove('active'));
-      if (btnElement) btnElement.classList.add('active');
+      const targetNavLink = document.querySelector(`.admin-nav-link[onclick*='${tabId}']`);
+      if (targetNavLink) targetNavLink.classList.add('active');
+      else if (btnElement) btnElement.classList.add('active');
+
+      // Sync Bottom Mobile Navigation Bar
+      document.querySelectorAll('.admin-tg-item').forEach(b => b.classList.remove('active'));
+      const targetBottomBtn = document.querySelector(`.admin-tg-item[onclick*='${tabId}']`);
+      if (targetBottomBtn) targetBottomBtn.classList.add('active');
 
       document.querySelectorAll('.admin-page-tab').forEach(t => t.classList.remove('active'));
       const target = document.getElementById(tabId);
       if (target) target.classList.add('active');
+
+      // Scroll horizontal mobile nav to visible
+      if (targetNavLink && targetNavLink.scrollIntoView) {
+        targetNavLink.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
 
       // Update titles
       if (tabHeaders[tabId]) {
@@ -1203,5 +1381,29 @@ Do'konimizning barcha 24+ xil tovarlarini Telegram ichida to'liq Mini App shakli
       checkAuthStatus();
     });
   </script>
+
+  <!-- MOBILE TELEGRAM BOTTOM ADMIN BAR (Only visible on mobile screens <= 768px) -->
+  <div class="admin-tg-bottom-bar" style="display:none;">
+    <button class="admin-tg-item active" onclick="switchPageTab('moliyaTab', document.querySelector('.admin-nav-link[onclick*=\'moliyaTab\']'))">
+      <span class="admin-tg-icon">📊</span>
+      <span>Moliya</span>
+    </button>
+    <button class="admin-tg-item" onclick="switchPageTab('ordersTab', document.querySelector('.admin-nav-link[onclick*=\'ordersTab\']'))">
+      <span class="admin-tg-icon">📦</span>
+      <span>Buyurtma</span>
+    </button>
+    <button class="admin-tg-item" onclick="switchPageTab('omborTab', document.querySelector('.admin-nav-link[onclick*=\'omborTab\']'))">
+      <span class="admin-tg-icon">🏪</span>
+      <span>Ombor</span>
+    </button>
+    <button class="admin-tg-item" onclick="switchPageTab('chegirmaTab', document.querySelector('.admin-nav-link[onclick*=\'chegirmaTab\']'))">
+      <span class="admin-tg-icon">🔥</span>
+      <span>Aksiya</span>
+    </button>
+    <button class="admin-tg-item" onclick="switchPageTab('addProdTab', document.querySelector('.admin-nav-link[onclick*=\'addProdTab\']'))">
+      <span class="admin-tg-icon">➕</span>
+      <span>Yangi</span>
+    </button>
+  </div>
 </body>
 </html>
