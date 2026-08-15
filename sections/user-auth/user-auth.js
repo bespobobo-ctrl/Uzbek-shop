@@ -559,11 +559,8 @@ function renderOmborTab() {
         </p>
       </div>
       <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-        <button onclick="syncFullWarehouseDatabase()" style="background:#FBC100;color:#000;font-weight:800;padding:0.6rem 1.1rem;border-radius:10px;font-size:0.85rem;cursor:pointer;box-shadow:0 2px 6px rgba(251,193,0,0.3);border:none;">
-          🔄 To'liq Bazani Qayta Yuklash (${defaultFallbackProducts.length}+)
-        </button>
-        <button onclick="renderOmborTab()" style="background:#ffffff;border:1.5px solid #cbd5e1;color:#1e293b;font-weight:700;padding:0.6rem 1rem;border-radius:10px;font-size:0.85rem;cursor:pointer;">
-          🔄 Yangilash
+        <button onclick="syncFullWarehouseDatabase()" style="background:#0f172a;color:#ffffff;font-weight:800;padding:0.6rem 1.1rem;border-radius:10px;font-size:0.85rem;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:0.4rem;">
+          <span>🔄</span> <span>Bazani Yangilash</span>
         </button>
       </div>
     </div>
