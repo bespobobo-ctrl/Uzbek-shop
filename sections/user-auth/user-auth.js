@@ -289,52 +289,167 @@ window.saveTelegramChatId = function() {
   }
 };
 
-/* =================== TAB 2: BUYURTMALAR =================== */
+/* =================== TAB 2: BUYURTMALAR (ORDERS) =================== */
+function getAdminOrders() {
+  const raw = localStorage.getItem('texnomart_orders');
+  if (raw === null) {
+    const initialOrders = [
+      { id: 1001, customer: 'Sardor Rahimov', phone: '+998 90 123 45 67', address: 'Toshkent sh., Yunusobod 12', product: 'iPhone 15 Pro 128GB', amount: 14200000, date: '2026-08-12', status: 'Yetkazildi', statusType: 'success' },
+      { id: 1002, customer: 'Jahongir Aliyev', phone: '+998 93 987 65 43', address: "Samarqand sh., Registon ko'ch.", product: 'MacBook Air M2', amount: 12800000, date: '2026-08-13', status: 'Yetkazilmoqda', statusType: 'warning' }
+    ];
+    localStorage.setItem('texnomart_orders', JSON.stringify(initialOrders));
+    return initialOrders;
+  }
+  try {
+    return JSON.parse(raw) || [];
+  } catch(e) {
+    return [];
+  }
+}
+
 function renderOrdersTab() {
   const container = document.getElementById('ordersTabContent');
   if (!container) return;
-  const orders = JSON.parse(localStorage.getItem('texnomart_orders')) || storeOrdersList;
+  const orders = getAdminOrders();
 
-  if (!orders.length) {
-    container.innerHTML = `<p style="padding:2rem; text-align:center; color:var(--text-muted);">Hozircha buyurtmalar yo'q.</p>`;
+  if (typeof updateSidebarBadges === 'function') {
+    updateSidebarBadges();
+  }
+
+  if (!orders || orders.length === 0) {
+    container.innerHTML = `
+      <div style="text-align:center; padding:4rem 2rem; background:#ffffff; border-radius:20px; border:2px dashed #e2e8f0;">
+        <div style="width:72px; height:72px; background:#f1f5f9; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2.2rem; margin:0 auto 1.25rem;">📦</div>
+        <h3 style="font-weight:800; font-size:1.3rem; color:#0f172a; margin-bottom:0.5rem;">Hozircha buyurtmalar ro'yxati toza va bo'sh</h3>
+        <p style="color:#64748b; font-size:0.9rem; max-width:480px; margin:0 auto 1.5rem; line-height:1.5;">
+          Barcha buyurtmalar tozalandi. Saytdan yangi xaridlar amalga oshirilganda bu yerda real vaqtda paydo bo'ladi va Telegram botingizga bildirishnoma boradi.
+        </p>
+        <button onclick="seedSampleOrder()" style="background:#f0fdf4; color:#16a34a; border:1.5px solid #bbf7d0; font-weight:800; padding:0.65rem 1.25rem; border-radius:10px; cursor:pointer; font-size:0.88rem;">
+          ➕ Test Buyurtma Yaratish
+        </button>
+      </div>
+    `;
     return;
   }
+
   container.innerHTML = `
-    <div style="margin-bottom:1rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.75rem;">
-      <h3 style="font-weight:800; font-size:1.1rem;">📦 Jami Buyurtmalar: <span style="color:#ef4444;">${orders.length} ta</span></h3>
-      <button onclick="clearAllOrders()" style="background:#fee2e2; color:#dc2626; font-weight:700; padding:0.5rem 1rem; border-radius:8px; font-size:0.85rem; cursor:pointer;">🗑️ Barchasini Tozalash</button>
-    </div>
-    <div class="table-responsive-wrap">
-      <table class="admin-table">
-        <thead>
-          <tr><th>#ID</th><th>Mijoz</th><th>Telefon</th><th>Manzil</th><th>Mahsulot</th><th>Summa</th><th>Sana</th><th>Holat</th></tr>
-        </thead>
-        <tbody>
-          ${orders.map(o => `
+    <div style="background:#ffffff; border-radius:20px; border:1px solid #e2e8f0; padding:1.75rem; box-shadow:0 4px 16px rgba(0,0,0,0.03);">
+      <div style="margin-bottom:1.5rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; border-bottom:1.5px solid #f1f5f9; padding-bottom:1.25rem;">
+        <div>
+          <h3 style="font-weight:800; font-size:1.2rem; color:#0f172a; margin-bottom:0.2rem;">📦 Buyurtmalar Boshqaruvi</h3>
+          <p style="font-size:0.85rem; color:#64748b;">Mijozlardan qabul qilingan barcha buyurtmalar ro'yxati (Jami: <b style="color:#0f172a;">${orders.length} ta</b>)</p>
+        </div>
+        <div style="display:flex; gap:0.75rem; align-items:center;">
+          <button onclick="seedSampleOrder()" style="background:#f0fdf4; color:#16a34a; border:1px solid #bbf7d0; font-weight:700; padding:0.6rem 1rem; border-radius:10px; font-size:0.85rem; cursor:pointer;">
+            ➕ Test Buyurtma
+          </button>
+          <button onclick="clearAllOrders()" style="background:#fee2e2; color:#dc2626; border:1px solid #fecaca; font-weight:800; padding:0.6rem 1.1rem; border-radius:10px; font-size:0.85rem; cursor:pointer; display:flex; align-items:center; gap:0.4rem;">
+            <span>🗑️</span> Barchasini Tozalash
+          </button>
+        </div>
+      </div>
+
+      <div class="table-responsive-wrap">
+        <table class="admin-table">
+          <thead>
             <tr>
-              <td><b>#${o.id}</b></td>
-              <td><b>${o.customer || '-'}</b></td>
-              <td>${o.phone || '-'}</td>
-              <td>${o.address || '-'}</td>
-              <td>${o.product || '-'}</td>
-              <td><b>${safeFormatUZS(o.amount)}</b></td>
-              <td style="font-size:0.8rem;">${o.date || '-'}</td>
-              <td><span class="order-status-pill ${o.statusType || 'warning'}">${o.status || 'Yangi'}</span></td>
-            </tr>`).join('')}
-        </tbody>
-      </table>
+              <th>#ID</th>
+              <th>Mijoz</th>
+              <th>Telefon</th>
+              <th>Manzil</th>
+              <th>Mahsulot</th>
+              <th>Summa</th>
+              <th>Sana</th>
+              <th>Holat</th>
+              <th style="text-align:center;">Amal</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${orders.map(o => `
+              <tr id="order-row-${o.id}">
+                <td><b style="color:#0284c7;">#${o.id}</b></td>
+                <td><b>${o.customer || '-'}</b></td>
+                <td><span style="font-family:monospace; font-size:0.85rem;">${o.phone || '-'}</span></td>
+                <td style="font-size:0.85rem; color:#475569;">${o.address || '-'}</td>
+                <td style="font-weight:600; max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${o.product || '-'}</td>
+                <td><b style="color:#16a34a;">${safeFormatUZS(o.amount)}</b></td>
+                <td style="font-size:0.8rem; color:#64748b;">${o.date || '-'}</td>
+                <td>
+                  <select onchange="updateOrderStatus('${o.id}', this.value)" style="padding:0.35rem 0.65rem; border-radius:8px; font-weight:700; font-size:0.8rem; border:1px solid #cbd5e1; outline:none; background:#ffffff; cursor:pointer;">
+                    <option value="Yetkazilmoqda" ${o.status === 'Yetkazilmoqda' ? 'selected' : ''}>🚚 Yetkazilmoqda</option>
+                    <option value="To'landi" ${o.status === "To'landi" ? 'selected' : ''}>💳 To'landi</option>
+                    <option value="Yetkazildi" ${o.status === 'Yetkazildi' || o.status === 'Bajarildi' ? 'selected' : ''}>✅ Yetkazildi</option>
+                    <option value="Bekor qilindi" ${o.status === 'Bekor qilindi' ? 'selected' : ''}>❌ Bekor qilindi</option>
+                  </select>
+                </td>
+                <td style="text-align:center;">
+                  <button onclick="deleteSingleOrder('${o.id}')" title="Buyurtmani o'chirish" style="background:#fee2e2; color:#dc2626; border:none; width:34px; height:34px; border-radius:8px; cursor:pointer; font-size:0.95rem; display:inline-flex; align-items:center; justify-content:center;">
+                    🗑️
+                  </button>
+                </td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
     </div>
   `;
 }
 
 window.clearAllOrders = function() {
-  if (confirm("Barcha buyurtmalarni tozalashni xohlaysizmi?")) {
-    localStorage.removeItem('texnomart_orders');
+  if (confirm("Barcha buyurtmalar ro'yxatini to'liq tozalashni tasdiqlaysizmi?")) {
+    localStorage.setItem('texnomart_orders', JSON.stringify([]));
     storeOrdersList = [];
     renderOrdersTab();
     renderAccountingTab();
-    if (window.showToast) showToast("Barcha buyurtmalar tozalandi.", 'info');
+    if (typeof updateSidebarBadges === 'function') updateSidebarBadges();
+    if (window.showToast) showToast("Barcha buyurtmalar muvaffaqiyatli tozalandi! 🗑️", 'success');
   }
+};
+
+window.deleteSingleOrder = function(orderId) {
+  let orders = getAdminOrders();
+  orders = orders.filter(o => o.id != orderId);
+  localStorage.setItem('texnomart_orders', JSON.stringify(orders));
+  storeOrdersList = orders;
+  renderOrdersTab();
+  renderAccountingTab();
+  if (typeof updateSidebarBadges === 'function') updateSidebarBadges();
+  if (window.showToast) showToast(`#${orderId}-sonli buyurtma o'chirildi.`, 'info');
+};
+
+window.updateOrderStatus = function(orderId, newStatus) {
+  let orders = getAdminOrders();
+  const ord = orders.find(o => o.id == orderId);
+  if (ord) {
+    ord.status = newStatus;
+    ord.statusType = (newStatus === 'Yetkazildi' || newStatus === 'Bajarildi' || newStatus === "To'landi") ? 'success' : newStatus === 'Bekor qilindi' ? 'danger' : 'warning';
+    localStorage.setItem('texnomart_orders', JSON.stringify(orders));
+    storeOrdersList = orders;
+    renderAccountingTab();
+    if (window.showToast) showToast(`#${orderId} holati: "${newStatus}" ga o'zgartirildi ✅`, 'success');
+  }
+};
+
+window.seedSampleOrder = function() {
+  let orders = getAdminOrders();
+  const newId = Math.floor(1000 + Math.random() * 9000);
+  orders.unshift({
+    id: newId,
+    customer: 'Dilshod Ergashev',
+    phone: '+998 90 999 88 77',
+    address: 'Toshkent sh., Chilonzor 9',
+    product: 'Smartfon Samsung Galaxy S24 Ultra',
+    amount: 15900000,
+    date: new Date().toISOString().split('T')[0],
+    status: 'Yetkazilmoqda',
+    statusType: 'warning'
+  });
+  localStorage.setItem('texnomart_orders', JSON.stringify(orders));
+  storeOrdersList = orders;
+  renderOrdersTab();
+  renderAccountingTab();
+  if (typeof updateSidebarBadges === 'function') updateSidebarBadges();
+  if (window.showToast) showToast(`Yangi #${newId}-sonli test buyurtma qo'shildi! 📦`, 'success');
 };
 
 /* =================== TAB 3: OMBOR (WAREHOUSE) =================== */

@@ -950,6 +950,19 @@
       }
     }
 
+    window.updateSidebarBadges = function() {
+      try {
+        const raw = localStorage.getItem('texnomart_orders');
+        const orders = raw !== null ? JSON.parse(raw) : [];
+        const ordersBadge = document.getElementById('sidebarOrdersBadge');
+        if (ordersBadge) ordersBadge.textContent = Array.isArray(orders) ? orders.length : 0;
+
+        const products = JSON.parse(localStorage.getItem('texnomart_all_products')) || [];
+        const omborBadge = document.getElementById('sidebarOmborBadge');
+        if (omborBadge) omborBadge.textContent = products.length > 0 ? products.length : '24+';
+      } catch(e) {}
+    };
+
     function switchPageTab(tabId, btnElement) {
       document.querySelectorAll('.admin-nav-link').forEach(b => b.classList.remove('active'));
       if (btnElement) btnElement.classList.add('active');
