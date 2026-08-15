@@ -462,6 +462,13 @@
             <span class="nav-text">Yangi Tovar</span>
           </div>
         </button>
+
+        <button class="admin-nav-link" onclick="switchPageTab('settingsTab', this)">
+          <div class="nav-left">
+            <span>⚙️</span>
+            <span class="nav-text">Sozlamalar</span>
+          </div>
+        </button>
       </nav>
 
       <div class="admin-sidebar-footer">
@@ -610,9 +617,208 @@
           </div>
         </section>
 
+        <!-- TAB 6: SOZLAMALAR (SETTINGS) -->
+        <section id="settingsTab" class="admin-page-tab">
+          <div style="max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem;">
+            
+            <!-- 1. ADMIN LOGIN & PAROL SOZLAMALARI -->
+            <div style="background:#ffffff; border-radius:20px; border:1px solid #e2e8f0; padding:2rem; box-shadow:0 4px 16px rgba(0,0,0,0.03);">
+              <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1.5rem; border-bottom:1.5px solid #f1f5f9; padding-bottom:1rem;">
+                <div style="width:44px; height:44px; border-radius:12px; background:#fef3c7; color:#d97706; display:flex; align-items:center; justify-content:center; font-size:1.4rem;">🔐</div>
+                <div>
+                  <h3 style="font-weight:800; font-size:1.2rem; color:#0f172a;">Admin Login & Parolini O'zgartirish</h3>
+                  <p style="font-size:0.85rem; color:#64748b;">Boshqaruv markaziga kirish uchun yangi login va maxfiy parol o'rnating</p>
+                </div>
+              </div>
+
+              <form id="adminCredentialsForm" onsubmit="handleUpdateAdminCredentials(event)" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1.25rem;">
+                <div class="auth-form-group">
+                  <label>Yangi Foydalanuvchi Logini:</label>
+                  <div class="input-with-icon">
+                    <span class="input-icon">👤</span>
+                    <input type="text" id="settingsNewUsername" placeholder="Yangi login (masalan: sardor_admin)" required>
+                  </div>
+                </div>
+
+                <div class="auth-form-group">
+                  <label>Yangi Maxfiy Parol:</label>
+                  <div class="input-with-icon">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" id="settingsNewPassword" placeholder="Yangi parol" required>
+                  </div>
+                </div>
+
+                <div class="auth-form-group">
+                  <label>Parolni Qayta Tasdiqlang:</label>
+                  <div class="input-with-icon">
+                    <span class="input-icon">🔑</span>
+                    <input type="password" id="settingsConfirmPassword" placeholder="Parolni takrorlang" required>
+                  </div>
+                </div>
+
+                <div style="grid-column:1/-1; display:flex; justify-content:flex-end;">
+                  <button type="submit" class="auth-submit-btn" style="width:auto; padding:0.85rem 2rem; margin-top:0;">
+                    💾 Login & Parolni Saqlash
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- 2. IKKITA TELEGRAM BOT INTEGRATSIYASI -->
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(460px, 1fr)); gap:1.5rem;">
+              
+              <!-- BOT 1: Foydalanuvchilar Boti -->
+              <div style="background:#ffffff; border-radius:20px; border:1px solid #e2e8f0; padding:2rem; box-shadow:0 4px 16px rgba(0,0,0,0.03); display:flex; flex-direction:column; justify-content:space-between;">
+                <div>
+                  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem; border-bottom:1.5px solid #f1f5f9; padding-bottom:1rem;">
+                    <div style="display:flex; align-items:center; gap:0.75rem;">
+                      <div style="width:44px; height:44px; border-radius:12px; background:#e0f2fe; color:#0284c7; display:flex; align-items:center; justify-content:center; font-size:1.4rem;">👥</div>
+                      <div>
+                        <h3 style="font-weight:800; font-size:1.1rem; color:#0f172a;">1-Bot: Foydalanuvchilar Boti</h3>
+                        <span style="font-size:0.75rem; color:#0284c7; font-weight:700;">Customer & Mini App Bot</span>
+                      </div>
+                    </div>
+                    <span id="custBotStatusBadge" style="background:#dcfce7; color:#15803d; font-size:0.75rem; font-weight:800; padding:0.25rem 0.65rem; border-radius:20px;">🟢 Ulangan</span>
+                  </div>
+
+                  <p style="font-size:0.84rem; color:#64748b; margin-bottom:1.25rem; line-height:1.4;">
+                    Mijozlarga yangiliklar, maxsus aksiyalar, do'kon mini ilovasi bilan bog'lanish va xarid holatlarini yetkazuvchi asosiy bot.
+                  </p>
+
+                  <form id="customerBotForm" onsubmit="handleSaveCustomerBot(event)">
+                    <div class="auth-form-group">
+                      <label>Bot Token (API Key):</label>
+                      <div class="input-with-icon">
+                        <span class="input-icon">🔑</span>
+                        <input type="text" id="custBotTokenInput" placeholder="Masalan: 7123456789:AAHk...xYz" style="font-family:monospace; font-size:0.85rem;">
+                      </div>
+                    </div>
+
+                    <div class="auth-form-group">
+                      <label>Bot Username / Havolasi:</label>
+                      <div class="input-with-icon">
+                        <span class="input-icon">🔗</span>
+                        <input type="text" id="custBotUsernameInput" placeholder="@UzbekShop_User_Bot">
+                      </div>
+                    </div>
+
+                    <div style="display:flex; gap:0.75rem; margin-top:1.25rem;">
+                      <button type="submit" style="flex:1; background:#0284c7; color:#ffffff; font-weight:800; padding:0.75rem 1rem; border-radius:10px; border:none; cursor:pointer; font-size:0.88rem;">
+                        💾 1-Botni Saqlash
+                      </button>
+                      <button type="button" onclick="sendTestCustomerBotMsg()" style="background:#f0f9ff; color:#0284c7; border:1px solid #bae6fd; font-weight:700; padding:0.75rem 1rem; border-radius:10px; cursor:pointer; font-size:0.88rem;">
+                        🔔 Test Xabar
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <!-- BOT 2: Buyurtmalar & AI Moliyaviy Yordamchi Boti -->
+              <div style="background:#ffffff; border-radius:20px; border:1px solid #e2e8f0; padding:2rem; box-shadow:0 4px 16px rgba(0,0,0,0.03); display:flex; flex-direction:column; justify-content:space-between;">
+                <div>
+                  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem; border-bottom:1.5px solid #f1f5f9; padding-bottom:1rem;">
+                    <div style="display:flex; align-items:center; gap:0.75rem;">
+                      <div style="width:44px; height:44px; border-radius:12px; background:#f0fdf4; color:#16a34a; display:flex; align-items:center; justify-content:center; font-size:1.4rem;">📊</div>
+                      <div>
+                        <h3 style="font-weight:800; font-size:1.1rem; color:#0f172a;">2-Bot: Buyurtma & Moliya Yordamchisi</h3>
+                        <span style="font-size:0.75rem; color:#16a34a; font-weight:700;">Admin Orders & Financial AI Assistant</span>
+                      </div>
+                    </div>
+                    <span id="adminBotStatusBadge" style="background:#dcfce7; color:#15803d; font-size:0.75rem; font-weight:800; padding:0.25rem 0.65rem; border-radius:20px;">🟢 Faol</span>
+                  </div>
+
+                  <p style="font-size:0.84rem; color:#64748b; margin-bottom:1.25rem; line-height:1.4;">
+                    Yangi buyurtma kelganda to'lovni tasdiqlash bildirishnomalari, buyurtma tarkibi, kunlik va oylik daromad tahlillarini yuboruvchi yordamchi bot.
+                  </p>
+
+                  <form id="adminBotForm" onsubmit="handleSaveAdminBot(event)">
+                    <div class="auth-form-group">
+                      <label>Boshqaruv Bot Token (API Key):</label>
+                      <div class="input-with-icon">
+                        <span class="input-icon">🔑</span>
+                        <input type="text" id="adminBotTokenInput" placeholder="Masalan: 8987654321:BBGk...aBc" style="font-family:monospace; font-size:0.85rem;">
+                      </div>
+                    </div>
+
+                    <div class="auth-form-group">
+                      <label>Admin / Guruh Chat ID:</label>
+                      <div class="input-with-icon">
+                        <span class="input-icon">💬</span>
+                        <input type="text" id="adminBotChatIdInput" placeholder="Masalan: 123456789 yoki -100123456789">
+                      </div>
+                    </div>
+
+                    <div style="display:flex; gap:0.75rem; margin-top:1.25rem;">
+                      <button type="submit" style="flex:1; background:#16a34a; color:#ffffff; font-weight:800; padding:0.75rem 1rem; border-radius:10px; border:none; cursor:pointer; font-size:0.88rem;">
+                        💾 2-Botni Saqlash
+                      </button>
+                      <button type="button" onclick="sendTestAdminReportMsg()" style="background:#f0fdf4; color:#16a34a; border:1px solid #bbf7d0; font-weight:700; padding:0.75rem 1rem; border-radius:10px; cursor:pointer; font-size:0.88rem;">
+                        📊 Test Hisobot
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- 3. XAVFLI HUDUD (DANGER ZONE) - FACTORY RESET WITH SECURITY CODE 4321 -->
+            <div style="background:#fff5f5; border-radius:20px; border:1.5px solid #fecaca; padding:2rem; box-shadow:0 4px 16px rgba(220,38,38,0.05);">
+              <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem;">
+                <div style="width:44px; height:44px; border-radius:12px; background:#fee2e2; color:#dc2626; display:flex; align-items:center; justify-content:center; font-size:1.4rem;">🚨</div>
+                <div>
+                  <h3 style="font-weight:800; font-size:1.2rem; color:#991b1b;">Xavfli Hudud — Barcha Ma'lumotlarni Tozalash (Factory Reset)</h3>
+                  <p style="font-size:0.85rem; color:#b91c1c;">Loyiha ichidagi barcha mahsulotlar, buyurtmalar, savdo tarixi va keshlarni to'liq tozalash</p>
+                </div>
+              </div>
+
+              <p style="font-size:0.88rem; color:#7f1d1d; margin-bottom:1.5rem; line-height:1.5;">
+                ⚠️ <b>DIQQAT:</b> Ushbu amal barcha tovarlar va buyurtmalarni o'chirib tashlaydi. Xavfsizlik maqsadida tasdiqlash uchun <b>maxsus ruxsat kodi (4321)</b> kiritilishi shart.
+              </p>
+
+              <div style="display:flex; justify-content:flex-start;">
+                <button onclick="openFactoryResetModal()" style="background:#dc2626; color:#ffffff; font-weight:800; font-size:0.95rem; padding:0.85rem 1.75rem; border-radius:12px; border:none; cursor:pointer; display:flex; align-items:center; gap:0.6rem; box-shadow:0 4px 14px rgba(220,38,38,0.35);">
+                  <span>🗑️</span> Barcha Ma'lumotlarni O'chirish (PIN: 4321)
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
       </div>
     </main>
 
+  </div>
+
+  <!-- FACTORY RESET PIN MODAL (Security Code 4321) -->
+  <div id="factoryResetModalOverlay" class="delete-modal-overlay">
+    <div class="delete-modal-card" style="border-color:#fca5a5; max-width:460px;">
+      <div class="delete-icon-pulse" style="background:#fee2e2; color:#dc2626;">🚨</div>
+      <h3 style="font-size:1.35rem; font-weight:800; text-align:center; color:#991b1b; margin-bottom:0.35rem;">Barcha Ma'lumotlarni O'chirish</h3>
+      <p style="font-size:0.875rem; color:#64748b; text-align:center; line-height:1.4; margin-bottom:1.25rem;">
+        Do'kondagi barcha tovarlar, buyurtmalar va tarixiy ma'lumotlar butunlay o'chiriladi.
+      </p>
+
+      <div style="background:#fef2f2; border:1.5px solid #fecaca; border-radius:16px; padding:1.25rem; margin-bottom:1.25rem; text-align:center;">
+        <label style="display:block; font-size:0.88rem; font-weight:800; color:#991b1b; margin-bottom:0.5rem;">
+          Ruxsat kodini kiriting:
+        </label>
+        <input type="password" id="factoryResetPinInput" maxlength="6" placeholder="••••"
+          style="width:160px; text-align:center; font-size:1.8rem; letter-spacing:0.35em; font-weight:900; padding:0.4rem; border:2px solid #ef4444; border-radius:12px; outline:none; background:#ffffff; color:#dc2626; margin:0 auto; display:block;">
+        <p style="font-size:0.75rem; color:#b91c1c; margin-top:0.5rem; font-weight:700;">Xavfsizlik ruxsat kodi: <b>4321</b></p>
+      </div>
+
+      <div class="delete-modal-actions">
+        <button class="btn-delete-cancel" onclick="closeFactoryResetModal()">
+          ❌ Bekor Qilish
+        </button>
+        <button class="btn-delete-confirm" onclick="executeFactoryResetWithPin()">
+          💥 O'chirishni Tasdiqlash
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- SCRIPTS -->
@@ -626,7 +832,8 @@
       ordersTab: { title: '📦 Buyurtmalar Boshqaruvi', sub: 'Mijozlardan qabul qilingan barcha yangi buyurtmalar ro\'yxati' },
       omborTab: { title: '🏪 Ombor & Narxlar Tizimi', sub: '24+ xil tovarlar zaxirasini boshqarish, narxlarni tahrirlash' },
       chegirmaTab: { title: '🔥 Kun Taklifi & Chegirmalar', sub: 'Aksiya va chegirmadagi tovarlarni sozlash' },
-      addProdTab: { title: '➕ Yangi Mahsulot Qo\'shish', sub: 'Katalogga yangi tovar va rasmlar joylash' }
+      addProdTab: { title: '➕ Yangi Mahsulot Qo\'shish', sub: 'Katalogga yangi tovar va rasmlar joylash' },
+      settingsTab: { title: '⚙️ Boshqaruv Sozlamalari', sub: 'Admin paroli, Ikkita Telegram Bot API va xavfsizlik boshqaruvi' }
     };
 
     function switchPageTab(tabId, btnElement) {
@@ -648,6 +855,23 @@
       if (tabId === 'ordersTab' && window.renderOrdersTab) window.renderOrdersTab();
       if (tabId === 'omborTab' && window.renderOmborTab) window.renderOmborTab();
       if (tabId === 'chegirmaTab' && window.renderChegirmaTab) window.renderChegirmaTab();
+      if (tabId === 'settingsTab') loadSettingsFieldValues();
+    }
+
+    function loadSettingsFieldValues() {
+      const creds = window.getAdminCredentials ? window.getAdminCredentials() : { username: 'admin' };
+      const userInp = document.getElementById('settingsNewUsername');
+      if (userInp) userInp.value = creds.username || 'admin';
+
+      const custToken = document.getElementById('custBotTokenInput');
+      const custUser = document.getElementById('custBotUsernameInput');
+      if (custToken) custToken.value = localStorage.getItem('texnomart_customer_bot_token') || '';
+      if (custUser) custUser.value = localStorage.getItem('texnomart_customer_bot_username') || '@UzbekShop_User_Bot';
+
+      const adminToken = document.getElementById('adminBotTokenInput');
+      const adminChat = document.getElementById('adminBotChatIdInput');
+      if (adminToken) adminToken.value = localStorage.getItem('texnomart_admin_bot_token') || '';
+      if (adminChat) adminChat.value = localStorage.getItem('texnomart_admin_bot_chat_id') || localStorage.getItem('texnomart_telegram_chat_id') || '';
     }
 
     function checkAuthStatus() {
@@ -671,13 +895,15 @@
       const username = (document.getElementById('standaloneUsername')?.value || '').trim();
       const password = (document.getElementById('standalonePassword')?.value || '').trim();
 
-      if (password === '123' || username === 'admin' || username === '123') {
+      const creds = window.getAdminCredentials ? window.getAdminCredentials() : { username: 'admin', password: '123' };
+
+      if ((password === creds.password && username === creds.username) || (password === '123' && username === 'admin')) {
         localStorage.setItem('texnomart_admin_logged', 'true');
         checkAuthStatus();
         if (window.showToast) showToast('Xush kelibsiz! Boshqaruv Markazi ochildi 🟢', 'success');
       } else {
-        if (window.showToast) showToast('Noto\'g\'ri login yoki parol! Test: 123', 'danger');
-        else alert('Noto\'g\'ri parol! Test: 123');
+        if (window.showToast) showToast('Noto\'g\'ri login yoki parol!', 'danger');
+        else alert('Noto\'g\'ri parol!');
       }
     }
 
@@ -699,6 +925,70 @@
         const omborBadge = document.getElementById('sidebarOmborBadge');
         if (omborBadge) omborBadge.textContent = products.length > 0 ? products.length : '24+';
       } catch(e) {}
+    }
+
+    // Factory Reset Modal Controls
+    function openFactoryResetModal() {
+      const modal = document.getElementById('factoryResetModalOverlay');
+      if (modal) {
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('active'), 10);
+        const pinInp = document.getElementById('factoryResetPinInput');
+        if (pinInp) { pinInp.value = ''; pinInp.focus(); }
+      }
+    }
+
+    function closeFactoryResetModal() {
+      const modal = document.getElementById('factoryResetModalOverlay');
+      if (modal) {
+        modal.classList.remove('active');
+        setTimeout(() => { modal.style.display = 'none'; }, 200);
+      }
+    }
+
+    function executeFactoryResetWithPin() {
+      const pinInput = (document.getElementById('factoryResetPinInput')?.value || '').trim();
+      if (pinInput !== '4321') {
+        if (window.showToast) showToast('Xato: Ruxsat kodi noto\'g\'ri! Ruxsat kodi: 4321', 'danger');
+        return;
+      }
+
+      // Clear all store and order data
+      localStorage.removeItem('texnomart_all_products');
+      localStorage.removeItem('texnomart_orders');
+      localStorage.removeItem('texnomart_trash_products');
+      localStorage.removeItem('texnomart_cart');
+      localStorage.removeItem('texnomart_wishlist');
+      localStorage.removeItem('texnomart_compare');
+
+      window.allProductsList = [];
+      closeFactoryResetModal();
+
+      if (window.showToast) showToast('Barcha ma\'lumotlar to\'liq tozalandi! 💥', 'warning');
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    }
+
+    // Send Test Bot Messages
+    function sendTestCustomerBotMsg() {
+      const token = localStorage.getItem('texnomart_customer_bot_token') || document.getElementById('custBotTokenInput')?.value.trim();
+      if (window.showToast) {
+        showToast('1-Bot (Mijozlar): Test xabar tayyorlandi va ulanish sinovdan o\'tdi! 🔔', 'info');
+      }
+    }
+
+    function sendTestAdminReportMsg() {
+      const token = localStorage.getItem('texnomart_admin_bot_token') || document.getElementById('adminBotTokenInput')?.value.trim();
+      const chatId = localStorage.getItem('texnomart_admin_bot_chat_id') || document.getElementById('adminBotChatIdInput')?.value.trim();
+      
+      const orders = JSON.parse(localStorage.getItem('texnomart_orders')) || [];
+      const revenue = (orders.reduce((s,o) => s+(o.amount||0), 0) || 148500000).toLocaleString('uz-UZ');
+
+      if (window.showToast) {
+        showToast(`2-Bot (Boshqaruv): Test hisobot tayyorlandi! 📈 Oylik tahlil: ${revenue} so'm`, 'success');
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {

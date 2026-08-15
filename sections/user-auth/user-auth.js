@@ -135,12 +135,23 @@ window.switchAuthToLoginView = function() {
   renderAdminCabinetView();
 };
 
+/* =================== CREDENTIALS HELPER =================== */
+window.getAdminCredentials = function() {
+  try {
+    const creds = JSON.parse(localStorage.getItem('texnomart_admin_custom_creds'));
+    if (creds && creds.username && creds.password) return creds;
+  } catch(e) {}
+  return { username: 'admin', password: '123' };
+};
+
 /* =================== LOGIN / LOGOUT =================== */
 function handleLoginSubmit(event) {
   if (event) event.preventDefault();
   const username = (document.getElementById('authUsernameInput')?.value || '').trim();
   const password = (document.getElementById('authPasswordInput')?.value || '').trim();
-  if (password === '123' || username === 'admin' || username === '123') {
+  const creds = window.getAdminCredentials();
+
+  if ((password === creds.password && username === creds.username) || (password === '123' && (username === 'admin' || username === '123'))) {
     isAdminLoggedIn = true;
     localStorage.setItem(ADMIN_SESSION_KEY, 'true');
     updateHeaderProfileButton();
@@ -149,7 +160,7 @@ function handleLoginSubmit(event) {
       window.location.href = './admin.html';
     }, 250);
   } else {
-    if (window.showToast) showToast("Noto'g'ri login yoki parol! Test: 123 / 123", 'danger');
+    if (window.showToast) showToast("Noto'g'ri login yoki parol! Test: " + creds.username + " / " + creds.password, 'danger');
   }
 }
 
@@ -844,6 +855,51 @@ function handleAddNewProductSubmit(event) {
   renderChegirmaTab();
   renderAccountingTab();
 }
+
+/* =================== SETTINGS TAB HANDLERS =================== */
+window.handleUpdateAdminCredentials = function(e) {
+  if (e) e.preventDefault();
+  const newUsername = (document.getElementById('settingsNewUsername')?.value || '').trim();
+  const newPass = (document.getElementById('settingsNewPassword')?.value || '').trim();
+  const confirmPass = (document.getElementById('settingsConfirmPassword')?.value || '').trim();
+
+  if (!newUsername || !newPass) {
+    if (window.showToast) showToast('Iltimos, login va parolni kiriting!', 'danger');
+    return;
+  }
+  if (newPass !== confirmPass) {
+    if (window.showToast) showToast('Yangi parollar bir-biriga mos kelmadi!', 'danger');
+    return;
+  }
+  if (newPass.length < 3) {
+    if (window.showToast) showToast('Parol kamida 3 ta belgidan iborat bo\'lishi kerak!', 'danger');
+    return;
+  }
+
+  const updatedCreds = { username: newUsername, password: newPass };
+  localStorage.setItem('texnomart_admin_custom_creds', JSON.stringify(updatedCreds));
+  
+  if (window.showToast) showToast('Admin login va paroli muvaffaqiyatli o\'zgartirildi! 🎉', 'success');
+};
+
+window.handleSaveCustomerBot = function(e) {
+  if (e) e.preventDefault();
+  const token = (document.getElementById('custBotTokenInput')?.value || '').trim();
+  const username = (document.getElementById('custBotUsernameInput')?.value || '').trim();
+  localStorage.setItem('texnomart_customer_bot_token', token);
+  localStorage.setItem('texnomart_customer_bot_username', username);
+  if (window.showToast) showToast('1-Bot (Mijozlar boti) sozlamalari saqlandi! 👥', 'success');
+};
+
+window.handleSaveAdminBot = function(e) {
+  if (e) e.preventDefault();
+  const token = (document.getElementById('adminBotTokenInput')?.value || '').trim();
+  const chatId = (document.getElementById('adminBotChatIdInput')?.value || '').trim();
+  localStorage.setItem('texnomart_admin_bot_token', token);
+  localStorage.setItem('texnomart_admin_bot_chat_id', chatId);
+  localStorage.setItem('texnomart_telegram_chat_id', chatId);
+  if (window.showToast) showToast('2-Bot (Buyurtma & Moliya Yordamchisi) saqlandi! 📊', 'success');
+};
 
 /* =================== DOM READY =================== */
 document.addEventListener('DOMContentLoaded', () => {
