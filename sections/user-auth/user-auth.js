@@ -583,22 +583,158 @@ window.toggleFlashFromOmbor = function(productId) {
   renderAccountingTab();
 };
 
+let pendingDeleteProductId = null;
+
 window.deleteProductById = function(productId) {
   const products = getAdminProducts();
+  const item = products.find(p => p.id === productId);
+  if (!item) return;
+
+  pendingDeleteProductId = productId;
+
+  let modalOverlay = document.getElementById('deleteConfirmModalOverlay');
+  if (!modalOverlay) {
+    modalOverlay = document.createElement('div');
+    modalOverlay.id = 'deleteConfirmModalOverlay';
+    modalOverlay.className = 'delete-modal-overlay';
+    document.body.appendChild(modalOverlay);
+
+    // Close on backdrop click
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) window.closeDeleteConfirmModal();
+    });
+  }
+
+  modalOverlay.innerHTML = `
+    <div class="delete-modal-card">
+      <div class="delete-icon-pulse">🗑️</div>
+      <h3 style="font-size:1.35rem; font-weight:800; text-align:center; color:#0f172a; margin-bottom:0.35rem;">Mahsulotni O'chirish</h3>
+      <p style="font-size:0.875rem; color:#64748b; text-align:center; line-height:1.4;">Ushbu tovar katalog va ombor bazasidan butunlay olib tashlanadi.</p>
+
+      <div class="delete-target-preview">
+        <img src="${item.image}" class="delete-target-img" onerror="this.src='https://via.placeholder.com/56'">
+        <div class="delete-target-info">
+          <div class="delete-target-name">${item.name}</div>
+          <div class="delete-target-meta">
+            <span style="font-weight:800; color:#0f172a;">${safeFormatUZS(item.price)}</span>
+            <span>•</span>
+            <span style="color:#16a34a; font-weight:700;">${item.stock || 0} dona omborda</span>
+            <span>•</span>
+            <span>ID: #${item.id}</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:12px; padding:0.75rem 1rem; font-size:0.82rem; color:#991b1b; display:flex; align-items:center; gap:0.5rem;">
+        <span>⚠️</span>
+        <span><b>Eslatma:</b> O'chirilgandan so'ng 6 soniya ichida «Qaytarish (Undo)» tugmasi orqali qayta tiklashingiz mumkin.</span>
+      </div>
+
+      <div class="delete-modal-actions">
+        <button class="btn-delete-cancel" onclick="closeDeleteConfirmModal()">
+          ❌ Bekor Qilish
+        </button>
+        <button class="btn-delete-confirm" onclick="confirmDeleteProductAction()">
+          🗑️ Ha, O'chirilsin
+        </button>
+      </div>
+    </div>
+  `;
+
+  modalOverlay.style.display = 'flex';
+  setTimeout(() => modalOverlay.classList.add('active'), 10);
+};
+
+window.closeDeleteConfirmModal = function() {
+  const modalOverlay = document.getElementById('deleteConfirmModalOverlay');
+  if (modalOverlay) {
+    modalOverlay.classList.remove('active');
+    setTimeout(() => { modalOverlay.style.display = 'none'; }, 250);
+  }
+  pendingDeleteProductId = null;
+};
+
+window.confirmDeleteProductAction = function() {
+  if (!pendingDeleteProductId) return;
+  const productId = pendingDeleteProductId;
+  const products = getAdminProducts();
   const idx = products.findIndex(p => p.id === productId);
-  if (idx < 0) return;
-  const item = products[idx];
-  if (confirm('"' + item.name + '" ni o\'chirib tashlashni xohlaysizmi?')) {
+  if (idx < 0) { closeDeleteConfirmModal(); return; }
+
+  const deletedItem = products[idx];
+  closeDeleteConfirmModal();
+
+  // Micro-animation on row
+  const row = document.getElementById('omborRow_' + productId);
+  if (row) {
+    row.classList.add('row-deleting-animation');
+  }
+
+  setTimeout(() => {
+    // Save to Trash history
+    let trash = [];
+    try { trash = JSON.parse(localStorage.getItem('texnomart_trash_products')) || []; } catch(e) { trash = []; }
+    trash.unshift(deletedItem);
+    localStorage.setItem('texnomart_trash_products', JSON.stringify(trash));
+
+    // Remove from active list
     window.allProductsList.splice(idx, 1);
     if (window.saveProductsToStorage) window.saveProductsToStorage();
     if (typeof window.deleteSupabaseProduct === 'function') window.deleteSupabaseProduct(productId);
     if (window.filterProductsBySearch) window.filterProductsBySearch('');
     if (window.renderFlashDealsSection) window.renderFlashDealsSection();
-    if(window.showToast) showToast('"' + item.name + '" o\'chirildi!', 'info');
+
     renderOmborTab();
     renderChegirmaTab();
     renderAccountingTab();
-  }
+
+    // Show Interactive Toast with Undo Action
+    if (typeof window.showActionToast === 'function') {
+      window.showActionToast(
+        `"${deletedItem.name}" o'chirildi`,
+        '↩️ Qaytarish (Undo)',
+        () => {
+          window.restoreProductItem(deletedItem);
+        },
+        6000
+      );
+    } else if (window.showToast) {
+      window.showToast(`"${deletedItem.name}" o'chirildi`, 'info');
+    }
+  }, 350);
+};
+
+window.restoreProductItem = function(product) {
+  if (!product) return;
+  if (!window.allProductsList) window.allProductsList = [];
+  
+  // Remove from trash
+  try {
+    let trash = JSON.parse(localStorage.getItem('texnomart_trash_products')) || [];
+    trash = trash.filter(t => t.id !== product.id);
+    localStorage.setItem('texnomart_trash_products', JSON.stringify(trash));
+  } catch(e) {}
+
+  // Re-insert product
+  window.allProductsList.unshift(product);
+  if (window.saveProductsToStorage) window.saveProductsToStorage();
+  if (window.filterProductsBySearch) window.filterProductsBySearch('');
+  if (window.renderFlashDealsSection) window.renderFlashDealsSection();
+
+  renderOmborTab();
+  renderChegirmaTab();
+  renderAccountingTab();
+
+  if (window.showToast) window.showToast(`"${product.name}" qayta tiklandi! 🎉`, 'success');
+
+  // Add restored glow animation to row
+  setTimeout(() => {
+    const newRow = document.getElementById('omborRow_' + product.id);
+    if (newRow) {
+      newRow.classList.add('row-restored-animation');
+      newRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, 100);
 };
 
 /* =================== TAB 4: CHEGIRMALAR =================== */
