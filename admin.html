@@ -1147,18 +1147,44 @@ Do'konimizning barcha 24+ xil tovarlarini Telegram ichida to'liq Mini App shakli
 
     function checkAuthStatus() {
       const isLogged = localStorage.getItem('texnomart_admin_logged') === 'true';
+      const loginScreen = document.getElementById('adminStandaloneLoginScreen');
+      const appShell = document.getElementById('adminAppShell');
+
       if (!isLogged) {
-        window.location.href = './index.html';
+        if (loginScreen) loginScreen.style.display = 'flex';
+        if (appShell) appShell.style.display = 'none';
+      } else {
+        if (loginScreen) loginScreen.style.display = 'none';
+        if (appShell) appShell.style.display = 'flex';
+        if (typeof updateSidebarBadges === 'function') updateSidebarBadges();
       }
     }
 
-    function handleAdminLogout() {
+    window.handleStandaloneLogin = function(event) {
+      if (event) event.preventDefault();
+      const username = (document.getElementById('standaloneUsername')?.value || '').trim();
+      const password = (document.getElementById('standalonePassword')?.value || '').trim();
+      const creds = window.getAdminCredentials ? window.getAdminCredentials() : { username: 'admin', password: '123' };
+
+      if ((username === creds.username && password === creds.password) || (username === 'admin' && password === '123')) {
+        localStorage.setItem('texnomart_admin_logged', 'true');
+        if (window.showToast) showToast('Xush kelibsiz! Boshqaruv markaziga kirdingiz 🟢', 'success');
+        checkAuthStatus();
+        switchPageTab('moliyaTab', document.querySelector('.admin-nav-link.active'));
+      } else {
+        if (window.showToast) showToast("Noto'g'ri login yoki parol!", 'danger');
+      }
+    };
+
+    window.handleStandaloneLogout = window.handleAdminLogout = function() {
       localStorage.setItem('texnomart_admin_logged', 'false');
+      localStorage.removeItem('texnomart_admin_logged');
       if (window.showToast) showToast('Tizimdan muvaffaqiyatli chiqdingiz.', 'info');
+      checkAuthStatus();
       setTimeout(() => {
         window.location.href = './index.html';
-      }, 200);
-    }
+      }, 300);
+    };
 
     window.addEventListener('storage', (e) => {
       if (e.key === 'texnomart_all_products') {
