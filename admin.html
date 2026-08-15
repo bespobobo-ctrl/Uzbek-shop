@@ -575,20 +575,6 @@
                 </div>
               </div>
               
-              <!-- File Image Upload Container -->
-              <div class="auth-form-group">
-                <label>Mahsulot Rasmini Yuklash (Kompyuterdan):</label>
-                <div class="file-upload-box">
-                  <input type="file" id="newProdFileInput" accept="image/*" style="display:none;" onchange="handleFileInputChange(event)">
-                  <label for="newProdFileInput" style="cursor:pointer; font-weight:700; color:var(--tm-dark); display:block; padding:0.75rem; text-align:center; background:#f8fafc; border:1.5px dashed #cbd5e1; border-radius:12px;">
-                    📁 Kompyuteringizdan Rasm Tanlang
-                  </label>
-                </div>
-                <div id="newProdImgPreviewWrap" style="display:none; margin-top:0.75rem;" class="img-preview-box">
-                  <img id="newProdImgPreview" src="" alt="Preview" style="max-height:120px; border-radius:10px;">
-                </div>
-              </div>
-
               <div class="auth-form-group">
                 <label>🔥 Super Chegirma (Kun taklifi):</label>
                 <div style="display:flex; align-items:center; gap:0.5rem; margin-top:0.5rem;">
@@ -597,11 +583,45 @@
                 </div>
               </div>
 
-              <div class="auth-form-group form-col-full">
-                <label>Yoki Rasm Internet URL Manzili (Muqobil):</label>
-                <div class="input-with-icon">
-                  <span class="input-icon">🖼️</span>
-                  <input type="url" id="newProdImage" placeholder="https://images.unsplash.com/...">
+              <!-- Multi-Image Upload (Min 3, Max 5 Images) -->
+              <div class="auth-form-group form-col-full" style="background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:18px; padding:1.5rem; grid-column: 1 / -1;">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+                  <div>
+                    <label style="font-weight:800; font-size:0.95rem; color:#0f172a; display:flex; align-items:center; gap:0.5rem;">
+                      <span>📸</span> Mahsulot Rasmlari Galereyasi (Qoida: 3 — 5 ta rasm)
+                    </label>
+                    <p style="font-size:0.8rem; color:#64748b; margin-top:0.2rem;">
+                      Mahsulot sifatini ta'minlash uchun <b>kamida 3 ta</b> va <b>ko'pi bilan 5 tagacha</b> rasm yuklang (1-rasm asosiy muqova bo'ladi).
+                    </p>
+                  </div>
+                  <div id="imageCountBadge" style="background:#fee2e2; color:#dc2626; font-size:0.8rem; font-weight:800; padding:0.4rem 0.9rem; border-radius:20px; display:inline-flex; align-items:center; gap:0.4rem; transition:all 0.2s ease;">
+                    <span id="imageCountIcon">⚠️</span> <span id="imageCountText">0/5 ta rasm (Kamida 3 ta yuklang)</span>
+                  </div>
+                </div>
+
+                <!-- Upload triggers -->
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1rem; margin-bottom:1.25rem;">
+                  <div>
+                    <input type="file" id="newProdFileInput" accept="image/*" multiple style="display:none;" onchange="handleMultipleFileInputChange(event)">
+                    <label for="newProdFileInput" style="cursor:pointer; font-weight:800; color:#0f172a; display:flex; align-items:center; justify-content:center; gap:0.5rem; padding:0.85rem 1rem; text-align:center; background:#ffffff; border:1.5px dashed #cbd5e1; border-radius:12px; transition:all 0.2s ease; box-shadow:0 2px 6px rgba(0,0,0,0.02);">
+                      <span>📁</span> Kompyuterdan Rasmlar Tanlash (3 - 5 ta)
+                    </label>
+                  </div>
+
+                  <div style="display:flex; gap:0.5rem;">
+                    <div class="input-with-icon" style="flex:1;">
+                      <span class="input-icon">🔗</span>
+                      <input type="url" id="newProdUrlInput" placeholder="Yoki Internet rasm URL havolasi..." style="background:#ffffff; font-size:0.85rem;">
+                    </div>
+                    <button type="button" onclick="handleAddImageUrl()" style="background:#0f172a; color:#ffffff; font-weight:800; padding:0 1.25rem; border-radius:10px; border:none; cursor:pointer; font-size:0.85rem; white-space:nowrap;">
+                      ➕ Qo'shish
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Images Preview Grid (Slots 1 to 5) -->
+                <div id="multiImagePreviewGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr)); gap:1rem;">
+                  <!-- Rendered dynamically via JS -->
                 </div>
               </div>
 
@@ -982,6 +1002,7 @@
       if (tabId === 'ordersTab' && window.renderOrdersTab) window.renderOrdersTab();
       if (tabId === 'omborTab' && window.renderOmborTab) window.renderOmborTab();
       if (tabId === 'chegirmaTab' && window.renderChegirmaTab) window.renderChegirmaTab();
+      if (tabId === 'addProdTab' && window.renderMultiImagePreviews) window.renderMultiImagePreviews();
       if (tabId === 'settingsTab') loadSettingsFieldValues();
     }
 

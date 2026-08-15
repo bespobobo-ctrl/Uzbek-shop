@@ -911,64 +911,226 @@ function flashCard(p, isFlash) {
     </div>`;
 }
 
-/* =================== ADD NEW PRODUCT =================== */
-function handleFileInputChange(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    uploadedImageBase64 = e.target.result;
-    const previewImg = document.getElementById('newProdImgPreview');
-    const previewWrap = document.getElementById('newProdImgPreviewWrap');
-    if (previewImg) previewImg.src = uploadedImageBase64;
-    if (previewWrap) previewWrap.style.display = 'block';
-    if(window.showToast) showToast('Rasm muvaffaqiyatli yuklandi!', 'success');
-  };
-  reader.readAsDataURL(file);
+/* =================== ADD NEW PRODUCT (MULTI-IMAGE: MIN 3, MAX 5) =================== */
+let uploadedImagesList = [];
+
+window.handleMultipleFileInputChange = function(event) {
+  const files = Array.from(event.target.files || []);
+  if (!files.length) return;
+
+  if (uploadedImagesList.length + files.length > 5) {
+    if (window.showToast) {
+      showToast('⚠️ Qoida: Ko\'pi bilan 5 tagacha rasm yuklash mumkin!', 'warning');
+    }
+  }
+
+  const remainingSlots = 5 - uploadedImagesList.length;
+  const filesToProcess = files.slice(0, remainingSlots);
+
+  let processedCount = 0;
+  filesToProcess.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      if (uploadedImagesList.length < 5) {
+        uploadedImagesList.push(e.target.result);
+      }
+      processedCount++;
+      if (processedCount === filesToProcess.length) {
+        renderMultiImagePreviews();
+        if (window.showToast) {
+          showToast(`📸 ${filesToProcess.length} ta yangi rasm yuklandi!`, 'success');
+        }
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Reset input
+  event.target.value = '';
+};
+
+window.handleAddImageUrl = function() {
+  const input = document.getElementById('newProdUrlInput');
+  if (!input) return;
+  const url = (input.value || '').trim();
+
+  if (!url) {
+    if (window.showToast) showToast('Iltimos, rasm URL manzilini kiriting!', 'danger');
+    return;
+  }
+
+  if (uploadedImagesList.length >= 5) {
+    if (window.showToast) showToast('⚠️ Maksimal 5 ta rasm limiti to\'ldi!', 'warning');
+    return;
+  }
+
+  uploadedImagesList.push(url);
+  input.value = '';
+  renderMultiImagePreviews();
+  if (window.showToast) showToast('Rasm URL galereyaga qo\'shildi! 🖼️', 'success');
+};
+
+window.removeUploadedImage = function(index) {
+  if (index >= 0 && index < uploadedImagesList.length) {
+    uploadedImagesList.splice(index, 1);
+    renderMultiImagePreviews();
+    if (window.showToast) showToast('Rasm olib tashlandi.', 'info');
+  }
+};
+
+function renderMultiImagePreviews() {
+  const grid = document.getElementById('multiImagePreviewGrid');
+  const countBadge = document.getElementById('imageCountBadge');
+  const countText = document.getElementById('imageCountText');
+  const countIcon = document.getElementById('imageCountIcon');
+
+  const count = uploadedImagesList.length;
+
+  // Update Badge Status
+  if (countBadge && countText && countIcon) {
+    if (count === 0) {
+      countBadge.style.background = '#fee2e2';
+      countBadge.style.color = '#dc2626';
+      countIcon.textContent = '⚠️';
+      countText.textContent = '0/5 ta rasm (Kamida 3 ta yuklang)';
+    } else if (count < 3) {
+      countBadge.style.background = '#fef3c7';
+      countBadge.style.color = '#d97706';
+      countIcon.textContent = '🟡';
+      countText.textContent = `${count}/5 ta rasm (Yana ${3 - count} ta kerak)`;
+    } else if (count <= 5) {
+      countBadge.style.background = '#dcfce7';
+      countBadge.style.color = '#15803d';
+      countIcon.textContent = '🟢';
+      countText.textContent = `${count}/5 ta rasm (Qoida bajarildi ✅)`;
+    }
+  }
+
+  if (!grid) return;
+
+  if (count === 0) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1; text-align:center; padding:2rem 1rem; color:#94a3b8; font-size:0.88rem; border:1px dashed #cbd5e1; border-radius:12px; background:#ffffff;">
+        <span style="font-size:1.8rem; display:block; margin-bottom:0.35rem;">🖼️</span>
+        Hozircha rasmlar yuklanmadi. Kamida 3 ta, ko'pi bilan 5 ta rasm tanlang.
+      </div>
+    `;
+    return;
+  }
+
+  let html = '';
+  uploadedImagesList.forEach((src, idx) => {
+    html += `
+      <div style="position:relative; background:#ffffff; border:1.5px solid ${idx === 0 ? '#0284c7' : '#e2e8f0'}; border-radius:14px; padding:6px; box-shadow:0 2px 8px rgba(0,0,0,0.04); display:flex; flex-direction:column; align-items:center;">
+        ${idx === 0 ? `
+          <span style="position:absolute; top:8px; left:8px; background:#0284c7; color:#ffffff; font-size:0.68rem; font-weight:800; padding:2px 6px; border-radius:6px; z-index:2;">
+            ★ Asosiy
+          </span>` : `
+          <span style="position:absolute; top:8px; left:8px; background:#0f172a; color:#ffffff; font-size:0.68rem; font-weight:700; padding:2px 6px; border-radius:6px; z-index:2;">
+            ${idx + 1}-rasm
+          </span>`}
+        
+        <button type="button" onclick="removeUploadedImage(${idx})" title="Rasmni o'chirish" style="position:absolute; top:6px; right:6px; width:26px; height:26px; border-radius:50%; background:#fee2e2; color:#dc2626; border:none; cursor:pointer; font-size:0.8rem; display:flex; align-items:center; justify-content:center; z-index:3;">
+          ✕
+        </button>
+
+        <img src="${src}" alt="Product ${idx + 1}" style="width:100%; height:110px; object-fit:cover; border-radius:10px; margin-bottom:4px;">
+      </div>
+    `;
+  });
+
+  // Add "+" placeholder button if < 5 images
+  if (count < 5) {
+    html += `
+      <label for="newProdFileInput" style="cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; height:122px; border:2px dashed #cbd5e1; border-radius:14px; background:#ffffff; color:#64748b; font-size:0.8rem; font-weight:700; transition:all 0.2s ease;">
+        <span style="font-size:1.5rem; margin-bottom:0.25rem;">➕</span>
+        <span>Rasm ${count + 1}</span>
+      </label>
+    `;
+  }
+
+  grid.innerHTML = html;
 }
 
 function handleAddNewProductSubmit(event) {
   event.preventDefault();
-  const name = document.getElementById('newProdName')?.value || '';
+  const name = (document.getElementById('newProdName')?.value || '').trim();
   const category = document.getElementById('newProdCategory')?.value || 'smartfonlar';
   const price = parseInt(document.getElementById('newProdPrice')?.value || '0');
-  const stock = parseInt(document.getElementById('newProdStock')?.value || '10');
+  const stock = parseInt(document.getElementById('newProdStock')?.value || '15');
   const isFlash = document.getElementById('newProdIsFlash')?.checked || false;
-  const imageUrl = document.getElementById('newProdImage')?.value || '';
-  const desc = document.getElementById('newProdDesc')?.value || '';
-  const finalImage = uploadedImageBase64 || imageUrl || 'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?auto=format&fit=crop&w=600&q=80';
-  const categoryNames = { smartfonlar:'Smartfonlar', kompyuterlar:'Kompyuterlar', 'tv-audio':'TV va Audio', 'maishiy-texnika':'Maishiy texnika', iqlim:'Iqlim texnikasi', oshxona:'Oshxona texnikasi' };
-  if (!name || !price) { if(window.showToast) showToast("Iltimos, nom va narxni kiriting!", 'danger'); return; }
+  const desc = (document.getElementById('newProdDesc')?.value || '').trim();
+
+  // MANDATORY VALIDATION: MINIMUM 3, MAXIMUM 5 IMAGES
+  if (uploadedImagesList.length < 3) {
+    if (window.showToast) {
+      showToast(`⚠️ Qoida: Kamida 3 ta rasm yuklashingiz shart! (Hozir: ${uploadedImagesList.length} ta rasm)`, 'danger');
+    }
+    const container = document.getElementById('imageCountBadge');
+    if (container) {
+      container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    return;
+  }
+
+  if (uploadedImagesList.length > 5) {
+    if (window.showToast) {
+      showToast('⚠️ Ko\'pi bilan 5 tagacha rasm yuklash mumkin!', 'danger');
+    }
+    return;
+  }
+
+  if (!name || !price) {
+    if (window.showToast) showToast("Iltimos, mahsulot nomi va narxini to'liq kiriting!", 'danger');
+    return;
+  }
+
+  const categoryNames = {
+    smartfonlar: 'Smartfonlar',
+    kompyuterlar: 'Kompyuterlar',
+    'tv-audio': 'TV va Audio',
+    'maishiy-texnika': 'Maishiy texnika',
+    iqlim: 'Iqlim texnikasi',
+    oshxona: 'Oshxona texnikasi'
+  };
 
   const newProduct = {
     id: Date.now(),
-    name, category, categoryName: categoryNames[category] || 'Boshqa',
-    brand: 'Yangi', price,
+    name,
+    category,
+    categoryName: categoryNames[category] || 'Boshqa',
+    brand: 'Yangi Brend',
+    price,
     oldPrice: Math.round(price * 1.18),
     monthlyPrice: Math.round(price / 12),
-    stock: stock || 10,
-    rating: 5.0, reviews: 0,
+    stock: stock || 15,
+    rating: 5.0,
+    reviews: 0,
     isFlashDeal: isFlash,
     badge: isFlash ? 'SUPER CHEGIRMA' : 'YANGI',
     badgeColor: isFlash ? 'danger' : 'accent',
-    image: finalImage, description: desc
+    image: uploadedImagesList[0], // Main thumbnail
+    images: [...uploadedImagesList], // Full 3 to 5 images gallery
+    description: desc || `${name} — kafolatli sifat va rasmiy servis xizmati bilan taqdim etiladi.`
   };
 
   if (!window.allProductsList) window.allProductsList = [];
   window.allProductsList.unshift(newProduct);
-  if (window.saveProductsToStorage) window.saveProductsToStorage();
-  if(window.showToast) showToast('"' + name + '" do\'konga qo\'shildi! 🎉', 'success');
 
+  if (window.saveProductsToStorage) window.saveProductsToStorage();
+  if (window.showToast) showToast(`"${name}" 3-5 ta rasmlari bilan do'konga muvaffaqiyatli qo'shildi! 🎉📸`, 'success');
+
+  // Reset form and gallery
   event.target.reset();
-  uploadedImageBase64 = '';
-  const previewWrap = document.getElementById('newProdImgPreviewWrap');
-  if (previewWrap) previewWrap.style.display = 'none';
+  uploadedImagesList = [];
+  renderMultiImagePreviews();
 
   if (window.filterProductsBySearch) window.filterProductsBySearch('');
   if (window.renderFlashDealsSection) window.renderFlashDealsSection();
   renderOmborTab();
   renderChegirmaTab();
   renderAccountingTab();
+  if (typeof updateSidebarBadges === 'function') updateSidebarBadges();
 }
 
 /* =================== SETTINGS TAB HANDLERS =================== */
@@ -1016,13 +1178,15 @@ window.handleSaveAdminBot = function(e) {
   if (window.showToast) showToast('2-Bot (Buyurtma & Moliya Yordamchisi) saqlandi! 📊', 'success');
 };
 
-/* =================== DOM READY =================== */
+/* =================== EXPORTS & DOM READY =================== */
+window.handleAddNewProductSubmit = handleAddNewProductSubmit;
+window.renderMultiImagePreviews = renderMultiImagePreviews;
+
 document.addEventListener('DOMContentLoaded', () => {
   updateHeaderProfileButton();
   const loginForm = document.getElementById('authLoginForm');
   const addProdForm = document.getElementById('addNewProductForm');
-  const fileInput = document.getElementById('newProdFileInput');
   if (loginForm) loginForm.addEventListener('submit', handleLoginSubmit);
   if (addProdForm) addProdForm.addEventListener('submit', handleAddNewProductSubmit);
-  if (fileInput) fileInput.addEventListener('change', handleFileInputChange);
+  if (window.renderMultiImagePreviews) window.renderMultiImagePreviews();
 });
