@@ -52,6 +52,7 @@
   cursor: pointer;
   transition: var(--transition);
   z-index: 10;
+  border: none;
 }
 
 .product-detail-close-btn:hover {
@@ -239,6 +240,8 @@
   border-radius: var(--radius-md);
   box-shadow: 0 6px 18px rgba(251, 193, 0, 0.35);
   transition: var(--transition);
+  border: none;
+  cursor: pointer;
 }
 
 .detail-add-cart-btn:hover {
@@ -257,9 +260,151 @@
   justify-content: center;
   font-size: 1.25rem;
   transition: var(--transition);
+  cursor: pointer;
 }
 
 .detail-icon-action-btn:hover {
   background-color: var(--tm-yellow);
   border-color: var(--tm-yellow);
+}
+
+/* ==========================================================================
+   MOBILE & TELEGRAM MINI APP NATIVE BOTTOM SHEET UI/UX (Screen <= 768px)
+   Desktop layout is completely unchanged above 768px
+   ========================================================================== */
+@media (max-width: 768px) {
+  .product-detail-modal-overlay {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+
+  .product-detail-modal-box {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 28px 28px 0 0 !important;
+    padding: 1.25rem 1rem 2.5rem !important;
+    max-height: 88vh !important;
+    margin: 0 !important;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.35) !important;
+    animation: slideUpBottomSheet 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  /* Grab handle pill */
+  .product-detail-modal-box::before {
+    content: '';
+    display: block;
+    width: 42px;
+    height: 5px;
+    background: #cbd5e1;
+    border-radius: 10px;
+    margin: 0 auto 0.85rem;
+  }
+
+  @keyframes slideUpBottomSheet {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  .product-detail-close-btn {
+    top: 1rem !important;
+    right: 1rem !important;
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 1.1rem !important;
+    background: #f1f5f9 !important;
+  }
+
+  .product-detail-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .main-detail-img-box {
+    height: 220px !important;
+    border-radius: 16px !important;
+    padding: 0.5rem !important;
+  }
+
+  .product-detail-title {
+    font-size: 1.15rem !important;
+    line-height: 1.3 !important;
+    margin-bottom: 0.4rem !important;
+  }
+
+  .product-detail-meta {
+    font-size: 0.78rem !important;
+    gap: 0.5rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .detail-price-box {
+    margin-bottom: 0.85rem !important;
+  }
+
+  .detail-current-price {
+    font-size: 1.5rem !important;
+  }
+
+  .detail-old-price {
+    font-size: 0.85rem !important;
+  }
+
+  .installment-calculator-box {
+    padding: 0.75rem !important;
+    margin-bottom: 1rem !important;
+    border-radius: 12px !important;
+  }
+
+  .installment-calculator-box h5 {
+    font-size: 0.78rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .installment-months-grid {
+    gap: 0.35rem !important;
+  }
+
+  .installment-month-btn {
+    padding: 0.35rem 0.2rem !important;
+    border-radius: 8px !important;
+  }
+
+  .installment-month-btn .m-title {
+    font-size: 0.65rem !important;
+  }
+
+  .installment-month-btn .m-price {
+    font-size: 0.72rem !important;
+  }
+
+  .specs-table {
+    font-size: 0.8rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .specs-table td {
+    padding: 0.35rem 0 !important;
+  }
+
+  .detail-actions-row {
+    position: sticky !important;
+    bottom: 0 !important;
+    background: #ffffff !important;
+    padding-top: 0.6rem !important;
+    gap: 0.5rem !important;
+    border-top: 1px solid #f1f5f9 !important;
+  }
+
+  .detail-add-cart-btn {
+    padding: 0.75rem 1rem !important;
+    font-size: 0.92rem !important;
+    border-radius: 12px !important;
+  }
+
+  .detail-icon-action-btn {
+    width: 42px !important;
+    height: 42px !important;
+    font-size: 1.1rem !important;
+    border-radius: 12px !important;
+  }
 }

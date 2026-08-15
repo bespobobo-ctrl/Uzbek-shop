@@ -16,13 +16,26 @@ function openProductDetailModal(productId) {
 
   const oldPriceHTML = item.oldPrice ? `<div class="detail-old-price">${formatUZS(item.oldPrice)}</div>` : '';
 
+  const allImgs = (item.images && Array.isArray(item.images) && item.images.length > 0)
+    ? item.images
+    : [item.image];
+
+  const thumbnailsHTML = allImgs.length > 1 ? `
+    <div class="detail-thumbnails-row" style="display:flex; gap:0.5rem; overflow-x:auto; padding:0.35rem 0; scrollbar-width:none; -webkit-overflow-scrolling:touch;">
+      ${allImgs.map((img, idx) => `
+        <img src="${img}" class="detail-thumb-item" onclick="changeMainDetailImage(this, '${img}')" style="width:52px; height:52px; border-radius:10px; border:2px solid ${idx === 0 ? 'var(--tm-yellow)' : '#cbd5e1'}; object-fit:cover; cursor:pointer; background:#fff; flex-shrink:0; transition:all 0.2s ease;">
+      `).join('')}
+    </div>
+  ` : '';
+
   container.innerHTML = `
     <div class="product-detail-grid">
       <!-- Gallery Column -->
       <div class="product-detail-gallery">
         <div class="main-detail-img-box">
-          <img src="${item.image}" alt="${item.name}">
+          <img id="mainDetailDisplayImage" src="${allImgs[0]}" alt="${item.name}">
         </div>
+        ${thumbnailsHTML}
       </div>
 
       <!-- Information Column -->
@@ -101,6 +114,13 @@ function openProductDetailModal(productId) {
 
   modal.classList.add('active');
 }
+
+window.changeMainDetailImage = function(thumbEl, imgSrc) {
+  const mainImg = document.getElementById('mainDetailDisplayImage');
+  if (mainImg) mainImg.src = imgSrc;
+  document.querySelectorAll('.detail-thumb-item').forEach(el => el.style.borderColor = '#cbd5e1');
+  if (thumbEl) thumbEl.style.borderColor = 'var(--tm-yellow)';
+};
 
 window.selectInstallmentMonth = function(btnElement, totalPrice, months) {
   const container = btnElement.parentElement;
